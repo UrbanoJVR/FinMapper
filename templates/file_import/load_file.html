@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+    <div class="container-md mt-3">
+        <div class="row">
+            <div class="col">
+            </div>
+            <div class="col-xxl-6 bg-light rounded-3">
+                <div class="mb-3">
+                    <form class="form" method="post">
+                        <div class="mb-3 mt-3">
+                            {{ form.type.label(class="form-label") }}
+                            {{ form.type(class="form-select") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.file.label(class="form-label") }}
+                            {{ form.file(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-primary">{{ _('Send') }}</button>
+                        </div>
+                    </form>
+                    {#<label for="bankSelector" class="form-label mt-3">Seleccione el tipo de archivo</label>
+                    <select class="form-select" aria-label="Default select example" id="bankSelector">
+                        <option selected>Configuración de archivo</option>
+                        <option value="1">BBVA</option>
+                        <option value="2">Openbank</option>
+                        <option value="3">FinMapper default</option>
+                    </select>#}
+                </div>
+                {#                flujo: usuario elije archivo y le da a cargar. Después, el sistema va a otra pantalla en la
+que el usuario ve la tabla con los datos que ha cargado. El usuario aquí elije si quiere no guardar alguno de los datos
+o guardarlo pero sin contabilizar. Cuando ha terminado, el usuario pulsa guardar. El usuario, sin guardar, puede pulsar volver
+o ir a otra pagina desde el navbar. no se guarda estado ni nada#}
+            </div>
+            <div class="col">
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
