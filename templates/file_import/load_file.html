@@ -9,7 +9,8 @@
             </div>
             <div class="col-xxl-6 bg-light rounded-3">
                 <div class="mb-3">
-                    <form class="form" method="post">
+                    <form class="form" method="post" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
                         <div class="mb-3 mt-3">
                             {{ form.type.label(class="form-label") }}
                             {{ form.type(class="form-select") }}
