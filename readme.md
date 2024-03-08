@@ -10,13 +10,12 @@ Add new messages into the specific file.
 
 Please make sure you are respecting the alphabetical order to sort the translation dictionaries keys.
 
-Compile the translation files:
+Commands to generate and compile translation files. Be careful: init command will re-write whole translate
+.po files and will not use alphabetical order
 
 ````
-pybabel extract -F babel.cfg -k lazy_gettext -o messages.pot .
-pybabel init -i messages.pot -d translations -l es
-pybabel init -i messages.pot -d translations -l en
-pybabel compile -d translations -l es
-pybabel compile -d translations -l en
+pybabel extract -F babel.cfg -k _l -o messages.pot .
+pybabel update -i messages.pot -d translations
+pybabel compile -d translations
 ````
 
