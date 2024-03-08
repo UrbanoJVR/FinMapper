@@ -23,14 +23,13 @@
                             <button type="submit" class="btn btn-primary">{{ _('Send') }}</button>
                         </div>
                     </form>
-                    {#<label for="bankSelector" class="form-label mt-3">Seleccione el tipo de archivo</label>
-                    <select class="form-select" aria-label="Default select example" id="bankSelector">
-                        <option selected>Configuración de archivo</option>
-                        <option value="1">BBVA</option>
-                        <option value="2">Openbank</option>
-                        <option value="3">FinMapper default</option>
-                    </select>#}
                 </div>
+                {% if error != None %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>ERROR</strong> {{ error }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
                 {#                flujo: usuario elije archivo y le da a cargar. Después, el sistema va a otra pantalla en la
 que el usuario ve la tabla con los datos que ha cargado. El usuario aquí elije si quiere no guardar alguno de los datos
 o guardarlo pero sin contabilizar. Cuando ha terminado, el usuario pulsa guardar. El usuario, sin guardar, puede pulsar volver
