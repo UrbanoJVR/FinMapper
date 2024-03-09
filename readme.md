@@ -15,7 +15,7 @@ Commands to generate and compile translation files. Be careful: init command wil
 
 ````
 pybabel extract -F babel.cfg -k _l -o messages.pot .
-pybabel update -i messages.pot -d translations
-pybabel compile -d translations
+pybabel update -i messages.pot -d app/translations
+pybabel compile -d app/translations
 ````
 
