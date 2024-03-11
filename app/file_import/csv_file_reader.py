@@ -19,6 +19,5 @@ class CsvFileReader(TransactionsFileReader):
         for line in content_lines[1:]:
             transaction = TransactionFromFile(line.split(';')[0], line.split(';')[1], line.split(';')[2])
             transactions.append(transaction)
-            print(transaction)
 
         return transactions

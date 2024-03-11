@@ -7,6 +7,9 @@ def register_blueprints(app):
     from .file_import import file_import_blueprint
     app.register_blueprint(file_import_blueprint)
 
+    from .categories import categories_blueprint
+    app.register_blueprint(categories_blueprint)
+
 
 def get_locale():
     return 'es'
