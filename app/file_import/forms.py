@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired
 from flask_babel import lazy_gettext, gettext
 
 
-class MovementFileForm(FlaskForm):
+class TransactionsFileForm(FlaskForm):
     type = SelectField(lazy_gettext('Type'), choices=[('default', 'DEFAULT'), ('bbva', 'BBVA')])
     file = FileField(lazy_gettext('File'),
                      validators=[DataRequired(),

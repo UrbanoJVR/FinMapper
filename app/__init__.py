@@ -9,7 +9,6 @@ def register_blueprints(app):
 
 
 def get_locale():
-    print('CALLING LOCALE SELECTOR')
     return 'es'
 
 

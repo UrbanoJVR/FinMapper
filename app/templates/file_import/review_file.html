@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container-fluid mt-3">
+        <div class="container-fluid m5 rounded-3">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Concepto</th>
+                    <th scope="col">Importe</th>
+                    <th scope="col">Categoría</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction.date }}</td>
+                        <td>{{ transaction.concept }}</td>
+                        <td>{{ transaction.amount }}</td>
+                        <td>
+                            <select class="form-select" aria-label="Default select example">
+                                {% if transaction.category_id == None %}
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+{#                                    El usuario debe haber creado primero un diccionario de categorías#}
+                                {% endif %}
+                            </select>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
