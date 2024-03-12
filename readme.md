@@ -2,7 +2,9 @@
 
 ## Update requirements
 
+````
 pip freeze > requirements.txt
+````
 
 ## Language and translations
 
