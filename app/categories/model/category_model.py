@@ -1,7 +1,7 @@
 from app import db
 
 
-class Category(db.Model):
+class CategoryModel(db.Model):
     __tablename__ = 'categories'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(24), nullable=False)

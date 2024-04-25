@@ -1,6 +1,8 @@
-class Category:
+from dataclasses import dataclass
 
-    def __init__(self, name, description):
-        self.id = None
-        self.name = name
-        self.description = description
+
+@dataclass
+class Category:
+    name: str
+    description: str
+    id: int = None
