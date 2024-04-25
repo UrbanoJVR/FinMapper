@@ -1,12 +1,10 @@
 import decimal
 from dataclasses import dataclass
-from typing import Any
 
 
 @dataclass
 class TransactionFromFile:
 
-    date: Any
+    date: str
     concept: str
-    amount: Any
-    category_id: int = None
+    amount: str

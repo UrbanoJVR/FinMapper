@@ -8,6 +8,7 @@ from app.file_import.transactions_file_reader import TransactionsFileReader
 
 
 class CsvFileReader(TransactionsFileReader):
+
     def __init__(self, file_name):
         self.file_name = file_name
 
@@ -16,8 +17,19 @@ class CsvFileReader(TransactionsFileReader):
         content_lines = path.read_text(encoding='utf-8').strip().splitlines()
         transactions = []
 
-        for line in content_lines[1:]:
-            transaction = TransactionFromFile(line.split(';')[0], line.split(';')[1], line.split(';')[2])
+        for line in content_lines:
+            transaction = TransactionFromFile(
+                line.split(';')[0],
+                line.split(';')[1],
+                line.split(';')[2]
+            )
+
             transactions.append(transaction)
 
         return transactions
+
+    def delete_file(self):
+        path = Path(str(os.path.join(current_app.config['UPLOAD_DIR'], self.file_name)))
+
+        if path.exists():
+            path.unlink()
