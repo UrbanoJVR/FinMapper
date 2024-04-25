@@ -1,5 +1,19 @@
 # Developers guide
 
+## Database management
+
+To create local sqlite database:
+
+````
+flask db upgrade
+````
+
+Generate script for new migrations:
+
+````
+flask db migrate
+````
+
 ## Config pycharm
 
 ![Pycharm run configuration](doc_img/flask_run_config_pycharm.png?raw=true "Pycharm run config")
