@@ -1,7 +1,12 @@
+import decimal
+from dataclasses import dataclass
+from typing import Any
+
+
+@dataclass
 class TransactionFromFile:
 
-    def __init__(self, date, concept, amount):
-        self.date = date
-        self.concept = concept
-        self.amount = amount
-        self.category_id = None
+    date: Any
+    concept: str
+    amount: Any
+    category_id: int = None
