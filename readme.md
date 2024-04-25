@@ -1,5 +1,9 @@
 # Developers guide
 
+## Config pycharm
+
+![Pycharm run configuration](doc_img/flask_run_config_pycharm.png?raw=true "Pycharm run config")
+
 ## Update requirements
 
 ````

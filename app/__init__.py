@@ -1,5 +1,7 @@
 from flask import Flask
 from flask_babel import Babel
+from flask_sqlalchemy import SQLAlchemy
+
 from config import config
 
 
@@ -16,14 +18,15 @@ def get_locale():
 
 
 babel = Babel()
+db = SQLAlchemy()
 
 
 def create_app(config_name):
     app = Flask(__name__)
 
     babel.init_app(app, locale_selector=get_locale)
-
     app.config.from_object(config[config_name])
+    db.init_app(app)
     config[config_name].init_app(app)
     register_blueprints(app)
 
