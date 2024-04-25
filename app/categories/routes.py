@@ -1,5 +1,3 @@
-from urllib.request import Request
-
 from flask import render_template, request, redirect, url_for
 
 from app.categories import categories_blueprint
