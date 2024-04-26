@@ -17,6 +17,9 @@ class CsvFileReader(TransactionsFileReader):
         content_lines = path.read_text(encoding='utf-8').strip().splitlines()
         transactions = []
 
+        if content_lines[0].startswith('\ufeff'):
+            content_lines[0] = content_lines[0][1:]
+
         for line in content_lines:
             transaction = TransactionFromFile(
                 line.split(';')[0],

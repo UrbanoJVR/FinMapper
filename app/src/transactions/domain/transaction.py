@@ -2,7 +2,7 @@ import decimal
 from dataclasses import dataclass
 from datetime import date
 
-from app.src.categories import Category
+from app.src.categories.domain.category import Category
 
 
 @dataclass
