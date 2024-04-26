@@ -1,7 +1,7 @@
 from typing import List
 
-from app.categories.domain.category import Category
-from app.categories.model.category_model import CategoryModel
+from app.src.categories.domain.category import Category
+from app.src.categories.model.category_model import CategoryModel
 
 
 def map_to_model(category: Category) -> CategoryModel:

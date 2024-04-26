@@ -1,7 +1,7 @@
 from typing import List
 
-from app.categories.domain.category import Category
-from app.categories.infraestructure.category_repository import CategoryRepository
+from app.src.categories.domain.category import Category
+from app.src.categories.infraestructure.category_repository import CategoryRepository
 
 
 class CategoryService:

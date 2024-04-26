@@ -9,13 +9,10 @@ from config import config
 
 
 def register_blueprints(app):
-    from .file_import import file_import_blueprint
-    app.register_blueprint(file_import_blueprint)
-
-    from .categories import categories_blueprint
+    from app.src.categories import categories_blueprint
     app.register_blueprint(categories_blueprint)
 
-    from .transactions import transactions_blueprint
+    from app.src.transactions import transactions_blueprint
     app.register_blueprint(transactions_blueprint)
 
 

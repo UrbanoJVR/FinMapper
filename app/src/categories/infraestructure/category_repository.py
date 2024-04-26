@@ -1,9 +1,9 @@
 from typing import List
 
 from app import db
-from app.categories.domain.category import Category
-from app.categories.model.category_model import CategoryModel
-from app.categories.domain.mapper import category_mapper
+from app.src.categories.domain.category import Category
+from app.src.categories.model.category_model import CategoryModel
+from app.src.categories.infraestructure import category_mapper
 
 
 class CategoryRepository:

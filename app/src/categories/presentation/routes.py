@@ -1,10 +1,10 @@
 from flask import render_template, request, redirect, url_for
 
-from app.categories import categories_blueprint
-from app.categories.application.category_service import CategoryService
-from app.categories.domain.category import Category
-from app.categories.forms import NewCategoryForm
-from app.categories.infraestructure.category_repository import CategoryRepository
+from app.src.categories import categories_blueprint
+from app.src.categories.application.category_service import CategoryService
+from app.src.categories.domain.category import Category
+from app.src.categories.presentation.forms import NewCategoryForm
+from app.src.categories.infraestructure.category_repository import CategoryRepository
 
 category_service = CategoryService(CategoryRepository())
 
