@@ -4,7 +4,7 @@ from pathlib import Path
 from flask import current_app
 
 from app.file_import.domain.transaction_from_file import TransactionFromFile
-from app.file_import.transactions_file_reader import TransactionsFileReader
+from app.file_import.application.transactions_file_reader import TransactionsFileReader
 
 
 class CsvFileReader(TransactionsFileReader):

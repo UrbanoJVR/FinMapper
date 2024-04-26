@@ -15,6 +15,9 @@ def register_blueprints(app):
     from .categories import categories_blueprint
     app.register_blueprint(categories_blueprint)
 
+    from .transactions import transactions_blueprint
+    app.register_blueprint(transactions_blueprint)
+
 
 def get_locale():
     return 'es'

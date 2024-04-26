@@ -3,7 +3,6 @@
 {% block content %}
     <div class="container mt-3">
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 d-flex align-items-center">
-            <!-- Loop para mostrar categorías -->
             {% for category in categories %}
                 <div class="col mb-3">
                     <div class="card border-dark">
@@ -15,7 +14,6 @@
                 </div>
             {% endfor %}
 
-            <!-- La tarjeta para añadir nueva categoría -->
             <div class="col mb-3">
                 <div class="card">
                     <div class="card-body text-center">

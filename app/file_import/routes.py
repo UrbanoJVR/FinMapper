@@ -6,9 +6,9 @@ from flask_babel import gettext
 from werkzeug.datastructures import CombinedMultiDict
 
 from app.file_import import file_import_blueprint
-from app.file_import.csv_file_reader import CsvFileReader
+from app.file_import.application.csv_file_reader import CsvFileReader
 from app.file_import.forms import TransactionsFileForm
-from app.file_import.transactions_file_reader import TransactionsFileReader
+from app.file_import.application.transactions_file_reader import TransactionsFileReader
 
 
 @file_import_blueprint.route('/load/review', methods=['GET', 'POST'])
