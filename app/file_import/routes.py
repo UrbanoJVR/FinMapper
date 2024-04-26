@@ -11,9 +11,15 @@ from app.file_import.forms import TransactionsFileForm
 from app.file_import.transactions_file_reader import TransactionsFileReader
 
 
-@file_import_blueprint.route('/load/data_review', methods=['GET', 'POST'])
-def review_file():
-    return render_template('file_import/review_file.html', transactions=session.get('transactions'))
+@file_import_blueprint.route('/load/review', methods=['GET', 'POST'])
+def review():
+    if request.method == 'GET':
+        return render_template('file_import/review_file.html', transactions=session.get('transactions'))
+
+    if request.method == 'POST':
+        transanctions = session.get('transactions')
+        session.clear()
+        return redirect(url_for('file_import_blueprint.load'))
 
 
 @file_import_blueprint.route('/load', methods=['GET', 'POST'])
@@ -25,7 +31,7 @@ def load():
 
     if form.validate_on_submit():
         read_file(save_file(form.file.data))
-        return redirect(url_for('file_import_blueprint.review_file'))
+        return redirect(url_for('file_import_blueprint.review'))
     else:
         error_text = gettext('FileExtensionNotAllowed')
         return render_template('file_import/load_file.html', form=form, error=error_text)
