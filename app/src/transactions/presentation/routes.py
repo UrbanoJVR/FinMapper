@@ -24,20 +24,14 @@ def dashboard():
     return render_template('transactions/transactions_dashboard.html')
 
 
-@transactions_blueprint.route('/movements', methods=['GET'])
+@transactions_blueprint.route('/movements', methods=['GET', 'POST'])
 def movements_list():
-    form = MonthYearFilterForm()
-    month: int
-    year: int
-
     if request.method == 'GET':
         now = datetime.now()
         month = now.month
         year = now.year
-        form.month.data = month
-        form.year.data = year
-
-    if request.method == 'POST':
+        form = MonthYearFilterForm(month=month, year=year)
+    else:
         form = MonthYearFilterForm(request.form)
         month = form.month.data
         year = form.year.data
@@ -45,7 +39,7 @@ def movements_list():
     return render_template(
         'transactions/movements_list.html',
         transactions=transaction_service.get_by_month_year(month, year),
-        form=form
+        month_year_filter_form=form
     )
 
 

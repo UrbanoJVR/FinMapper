@@ -2,22 +2,23 @@
 
 {% block content %}
     <div class="container-fluid mt-3">
-        <form id="date-form" method="POST">
-            {{ form.csrf_token }}
+        <form id="month-year-filtering-form" method="POST">
+            {{ month_year_filter_form.csrf_token }}
             <div class="row mb-3">
                 <div class="col-auto">
                     <button type="submit" name="direction" value="previous" class="btn btn-outline-dark"><</button>
                 </div>
                 <div class="col-auto">
-                    {{ form.month(class="form-select") }}
+                    {{ month_year_filter_form.month(class="form-select", id="month-selector") }}
                 </div>
                 <div class="col-auto">
-                    {{ form.year(class="form-select") }}
+                    {{ month_year_filter_form.year(class="form-select", id="year-selector") }}
                 </div>
                 <div class="col-auto">
                     <button type="submit" name="direction" value="next" class="btn btn-outline-dark">></button>
                 </div>
             </div>
+        </form>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -39,4 +40,11 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+        document.getElementById("month-selector").addEventListener("change", function() {
+            document.getElementById("month-year-filtering-form").submit();
+        });
+    </script>
+
 {% endblock %}
