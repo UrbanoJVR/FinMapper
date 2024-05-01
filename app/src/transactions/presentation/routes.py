@@ -13,7 +13,7 @@ from app.src.transactions.domain.transaction_from_file import TransactionFromFil
 from app.src.transactions.infraestructure.file_reader.csv_file_reader import CsvFileReader
 from app.src.transactions.infraestructure.file_reader.transactions_file_reader import TransactionsFileReader
 from app.src.transactions.infraestructure.repository.transaction_repository import TransactionRepository
-from app.src.transactions.presentation.forms import TransactionsFileForm
+from app.src.transactions.presentation.forms import TransactionsFileForm, MonthYearFilterForm
 from app.src.transactions.presentation.transaction_from_file_mapper import map_to_entity_list
 
 transaction_service = TransactionService(TransactionRepository())
@@ -36,7 +36,8 @@ def movements_list():
 
     return render_template(
         'transactions/movements_list.html',
-        transactions=transaction_service.get_by_month_year(month, year)
+        transactions=transaction_service.get_by_month_year(month, year),
+        form=MonthYearFilterForm()
     )
 
 
