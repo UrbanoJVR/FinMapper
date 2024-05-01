@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-05-01 23:38+0200\n"
+"POT-Creation-Date: 2024-05-01 23:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,12 +56,9 @@ msgid "Concept"
 msgstr ""
 
 #: app/templates/transactions/movements_list.html:27
+#: app/templates/transactions/movements_list.html:28
 #: app/templates/transactions/review_file.html:14
 msgid "Amount"
-msgstr ""
-
-#: app/templates/transactions/movements_list.html:28
-msgid "Category"
 msgstr ""
 
 #: app/templates/transactions/review_file.html:7
