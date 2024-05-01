@@ -27,18 +27,19 @@ def dashboard():
 @transactions_blueprint.route('/movements', methods=['GET', 'POST'])
 def movements_list():
     if request.method == 'GET':
-        now = datetime.now()
-        month = now.month
-        year = now.year
-        form = MonthYearFilterForm(month=month, year=year)
+        form = generate_month_year_filter_form_actual_date()
     else:
         form = MonthYearFilterForm(request.form)
-        month = form.month.data
-        year = form.year.data
+
+        if request.form.get('direction') == 'previous':
+            form.month.data, form.year.data = previous_month(int(form.month.data), int(form.year.data))
+
+        if request.form.get('direction') == 'next':
+            form.month.data, form.year.data = next_month(int(form.month.data), int(form.year.data))
 
     return render_template(
         'transactions/movements_list.html',
-        transactions=transaction_service.get_by_month_year(month, year),
+        transactions=transaction_service.get_by_month_year(form.month.data, form.year.data),
         month_year_filter_form=form
     )
 
@@ -83,3 +84,22 @@ def save_file(data_file):
     filename = f'{int(time.time())}.{extension}'
     data_file.save(os.path.join(current_app.config['UPLOAD_DIR'], filename))
     return filename
+
+
+def generate_month_year_filter_form_actual_date():
+    now = datetime.now()
+    return MonthYearFilterForm(month=now.month, year=now.year)
+
+
+def previous_month(month, year):
+    if month == 1:
+        return str(12), str(year - 1)
+    else:
+        return str(month - 1), str(year)
+
+
+def next_month(month, year):
+    if month == 12:
+        return str(1), str(year + 1)
+    else:
+        return str(month + 1), str(year)
