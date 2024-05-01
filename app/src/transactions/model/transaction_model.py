@@ -8,3 +8,4 @@ class TransactionModel(db.Model):
     amount = db.Column(db.Numeric(precision=10, scale=2), nullable=False)
     concept = db.Column(db.String(100), nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=True)
+    category = db.relationship("CategoryModel", back_populates="transactions")

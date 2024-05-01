@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
     <div class="container-fluid mt-3">
         <form id="save" method="POST">
-            <button type="submit" class="btn btn-primary">{{ _('Save') }}</button>
+            <button type="submit" class="btn btn-outline-dark"><</button>
+            <button type="submit" class="btn btn-outline-dark">></button>
         </form>
         <table class="table table-striped">
             <thead>
@@ -12,18 +12,19 @@
                 <th scope="col">{{ _('Date') }}</th>
                 <th scope="col">{{ _('Concept') }}</th>
                 <th scope="col">{{ _('Amount') }}</th>
+                <th scope="col">{{ _('Category') }}</th>
             </tr>
             </thead>
             <tbody>
             {% for transaction in transactions %}
                 <tr>
-                    <td>{{ transaction.date }}</td>
+                    <td>{{ transaction.transaction_date.strftime('%d-%m-%Y') }}</td>
                     <td>{{ transaction.concept }}</td>
                     <td>{{ transaction.amount }}</td>
+                    <td>{{ transaction.category.name }}</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
-
 {% endblock %}

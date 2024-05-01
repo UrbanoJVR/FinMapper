@@ -1,5 +1,6 @@
 import os
 import time
+from datetime import datetime
 from typing import List
 
 from flask import render_template, session, request, redirect, url_for, current_app
@@ -17,9 +18,26 @@ from app.src.transactions.presentation.transaction_from_file_mapper import map_t
 
 transaction_service = TransactionService(TransactionRepository())
 
+
 @transactions_blueprint.route('/transactions', methods=['GET'])
 def dashboard():
     return render_template('transactions/transactions_dashboard.html')
+
+
+@transactions_blueprint.route('/movements', methods=['GET'])
+def movements_list():
+    month: int
+    year: int
+
+    if request.method == 'GET':
+        now = datetime.now()
+        month = 3
+        year = 2024
+
+    return render_template(
+        'transactions/movements_list.html',
+        transactions=transaction_service.get_by_month_year(month, year)
+    )
 
 
 @transactions_blueprint.route('/load/review', methods=['GET', 'POST'])
