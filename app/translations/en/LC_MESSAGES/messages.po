@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-04-27 01:53+0200\n"
+"POT-Creation-Date: 2024-05-01 22:17+0200\n"
 "PO-Revision-Date: 2024-03-07 18:27+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
 
-#: app/src/transactions/presentation/routes.py:55
+#: app/src/transactions/presentation/routes.py:76
 msgid "FileExtensionNotAllowed"
 msgstr "File format not allowed"
 
@@ -46,19 +46,65 @@ msgstr "Movements"
 msgid "Send"
 msgstr "Send"
 
-#: app/templates/transactions/review_file.html:7
-msgid "Save"
-msgstr "Save"
-
+#: app/templates/transactions/movements_list.html:24
 #: app/templates/transactions/review_file.html:12
 msgid "Date"
 msgstr "Date"
 
+#: app/templates/transactions/movements_list.html:25
 #: app/templates/transactions/review_file.html:13
 msgid "Concept"
 msgstr "Concept"
 
+#: app/templates/transactions/movements_list.html:26
 #: app/templates/transactions/review_file.html:14
 msgid "Amount"
 msgstr "Amount"
+
+#: app/templates/transactions/movements_list.html:27
+#, fuzzy
+msgid "Category"
+msgstr "Categorize"
+
+#: app/templates/transactions/review_file.html:7
+msgid "Save"
+msgstr "Save"
+
+# MANUAL TRANSLATIONS
+msgid "January"
+msgstr "January"
+
+msgid "February"
+msgstr "February"
+
+msgid "March"
+msgstr "March"
+
+msgid "April"
+msgstr "April"
+
+msgid "May"
+msgstr "May"
+
+msgid "June"
+msgstr "June"
+
+msgid "July"
+msgstr "July"
+
+msgid "August"
+msgstr "August"
+
+msgid "September"
+msgstr "September"
+
+msgid "October"
+msgstr "October"
+
+msgid "November"
+msgstr "November"
+
+msgid "December"
+msgstr "December"
+
 
