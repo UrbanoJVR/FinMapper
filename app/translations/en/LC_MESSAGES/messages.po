@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-05-01 23:49+0200\n"
+"POT-Creation-Date: 2024-05-02 01:09+0200\n"
 "PO-Revision-Date: 2024-03-07 18:27+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
 
-#: app/src/transactions/presentation/routes.py:70
+#: app/src/transactions/presentation/routes.py:71
 msgid "FileExtensionNotAllowed"
 msgstr "File format not allowed"
 
@@ -70,39 +70,41 @@ msgid "Save"
 msgstr "Save"
 
 # MANUAL TRANSLATIONS
-#~ msgid "January"
-#~ msgstr "January"
 
-#~ msgid "February"
-#~ msgstr "February"
+msgid "January"
+msgstr "January"
 
-#~ msgid "March"
-#~ msgstr "March"
+msgid "February"
+msgstr "February"
 
-#~ msgid "April"
-#~ msgstr "April"
+msgid "March"
+msgstr "March"
 
-#~ msgid "May"
-#~ msgstr "May"
+msgid "April"
+msgstr "April"
 
-#~ msgid "June"
-#~ msgstr "June"
+msgid "May"
+msgstr "May"
 
-#~ msgid "July"
-#~ msgstr "July"
+msgid "June"
+msgstr "June"
 
-#~ msgid "August"
-#~ msgstr "August"
+msgid "July"
+msgstr "July"
 
-#~ msgid "September"
-#~ msgstr "September"
+msgid "August"
+msgstr "August"
 
-#~ msgid "October"
-#~ msgstr "October"
+msgid "September"
+msgstr "September"
 
-#~ msgid "November"
-#~ msgstr "November"
+msgid "October"
+msgstr "October"
 
-#~ msgid "December"
-#~ msgstr "December"
+msgid "November"
+msgstr "November"
+
+msgid "December"
+msgstr "December"
+
 

@@ -39,7 +39,7 @@ def movements_list():
 
     return render_template(
         'transactions/movements_list.html',
-        transactions=transaction_service.get_by_month_year(form.month.data, form.year.data),
+        transactions=transaction_service.get_by_month_year(int(form.month.data), int(form.year.data)),
         month_year_filter_form=form
     )
 

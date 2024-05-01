@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-05-01 23:49+0200\n"
+"POT-Creation-Date: 2024-05-02 01:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
 
-#: app/src/transactions/presentation/routes.py:70
+#: app/src/transactions/presentation/routes.py:71
 msgid "FileExtensionNotAllowed"
 msgstr ""
 
@@ -67,4 +67,3 @@ msgstr ""
 #: app/templates/transactions/review_file.html:7
 msgid "Save"
 msgstr ""
-
