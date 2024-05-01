@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-05-01 23:46+0200\n"
+"POT-Creation-Date: 2024-05-01 23:49+0200\n"
 "PO-Revision-Date: 2024-03-07 18:27+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -57,10 +57,13 @@ msgid "Concept"
 msgstr "Concept"
 
 #: app/templates/transactions/movements_list.html:27
-#: app/templates/transactions/movements_list.html:28
 #: app/templates/transactions/review_file.html:14
 msgid "Amount"
 msgstr "Amount"
+
+#: app/templates/transactions/movements_list.html:28
+msgid "Category"
+msgstr "Category"
 
 #: app/templates/transactions/review_file.html:7
 msgid "Save"
@@ -102,3 +105,4 @@ msgstr "Save"
 
 #~ msgid "December"
 #~ msgstr "December"
+
