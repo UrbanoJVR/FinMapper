@@ -12,12 +12,13 @@
                     {{ month_year_filter_form.month(class="form-select", id="month-selector") }}
                 </div>
                 <div class="col-auto">
-                    {{ month_year_filter_form.year(class="form-select", id="year-selector") }}
+                    {{ month_year_filter_form.year(type="number", class="form-control", id="year-selector") }}
                 </div>
                 <div class="col-auto">
                     <button type="submit" name="direction" value="next" class="btn btn-outline-dark">></button>
                 </div>
             </div>
+            {{ month_year_filter_form.submit_by_enter() }}
         </form>
         <table class="table table-striped">
             <thead>
@@ -42,8 +43,19 @@
     </div>
 
     <script>
-        document.getElementById("month-selector").addEventListener("change", function() {
+        document.getElementById("month-selector").addEventListener("change", function () {
             document.getElementById("month-year-filtering-form").submit();
+        });
+
+        document.getElementById("year-selector").addEventListener("change", function () {
+            document.getElementById("month-year-filtering-form").submit();
+        });
+
+        document.getElementById("year-selector").addEventListener("keydown", function (event) {
+            if (event.key === 'Enter') {
+                console.log('HAS PULSADO ENTER')
+                document.getElementById("submit_by_enter").value = "true"
+            }
         });
     </script>
 

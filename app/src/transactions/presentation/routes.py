@@ -31,11 +31,12 @@ def movements_list():
     else:
         form = MonthYearFilterForm(request.form)
 
-        if request.form.get('direction') == 'previous':
-            form.month.data, form.year.data = previous_month(int(form.month.data), int(form.year.data))
+        if not request.form.get('submit_by_enter'):
+            if request.form.get('direction') == 'previous':
+                form.month.data, form.year.data = previous_month(int(form.month.data), int(form.year.data))
 
-        if request.form.get('direction') == 'next':
-            form.month.data, form.year.data = next_month(int(form.month.data), int(form.year.data))
+            if request.form.get('direction') == 'next':
+                form.month.data, form.year.data = next_month(int(form.month.data), int(form.year.data))
 
     return render_template(
         'transactions/movements_list.html',

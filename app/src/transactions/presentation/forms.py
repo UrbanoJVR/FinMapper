@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms.fields.choices import SelectField
+from wtforms.fields.simple import StringField, HiddenField
 from wtforms.validators import DataRequired
 from flask_babel import lazy_gettext, gettext
 
@@ -24,5 +25,6 @@ class TransactionsFileForm(FlaskForm):
 class MonthYearFilterForm(FlaskForm):
     years = [(year, str(year)) for year in range(2022, 2033)]
 
-    month = SelectField(lazy_gettext('Month'), choices=get_translated_months())
-    year = SelectField(lazy_gettext('Year'), choices=years)
+    month = SelectField(choices=get_translated_months())
+    year = StringField()
+    submit_by_enter = HiddenField(default="false")
