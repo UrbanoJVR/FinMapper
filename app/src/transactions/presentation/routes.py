@@ -30,13 +30,7 @@ def movements_list():
         form = generate_month_year_filter_form_actual_date()
     else:
         form = MonthYearFilterForm(request.form)
-
-        if not request.form.get('submit_by_enter'):
-            if request.form.get('direction') == 'previous':
-                form.month.data, form.year.data = previous_month(int(form.month.data), int(form.year.data))
-
-            if request.form.get('direction') == 'next':
-                form.month.data, form.year.data = next_month(int(form.month.data), int(form.year.data))
+        calculate_form_parameters(form)
 
     return render_template(
         'transactions/movements_list.html',
@@ -104,3 +98,16 @@ def next_month(month, year):
         return str(1), str(year + 1)
     else:
         return str(month + 1), str(year)
+
+
+def form_is_submitted_by_enter_key_pressed(form) -> bool:
+    return bool(form.get('submit_by_enter'))
+
+
+def calculate_form_parameters(form):
+    if not form_is_submitted_by_enter_key_pressed(request.form):
+        if request.form.get('direction') == 'previous':
+            form.month.data, form.year.data = previous_month(int(form.month.data), int(form.year.data))
+
+        if request.form.get('direction') == 'next':
+            form.month.data, form.year.data = next_month(int(form.month.data), int(form.year.data))
