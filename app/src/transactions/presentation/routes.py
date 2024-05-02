@@ -101,7 +101,10 @@ def next_month(month, year):
 
 
 def form_is_submitted_by_enter_key_pressed(form) -> bool:
-    return bool(form.get('submit_by_enter'))
+    if form.get('submit_by_enter') == 'true':
+        return True
+
+    return False
 
 
 def calculate_form_parameters(form):
