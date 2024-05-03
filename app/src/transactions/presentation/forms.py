@@ -23,8 +23,6 @@ class TransactionsFileForm(FlaskForm):
 
 
 class MonthYearFilterForm(FlaskForm):
-    years = [(year, str(year)) for year in range(2022, 2033)]
-
     month = SelectField(choices=get_translated_months())
     year = StringField()
     submit_by_enter = HiddenField(default="false")
