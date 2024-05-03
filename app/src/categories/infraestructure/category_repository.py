@@ -18,3 +18,6 @@ class CategoryRepository:
 
     def get_all(self) -> List[Category]:
         return category_model_mapper.map_model_list_to_class(CategoryModel.query.all())
+
+    def get_by_id(self, id: int) -> Category:
+        return category_model_mapper.map_to_class(CategoryModel.query.filter_by(id=id).first())

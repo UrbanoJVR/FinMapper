@@ -7,16 +7,21 @@ from flask import render_template, session, request, redirect, url_for, current_
 from flask_babel import gettext
 from werkzeug.datastructures import CombinedMultiDict
 
+from app.src.categories.application.category_service import CategoryService
+from app.src.categories.domain.category import Category
+from app.src.categories.infraestructure.category_repository import CategoryRepository
 from app.src.transactions import transactions_blueprint
 from app.src.transactions.application.transaction_service import TransactionService
+from app.src.transactions.domain.transaction import Transaction
 from app.src.transactions.domain.transaction_from_file import TransactionFromFile
 from app.src.transactions.infraestructure.file_reader.csv_file_reader import CsvFileReader
 from app.src.transactions.infraestructure.file_reader.transactions_file_reader import TransactionsFileReader
 from app.src.transactions.infraestructure.repository.transaction_repository import TransactionRepository
-from app.src.transactions.presentation.forms import TransactionsFileForm, MonthYearFilterForm
+from app.src.transactions.presentation.forms import TransactionsFileForm, MonthYearFilterForm, TransactionForm
 from app.src.transactions.presentation.transaction_from_file_mapper import map_to_entity_list
 
 transaction_service = TransactionService(TransactionRepository())
+category_service = CategoryService(CategoryRepository())
 
 
 @transactions_blueprint.route('/transactions', methods=['GET'])
@@ -37,6 +42,42 @@ def movements_list():
         transactions=transaction_service.get_by_month_year(int(form.month.data), int(form.year.data)),
         month_year_filter_form=form
     )
+
+
+@transactions_blueprint.route('/edit-transaction/<int:transaction_id>', methods=['GET', 'POST'])
+def edit_transaction(transaction_id):
+    if request.method == 'GET':
+        transaction = transaction_service.get_by_id(transaction_id)
+        form = TransactionForm()
+        form.date.data = transaction.transaction_date
+        form.amount.data = transaction.amount
+        form.concept.data = transaction.concept
+        form.category.choices = [('None', '')] + [(str(category.id), category.name) for category in category_service.get_all_categories()]
+        form.category.selected = form.category.data
+        form.category.data = str(transaction.category.id) if transaction.category else 'None'
+        return render_template('transactions/edit_transaction.html', form=form)
+
+    if request.method == 'POST':
+        form: TransactionForm = TransactionForm(request.form)
+        transaction = Transaction(
+            id=transaction_id,
+            transaction_date=form.date.data,
+            amount=form.amount.data,
+            concept=form.concept.data,
+            category=category_service.get_by_id(int(str(form.category.data)))
+        )
+        transaction_service.update(transaction)
+        return render_template('transactions/edit_transaction.html', form=TransactionForm())
+
+
+@transactions_blueprint.route('/delete-transaction/<int:transaction_id>', methods=['GET', 'POST'])
+def delete_transaction(transaction_id):
+    if request.method == 'POST':
+        # Aquí eliminas el movimiento con el ID proporcionado
+        return redirect(url_for('transactions.movements_list'))
+    else:
+        # Aquí puedes renderizar un template de confirmación de eliminación
+        return None
 
 
 @transactions_blueprint.route('/load/review', methods=['GET', 'POST'])

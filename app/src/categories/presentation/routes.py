@@ -23,7 +23,7 @@ def dashboard():
 
 
 def create_category(req):
-    new_category_form = NewCategoryForm(req.month_year_filter_form)
+    new_category_form = NewCategoryForm(req.form)
 
     if new_category_form.validate_on_submit():
         new_category = Category(
