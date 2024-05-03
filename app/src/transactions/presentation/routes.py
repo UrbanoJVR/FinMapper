@@ -109,8 +109,8 @@ def form_is_submitted_by_enter_key_pressed(form: MonthYearFilterForm) -> bool:
 
 def calculate_month_year(form: MonthYearFilterForm):
     if not form_is_submitted_by_enter_key_pressed(form):
-        if request.form.get('direction') == 'previous':
+        if form.direction.data == 'previous':
             form.month.data, form.year.data = previous_month(int(form.month.data), int(form.year.data))
 
-        if request.form.get('direction') == 'next':
+        if form.direction.data == 'next':
             form.month.data, form.year.data = next_month(int(form.month.data), int(form.year.data))

@@ -26,3 +26,4 @@ class MonthYearFilterForm(FlaskForm):
     month = SelectField(choices=get_translated_months())
     year = StringField()
     submit_by_enter = HiddenField(default="false")
+    direction = HiddenField()
