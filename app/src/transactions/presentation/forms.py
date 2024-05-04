@@ -44,8 +44,7 @@ class TransactionForm(FlaskForm):
         lazy_gettext('Concept'),
         validators=[DataRequired(message=lazy_gettext('Concept required'))]
     )
-    category = SelectField(
+    category_id = SelectField(
         lazy_gettext('Category'),
-        validators=[DataRequired(message=lazy_gettext('Category required'))],
-        choices=[('category 1', 'category 2')]
+        validators=[DataRequired(message=lazy_gettext('Category required'))]
     )

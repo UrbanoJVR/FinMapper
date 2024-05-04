@@ -20,6 +20,10 @@ class TransactionRepository:
 
         db.session.commit()
 
+    def delete(self, id: int):
+        TransactionModel.query.filter(TransactionModel.id == id).delete()
+        db.session.commit()
+
     def update(self, transaction: Transaction):
         db.session.merge(map_to_model(transaction))
         db.session.commit()

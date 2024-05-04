@@ -1,5 +1,3 @@
-import decimal
-from datetime import datetime
 from typing import List
 
 from app.src.transactions.domain.transaction import Transaction
@@ -24,6 +22,10 @@ class TransactionService:
         self.repository.update(transaction)
 
         return transaction.id
+
+    def delete(self, id: int):
+        self.repository.delete(id)
+
 
     def get_by_month_year(self, month: int, year: int) -> List[Transaction]:
         return self.repository.get_by_month_year(month, year)
