@@ -5,7 +5,7 @@ from sqlalchemy import extract
 from app import db
 from app.src.transactions.domain.transaction import Transaction
 from app.src.transactions.infraestructure.repository.transaction_model_mapper import map_to_model_list, \
-    map_to_entity_list
+    map_to_entity_list, map_to_entity, map_to_model
 from app.src.transactions.model.transaction_model import TransactionModel
 
 
@@ -20,6 +20,14 @@ class TransactionRepository:
 
         db.session.commit()
 
+    def delete(self, id: int):
+        TransactionModel.query.filter(TransactionModel.id == id).delete()
+        db.session.commit()
+
+    def update(self, transaction: Transaction):
+        db.session.merge(map_to_model(transaction))
+        db.session.commit()
+
     def get_by_month_year(self, month: int, year: int) -> List[Transaction]:
         transactions = TransactionModel.query.filter(
             extract('month', TransactionModel.date) == month,
@@ -29,3 +37,7 @@ class TransactionRepository:
         # transactions = TransactionModel.query.all()
 
         return map_to_entity_list(transactions)
+
+    def get_by_id(self, id: int) -> Transaction:
+        transaction_model = TransactionModel.query.filter_by(id=id).first()
+        return map_to_entity(transaction_model)

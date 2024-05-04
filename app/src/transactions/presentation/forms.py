@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms.fields.choices import SelectField
+from wtforms.fields.datetime import DateField
+from wtforms.fields.numeric import DecimalField
 from wtforms.fields.simple import StringField, HiddenField
 from wtforms.validators import DataRequired
 from flask_babel import lazy_gettext, gettext
@@ -27,3 +29,22 @@ class MonthYearFilterForm(FlaskForm):
     year = StringField()
     submit_by_enter = HiddenField(default="false")
     direction = HiddenField()
+
+
+class TransactionForm(FlaskForm):
+    date = DateField(
+        lazy_gettext('Date'),
+        validators=[DataRequired(message=lazy_gettext('Date required'))]
+    )
+    amount = DecimalField(
+        lazy_gettext('Amount'),
+        validators=[DataRequired(message=lazy_gettext('Amount required'))]
+    )
+    concept = StringField(
+        lazy_gettext('Concept'),
+        validators=[DataRequired(message=lazy_gettext('Concept required'))]
+    )
+    category_id = SelectField(
+        lazy_gettext('Category'),
+        validators=[DataRequired(message=lazy_gettext('Category required'))]
+    )
