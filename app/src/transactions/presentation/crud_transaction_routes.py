@@ -19,19 +19,25 @@ def dashboard():
     return render_template('transactions/transactions_dashboard.html')
 
 
-@transactions_blueprint.route('/movements', methods=['GET', 'POST'])
-def movements_list():
+@transactions_blueprint.route('/movements/<int:month>/<int:year>', methods=['GET', 'POST'])
+def movements_list(month: int, year: int):
     if request.method == 'GET':
-        form = generate_month_year_filter_form_actual_date()
-    else:
-        form = MonthYearFilterForm(request.form)
-        calculate_month_year(form)
+        form = MonthYearFilterForm(month=month, year=year)
+        return render_template(
+            'transactions/movements_list.html',
+            transactions=transaction_service.get_by_month_year(int(form.month.data), int(form.year.data)),
+            month_year_filter_form=form
+        )
 
-    return render_template(
-        'transactions/movements_list.html',
-        transactions=transaction_service.get_by_month_year(int(form.month.data), int(form.year.data)),
-        month_year_filter_form=form
-    )
+    if request.method == 'POST':
+        month, year = calculate_month_year(MonthYearFilterForm(request.form))
+        return redirect(url_for('transactions_blueprint.movements_list', month=month, year=year))
+
+
+@transactions_blueprint.route('/movements', methods=['GET', 'POST'])
+def movements():
+    now = datetime.now()
+    return redirect(url_for('transactions_blueprint.movements_list', month=now.month, year=now.year))
 
 
 @transactions_blueprint.route('/edit-transaction/<int:transaction_id>', methods=['GET', 'POST'])
@@ -62,7 +68,7 @@ def edit_transaction(transaction_id):
 
 
 def load_category(category_id):
-    if category_id == 'None':  # Verificar si category_id es 'None' como una cadena
+    if category_id == 'None':
         return None
     else:
         return category_service.get_by_id(int(category_id))
@@ -100,10 +106,21 @@ def form_is_submitted_by_enter_key_pressed(form: MonthYearFilterForm) -> bool:
     return False
 
 
-def calculate_month_year(form: MonthYearFilterForm):
-    if not form_is_submitted_by_enter_key_pressed(form):
-        if form.direction.data == 'previous':
-            form.month.data, form.year.data = previous_month(int(form.month.data), int(form.year.data))
+# def calculate_month_year(form: MonthYearFilterForm):
+#     if not form_is_submitted_by_enter_key_pressed(form):
+#         if form.direction.data == 'previous':
+#             form.month.data, form.year.data = previous_month(int(form.month.data), int(form.year.data))
+#
+#         if form.direction.data == 'next':
+#             form.month.data, form.year.data = next_month(int(form.month.data), int(form.year.data))
 
-        if form.direction.data == 'next':
-            form.month.data, form.year.data = next_month(int(form.month.data), int(form.year.data))
+
+def calculate_month_year(form: MonthYearFilterForm):
+    if form_is_submitted_by_enter_key_pressed(form):
+        return form.month.data, form.year.data
+
+    if form.direction.data == 'previous':
+        return previous_month(int(form.month.data), int(form.year.data))
+
+    if form.direction.data == 'next':
+        return next_month(int(form.month.data), int(form.year.data))
