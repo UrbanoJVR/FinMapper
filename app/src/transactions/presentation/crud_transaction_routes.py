@@ -77,7 +77,7 @@ def load_category(category_id):
 @transactions_blueprint.route('/delete-transaction/<int:transaction_id>', methods=['GET'])
 def delete_transaction(transaction_id):
     transaction_service.delete(transaction_id)
-    return redirect(url_for('transactions_blueprint.movements_list'))
+    return '', 204
 
 
 def generate_month_year_filter_form_actual_date():

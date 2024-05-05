@@ -75,6 +75,7 @@
         function confirmDelete(transactionId) {
             if (confirm("¿Estás seguro de que deseas eliminar este movimiento?")) {
                 window.location.href = "/delete-transaction/" + transactionId;
+                window.location.reload();
             }
         }
     </script>
