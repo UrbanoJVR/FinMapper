@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-05-02 01:09+0200\n"
+"POT-Creation-Date: 2024-05-05 02:18+0200\n"
 "PO-Revision-Date: 2024-03-07 18:27+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -18,56 +18,65 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
 
-#: app/src/transactions/presentation/routes.py:71
+#: app/src/transactions/presentation/load_transactions_file_routes.py:44
 msgid "FileExtensionNotAllowed"
 msgstr "File format not allowed"
 
-#: app/templates/base.html:27
+#: app/templates/base.html:32
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: app/templates/base.html:30
+#: app/templates/base.html:35
 msgid "Categories"
 msgstr "Categories"
 
-#: app/templates/base.html:33
+#: app/templates/base.html:38
 msgid "Categorize"
 msgstr "Categorize"
 
-#: app/templates/base.html:36
+#: app/templates/base.html:41
 msgid "Load"
 msgstr "Load"
 
-#: app/templates/base.html:39
+#: app/templates/base.html:44
 msgid "Movements"
 msgstr "Movements"
 
-#: app/templates/transactions/load_file.html:23
+#: app/templates/transactions/edit_transaction.html:51
+#: app/templates/transactions/review_file.html:7
+msgid "Save"
+msgstr "Save"
+
+#: app/templates/transactions/load_file.html:15
 msgid "Send"
 msgstr "Send"
 
-#: app/templates/transactions/movements_list.html:25
+#: app/templates/transactions/movements_list.html:27
+msgid "Actions"
+msgstr ""
+
+#: app/templates/transactions/movements_list.html:28
 #: app/templates/transactions/review_file.html:12
 msgid "Date"
 msgstr "Date"
 
-#: app/templates/transactions/movements_list.html:26
+#: app/templates/transactions/movements_list.html:29
 #: app/templates/transactions/review_file.html:13
 msgid "Concept"
 msgstr "Concept"
 
-#: app/templates/transactions/movements_list.html:27
+#: app/templates/transactions/movements_list.html:30
 #: app/templates/transactions/review_file.html:14
 msgid "Amount"
 msgstr "Amount"
 
-#: app/templates/transactions/movements_list.html:28
+#: app/templates/transactions/movements_list.html:31
 msgid "Category"
 msgstr "Category"
 
-#: app/templates/transactions/review_file.html:7
-msgid "Save"
-msgstr "Save"
+#: app/templates/transactions/movements_list.html:76
+msgid "Are you sure you want to delete this transaction?"
+msgstr "Are you sure you want to delete this transaction?"
 
 # MANUAL TRANSLATIONS
 
@@ -106,5 +115,3 @@ msgstr "November"
 
 msgid "December"
 msgstr "December"
-
-
