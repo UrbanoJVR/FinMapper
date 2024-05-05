@@ -38,7 +38,7 @@
                         <button type="button" class="btn btn-primary" onclick="editTransaction('{{ transaction.id }}')">
                             <i class="fas fa-pencil-alt"></i>
                         </button>
-                        <button type="button" class="btn btn-danger" onclick="confirmDelete('{{ transaction.id }}')">
+                        <button type="button" class="btn btn-danger" onclick="deleteTransaction('{{ transaction.id }}')">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </td>
@@ -63,7 +63,6 @@
 
         document.getElementById("year-selector").addEventListener("keydown", function (event) {
             if (event.key === 'Enter') {
-                console.log('HAS PULSADO ENTER')
                 document.getElementById("submit_by_enter").value = "true"
             }
         });
@@ -72,10 +71,10 @@
             window.location.href = "/edit-transaction/" + transactionId;
         }
 
-        function confirmDelete(transactionId) {
+        function deleteTransaction(transactionId) {
             var confirmationMessage = "{{ _('Are you sure you want to delete this transaction?') }}";
             if (confirm(confirmationMessage)) {
-                window.location.href = "/delete-transaction/" + transactionId;
+                window.location.href = "/transactions/delete/" + transactionId;
                 window.location.reload();
             }
         }
