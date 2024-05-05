@@ -73,7 +73,8 @@
         }
 
         function confirmDelete(transactionId) {
-            if (confirm("¿Estás seguro de que deseas eliminar este movimiento?")) {
+            var confirmationMessage = "{{ _('Are you sure you want to delete this transaction?') }}";
+            if (confirm(confirmationMessage)) {
                 window.location.href = "/delete-transaction/" + transactionId;
                 window.location.reload();
             }
