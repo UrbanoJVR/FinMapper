@@ -22,6 +22,12 @@ def dashboard():
                            new_category_form=NewCategoryForm())
 
 
+@categories_blueprint.route('/categories/delete/<int:category_id>', methods=['GET'])
+def delete(category_id):
+    category_service.delete(category_id)
+    return '', 204
+
+
 def create_category(req):
     new_category_form = NewCategoryForm(req.form)
 

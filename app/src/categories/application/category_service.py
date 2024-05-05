@@ -13,6 +13,9 @@ class CategoryService:
     def save_category(self, category: Category):
         self.repository.save(category)
 
+    def delete(self, id: int):
+        self.repository.delete(id)
+
     def get_all_categories(self) -> List[Category]:
         return self.repository.get_all()
 
