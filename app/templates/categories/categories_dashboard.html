@@ -28,38 +28,23 @@
                                 data-bs-target="#newCategoryModal">
                             Add new category
                         </button>
-                        <div class="modal fade" id="newCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                             aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Create category</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form class="form" method="post">
-                                            {{ new_category_form.hidden_tag() }}
-                                            <div class="text-start">
-                                                {{ new_category_form.name.label(class='form-label') }}
-                                                {{ new_category_form.name }}
-                                            </div>
-                                            <div class="mt-3 text-start">
-                                                {{ new_category_form.description.label(class='form-label') }}
-                                                {{ new_category_form.description }}
-                                            </div>
-                                            <button type="button" class="btn btn-secondary mt-3"
-                                                    data-bs-dismiss="modal">Close
-                                            </button>
-                                            <button type="submit" class="btn btn-primary mt-3">Guardar</button>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-
-                                    </div>
+                        {% call centered_modal('newCategoryModal', 'Create category') %}
+                            <form class="form" method="post">
+                                {{ new_category_form.hidden_tag() }}
+                                <div class="text-start">
+                                    {{ new_category_form.name.label(class='form-label') }}
+                                    {{ new_category_form.name }}
                                 </div>
-                            </div>
-                        </div>
+                                <div class="mt-3 text-start">
+                                    {{ new_category_form.description.label(class='form-label') }}
+                                    {{ new_category_form.description }}
+                                </div>
+                                <button type="button" class="btn btn-secondary mt-3"
+                                        data-bs-dismiss="modal">Close
+                                </button>
+                                <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+                            </form>
+                        {% endcall %}
                     </div>
                 </div>
             </div>
