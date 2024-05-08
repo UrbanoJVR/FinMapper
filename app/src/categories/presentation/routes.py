@@ -28,9 +28,16 @@ def delete(category_id):
     return '', 204
 
 
-@categories_blueprint.route('/categories/edit/<int:category_id>', methods=['GET'])
+@categories_blueprint.route('/categories/edit/<int:category_id>', methods=['POST'])
 def edit(category_id):
-    return render_template('categories/edit_category.html')
+    form = NewCategoryForm(request.form)
+    category: Category = Category(
+        id=category_id,
+        name=form.name.data,
+        description=form.description.data
+    )
+    category_service.update(category)
+    return redirect(url_for('categories_blueprint.dashboard'))
 
 
 def create_category(req):

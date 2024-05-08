@@ -14,6 +14,12 @@ Generate script for new migrations:
 flask db migrate
 ````
 
+If you want to create empty migration file to insert manual changes:
+
+````
+flask db revision
+````
+
 ## Config pycharm
 
 ![Pycharm run configuration](doc_img/flask_run_config_pycharm.png?raw=true "Pycharm run config")

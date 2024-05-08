@@ -16,6 +16,16 @@ class CategoryService:
     def delete(self, id: int):
         self.repository.delete(id)
 
+    def update(self, category: Category):
+        category_on_db: Category = self.repository.get_by_id(category.id)
+        if category_on_db is None:
+            # Exception
+            return None
+
+        self.repository.update(category)
+        return category.id
+
+
     def get_all_categories(self) -> List[Category]:
         return self.repository.get_all()
 
