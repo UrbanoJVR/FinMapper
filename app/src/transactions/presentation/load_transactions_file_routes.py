@@ -1,5 +1,5 @@
 import os
-from datetime import time
+from datetime import datetime
 from typing import List
 
 from flask import request, render_template, session, redirect, url_for, current_app
@@ -54,6 +54,6 @@ def read_file(filename: str):
 
 def save_file(data_file):
     _, extension = data_file.filename.split('.')
-    filename = f'{int(time.time())}.{extension}'
+    filename = f'{datetime.now().timestamp()}.{extension}'
     data_file.save(os.path.join(current_app.config['UPLOAD_DIR'], filename))
     return filename
