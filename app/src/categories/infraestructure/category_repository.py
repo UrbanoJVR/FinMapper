@@ -16,6 +16,14 @@ class CategoryRepository:
         db.session.add(model)
         db.session.commit()
 
+    def delete(self, category_id: int):
+        CategoryModel.query.filter_by(id=category_id).delete()
+        db.session.commit()
+
+    def update(self, category: Category):
+        db.session.merge(category_model_mapper.map_to_model(category))
+        db.session.commit()
+
     def get_all(self) -> List[Category]:
         return category_model_mapper.map_model_list_to_class(CategoryModel.query.all())
 

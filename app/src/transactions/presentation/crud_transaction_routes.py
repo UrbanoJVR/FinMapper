@@ -74,7 +74,7 @@ def load_category(category_id):
         return category_service.get_by_id(int(category_id))
 
 
-@transactions_blueprint.route('/delete-transaction/<int:transaction_id>', methods=['GET'])
+@transactions_blueprint.route('/transactions/delete/<int:transaction_id>', methods=['GET'])
 def delete_transaction(transaction_id):
     transaction_service.delete(transaction_id)
     return '', 204
