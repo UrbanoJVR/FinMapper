@@ -2,7 +2,7 @@
 
 ## Database management
 
-To create local sqlite database:
+To create and update local sqlite database:
 
 ````
 flask db upgrade
