@@ -2,10 +2,10 @@ import os
 
 from flask import Flask
 from flask_babel import Babel
-from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 from config import config
+from database import db
 
 
 def register_blueprints(app):
@@ -21,7 +21,6 @@ def get_locale():
 
 
 babel = Babel()
-db = SQLAlchemy()
 migrate = Migrate()
 
 
