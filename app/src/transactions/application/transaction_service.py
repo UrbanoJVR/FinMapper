@@ -26,7 +26,6 @@ class TransactionService:
     def delete(self, id: int):
         self.repository.delete(id)
 
-
     def get_by_month_year(self, month: int, year: int) -> List[Transaction]:
         return self.repository.get_by_month_year(month, year)
 

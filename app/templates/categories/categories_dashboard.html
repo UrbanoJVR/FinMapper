@@ -1,6 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+    {% endwith %}
+
     {% from "shared/centered_modal.html" import centered_modal %}
     <div class="container mt-3">
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 d-flex align-items-center">
