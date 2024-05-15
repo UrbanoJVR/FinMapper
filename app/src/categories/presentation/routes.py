@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 
 from app.src.categories import categories_blueprint
 from app.src.categories.application.category_service import CategoryService
@@ -14,7 +14,10 @@ def dashboard():
     categories = category_service.get_all_categories()
 
     if request.method == 'POST':
-        create_category(request)
+        if create_category(request):
+            flash("Category successfully created!", "success")
+        else:
+            flash("Category name already exists!", "warning")
         return redirect(url_for('categories_blueprint.dashboard'))
 
     return render_template('categories/categories_dashboard.html',
@@ -40,7 +43,7 @@ def edit(category_id):
     return redirect(url_for('categories_blueprint.dashboard'))
 
 
-def create_category(req):
+def create_category(req) -> bool:
     new_category_form = NewCategoryForm(req.form)
 
     if new_category_form.validate_on_submit():
@@ -48,6 +51,6 @@ def create_category(req):
             name=new_category_form.name.data,
             description=new_category_form.description.data
         )
-        category_service.save_category(new_category)
-        new_category_form.name.data = None
-        new_category_form.description.data = None
+        return category_service.save_category(new_category)
+    else:
+        return False

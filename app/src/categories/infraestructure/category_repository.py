@@ -29,3 +29,9 @@ class CategoryRepository:
 
     def get_by_id(self, id: int) -> Category:
         return category_model_mapper.map_to_class(CategoryModel.query.filter_by(id=id).first())
+
+    def exists_by_name(self, name: str) -> bool:
+        if CategoryModel.query.filter_by(name=name).first() is None:
+            return False
+        else:
+            return True

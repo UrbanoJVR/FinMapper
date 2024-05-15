@@ -10,8 +10,12 @@ class CategoryService:
     def __init__(self, repository: CategoryRepository):
         self.repository = repository
 
-    def save_category(self, category: Category):
+    def save_category(self, category: Category) -> bool:
+        if self.repository.exists_by_name(category.name):
+            return False
+
         self.repository.save(category)
+        return True
 
     def delete(self, id: int):
         self.repository.delete(id)
@@ -24,7 +28,6 @@ class CategoryService:
 
         self.repository.update(category)
         return category.id
-
 
     def get_all_categories(self) -> List[Category]:
         return self.repository.get_all()
