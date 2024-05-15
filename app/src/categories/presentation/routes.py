@@ -1,4 +1,5 @@
 from flask import render_template, request, redirect, url_for, flash
+from flask_babel import gettext
 
 from app.src.categories import categories_blueprint
 from app.src.categories.application.category_service import CategoryService
@@ -15,9 +16,9 @@ def dashboard():
 
     if request.method == 'POST':
         if create_category(request):
-            flash("Category successfully created!", "success")
+            flash(gettext("Category successfully created!"), "success")
         else:
-            flash("Category name already exists!", "warning")
+            flash(gettext("Can't create category"), "warning")
         return redirect(url_for('categories_blueprint.dashboard'))
 
     return render_template('categories/categories_dashboard.html',
