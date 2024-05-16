@@ -19,7 +19,7 @@ def categories_dashboard():
             flash(gettext("Category successfully created!"), "success")
         else:
             flash(gettext("Can't create category"), "warning")
-        return redirect(url_for('categories_blueprintcategories_dashboard'))
+        return redirect(url_for('categories_blueprint.categories_dashboard'))
 
     return render_template('categories/categories_dashboard.html',
                            categories=categories,
@@ -34,7 +34,7 @@ def delete(category_id):
         category_service.delete(category_id)
         flash(gettext("Category successfully deleted!"), "success")
 
-    return redirect(url_for('categories_blueprintcategories_dashboard'))
+    return redirect(url_for('categories_blueprint.categories_dashboard'))
 
 
 @categories_blueprint.route('/categories/edit/<int:category_id>', methods=['POST'])
@@ -46,7 +46,7 @@ def edit(category_id):
         description=form.description.data
     )
     category_service.update(category)
-    return redirect(url_for('categories_blueprintcategories_dashboard'))
+    return redirect(url_for('categories_blueprint.categories_dashboard'))
 
 
 def create_category(req) -> bool:

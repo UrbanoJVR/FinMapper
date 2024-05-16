@@ -1,0 +1,22 @@
+{% macro show_flash_messages(messages) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            {% if category == "warning" %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <ul>
+                        <li>{{ message }}</li>
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+            {% if category == "success" %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <ul>
+                        <li>{{ message }}</li>
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endmacro %}

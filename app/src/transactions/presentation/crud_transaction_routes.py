@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
+from flask_babel import gettext
 
 from app.src.categories.application.category_service import CategoryService
 from app.src.categories.infraestructure.category_repository import CategoryRepository
@@ -64,6 +65,7 @@ def edit_transaction(transaction_id):
             category=load_category(form.category_id.data)
         )
         transaction_service.update(transaction)
+        flash(gettext('Transaction successfully updated.'), 'success')
         return redirect(url_for('transactions_blueprint.edit_transaction', transaction_id=transaction.id))
 
 

@@ -1,30 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% with messages = get_flashed_messages(with_categories=True) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                {% if category == "warning" %}
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <ul>
-                            <li>{{ message }}</li>
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endif %}
-                {% if category == "success" %}
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <ul>
-                            <li>{{ message }}</li>
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
     {% from "shared/centered_modal.html" import centered_modal %}
+    {% from "shared/show_flash_messages.html" import show_flash_messages %}
+    {{ show_flash_messages(get_flashed_messages(with_categories=True)) }}
+
     <div class="container mt-3">
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 d-flex align-items-center">
             {% for category in categories %}
