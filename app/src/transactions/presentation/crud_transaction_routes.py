@@ -14,7 +14,7 @@ transaction_service = TransactionService(TransactionRepository())
 category_service = CategoryService(CategoryRepository())
 
 
-@transactions_blueprint.route('/transactions', methods=['GET'])
+@transactions_blueprint.route('/dashboard', methods=['GET'])
 def dashboard():
     return render_template('transactions/transactions_dashboard.html')
 
@@ -104,15 +104,6 @@ def form_is_submitted_by_enter_key_pressed(form: MonthYearFilterForm) -> bool:
         return True
 
     return False
-
-
-# def calculate_month_year(form: MonthYearFilterForm):
-#     if not form_is_submitted_by_enter_key_pressed(form):
-#         if form.direction.data == 'previous':
-#             form.month.data, form.year.data = previous_month(int(form.month.data), int(form.year.data))
-#
-#         if form.direction.data == 'next':
-#             form.month.data, form.year.data = next_month(int(form.month.data), int(form.year.data))
 
 
 def calculate_month_year(form: MonthYearFilterForm):

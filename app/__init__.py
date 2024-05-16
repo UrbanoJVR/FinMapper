@@ -4,6 +4,7 @@ from flask import Flask
 from flask_babel import Babel
 from flask_migrate import Migrate
 
+from app.common_routes import page_not_found
 from config import config
 from database import db
 
@@ -14,6 +15,8 @@ def register_blueprints(app):
 
     from app.src.transactions import transactions_blueprint
     app.register_blueprint(transactions_blueprint)
+
+    app.errorhandler(404)(page_not_found)
 
 
 def get_locale():
