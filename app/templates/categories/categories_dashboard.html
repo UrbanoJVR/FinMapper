@@ -106,7 +106,6 @@
             const confirmationMessage = "{{ _('Are you sure you want to delete this category? Could lose the category of some transactions. ') }}";
             if (confirm(confirmationMessage)) {
                 window.location.href = "/categories/delete/" + categoryId;
-                window.location.reload();
             }
         }
 

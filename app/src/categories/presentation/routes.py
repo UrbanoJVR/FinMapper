@@ -28,8 +28,13 @@ def dashboard():
 
 @categories_blueprint.route('/categories/delete/<int:category_id>', methods=['GET'])
 def delete(category_id):
-    category_service.delete(category_id)
-    return '', 204
+    if category_service.is_category_used(category_id):
+        flash(gettext("Can't delete category!"), "warning")
+    else:
+        category_service.delete(category_id)
+        flash(gettext("Category successfully deleted!"), "success")
+
+    return redirect(url_for('categories_blueprint.dashboard'))
 
 
 @categories_blueprint.route('/categories/edit/<int:category_id>', methods=['POST'])

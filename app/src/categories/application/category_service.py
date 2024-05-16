@@ -17,8 +17,9 @@ class CategoryService:
         self.repository.save(category)
         return True
 
-    def delete(self, id: int):
-        self.repository.delete(id)
+    def delete(self, category_id: int):
+        if not self.repository.is_category_used(category_id):
+            self.repository.delete(category_id)
 
     def update(self, category: Category):
         category_on_db: Category = self.repository.get_by_id(category.id)
@@ -34,3 +35,6 @@ class CategoryService:
 
     def get_by_id(self, id: int) -> Category:
         return self.repository.get_by_id(id)
+
+    def is_category_used(self, category_id: int) -> bool:
+        return self.repository.is_category_used(category_id)
