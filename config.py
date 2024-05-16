@@ -17,8 +17,15 @@ class DevelopmentConfig(Config):
     pass
 
 
-class TestingConfig(Config):
-    pass
+class TestConfig(Config):
+    SECRET_KEY = 'NOBODY_KNOWS'
+    UPLOAD_DIR = '/tmp'
+    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+
+    @staticmethod
+    def init_app(app):
+        pass
 
 
 class ProductionConfig(Config):
@@ -28,6 +35,6 @@ class ProductionConfig(Config):
 config = {
     'development': DevelopmentConfig,
     'production': ProductionConfig,
-    'testing': TestingConfig,
+    'test': TestConfig,
     'default': DevelopmentConfig
 }
