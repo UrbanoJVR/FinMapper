@@ -1,6 +1,9 @@
 {% extends 'shared/centered_card_content_template.html' %}
 
 {% block centered_content %}
+    {% from "shared/show_flash_messages.html" import show_flash_messages %}
+    {{ show_flash_messages(get_flashed_messages(with_categories=True)) }}
+
     <form class="form" method="post">
         {{ form.hidden_tag() }}
         <div class="mb-3 mt-3">
