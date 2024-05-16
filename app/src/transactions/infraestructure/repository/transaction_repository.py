@@ -2,11 +2,11 @@ from typing import List
 
 from sqlalchemy import extract
 
-from app import db
 from app.src.transactions.domain.transaction import Transaction
 from app.src.transactions.infraestructure.repository.transaction_model_mapper import map_to_model_list, \
     map_to_entity_list, map_to_entity, map_to_model
 from app.src.transactions.model.transaction_model import TransactionModel
+from database import db
 
 
 class TransactionRepository:

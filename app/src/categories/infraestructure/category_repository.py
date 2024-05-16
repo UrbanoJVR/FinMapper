@@ -2,10 +2,10 @@ from typing import List
 
 from sqlalchemy import text
 
-from app import db
 from app.src.categories.domain.category import Category
 from app.src.categories.infraestructure import category_model_mapper
 from app.src.categories.model.category_model import CategoryModel
+from database import db
 
 
 class CategoryRepository:
