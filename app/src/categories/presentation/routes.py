@@ -29,7 +29,7 @@ def dashboard():
 @categories_blueprint.route('/categories/delete/<int:category_id>', methods=['GET'])
 def delete(category_id):
     if category_service.is_category_used(category_id):
-        flash(gettext("Can't delete category!"), "warning")
+        flash(gettext("Can't delete used category!"), "warning")
     else:
         category_service.delete(category_id)
         flash(gettext("Category successfully deleted!"), "success")
