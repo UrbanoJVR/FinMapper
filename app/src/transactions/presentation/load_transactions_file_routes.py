@@ -2,11 +2,10 @@ import os
 from datetime import datetime
 from typing import List
 
-from flask import request, render_template, session, redirect, url_for, current_app
+from flask import request, render_template, session, redirect, url_for, current_app, Blueprint
 from flask_babel import gettext
 from werkzeug.datastructures import CombinedMultiDict
 
-from app.src.transactions import transactions_blueprint
 from app.src.transactions.application.transaction_service import TransactionService
 from app.src.transactions.domain.transaction_from_file import TransactionFromFile
 from app.src.transactions.infraestructure.file_reader.csv_file_reader import CsvFileReader
@@ -15,9 +14,11 @@ from app.src.transactions.infraestructure.repository.transaction_repository impo
 from app.src.transactions.presentation.forms import TransactionsFileForm
 from app.src.transactions.presentation.transaction_from_file_mapper import map_to_entity_list
 
+transactions_file_blueprint = Blueprint('transactions_file_blueprint', __name__, url_prefix='')
 transaction_service = TransactionService(TransactionRepository())
 
-@transactions_blueprint.route('/load/review', methods=['GET', 'POST'])
+
+@transactions_file_blueprint.route('/load/review', methods=['GET', 'POST'])
 def review_file():
     if request.method == 'GET':
         return render_template('transactions/review_file.html', transactions=session.get('transactions'))
@@ -27,10 +28,10 @@ def review_file():
             map_to_entity_list(session.get('transactions'))
         )
         session.pop('transactions')
-        return redirect(url_for('transactions_blueprint.load_transactions_file'))
+        return redirect(url_for('transactions_file_blueprint.load_transactions_file'))
 
 
-@transactions_blueprint.route('/load', methods=['GET', 'POST'])
+@transactions_file_blueprint.route('/load', methods=['GET', 'POST'])
 def load_transactions_file():
     form = TransactionsFileForm(CombinedMultiDict((request.files, request.form)))
 
@@ -39,7 +40,7 @@ def load_transactions_file():
 
     if form.validate_on_submit():
         read_file(save_file(form.file.data))
-        return redirect(url_for('transactions_blueprint.review_file'))
+        return redirect(url_for('transactions_file_blueprint.review_file'))
     else:
         error_text = gettext('FileExtensionNotAllowed')
         return render_template('transactions/load_file.html', form=form, error=error_text)

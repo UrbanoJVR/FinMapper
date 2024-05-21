@@ -8,8 +8,11 @@ from database import db
 
 
 def register_blueprints(app):
-    from app.src.transactions import transactions_blueprint
-    app.register_blueprint(transactions_blueprint)
+    from transactions.presentation.crud_transaction_routes import transactions_crud_blueprint
+    app.register_blueprint(transactions_crud_blueprint)
+
+    from transactions.presentation.load_transactions_file_routes import transactions_file_blueprint
+    app.register_blueprint(transactions_file_blueprint)
 
     from categories.presentation.routes import categories_blueprint
     app.register_blueprint(categories_blueprint)

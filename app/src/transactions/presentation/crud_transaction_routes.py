@@ -1,26 +1,26 @@
 from datetime import datetime
 
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_babel import gettext
 
 from app.src.categories.application.category_service import CategoryService
 from app.src.categories.infraestructure.category_repository import CategoryRepository
-from app.src.transactions import transactions_blueprint
 from app.src.transactions.application.transaction_service import TransactionService
 from app.src.transactions.domain.transaction import Transaction
 from app.src.transactions.infraestructure.repository.transaction_repository import TransactionRepository
 from app.src.transactions.presentation.forms import MonthYearFilterForm, TransactionForm
 
+transactions_crud_blueprint = Blueprint('transactions_crud_blueprint', __name__, url_prefix='')
 transaction_service = TransactionService(TransactionRepository())
 category_service = CategoryService(CategoryRepository())
 
 
-@transactions_blueprint.route('/dashboard', methods=['GET'])
+@transactions_crud_blueprint.route('/dashboard', methods=['GET'])
 def dashboard():
     return render_template('transactions/transactions_dashboard.html')
 
 
-@transactions_blueprint.route('/movements/<int:month>/<int:year>', methods=['GET', 'POST'])
+@transactions_crud_blueprint.route('/movements/<int:month>/<int:year>', methods=['GET', 'POST'])
 def movements_list(month: int, year: int):
     if request.method == 'GET':
         form = MonthYearFilterForm(month=month, year=year)
@@ -32,16 +32,16 @@ def movements_list(month: int, year: int):
 
     if request.method == 'POST':
         month, year = calculate_month_year(MonthYearFilterForm(request.form))
-        return redirect(url_for('transactions_blueprint.movements_list', month=month, year=year))
+        return redirect(url_for('transactions_crud_blueprint.movements_list', month=month, year=year))
 
 
-@transactions_blueprint.route('/movements', methods=['GET', 'POST'])
+@transactions_crud_blueprint.route('/movements', methods=['GET', 'POST'])
 def movements():
     now = datetime.now()
-    return redirect(url_for('transactions_blueprint.movements_list', month=now.month, year=now.year))
+    return redirect(url_for('transactions_crud_blueprint.movements_list', month=now.month, year=now.year))
 
 
-@transactions_blueprint.route('/edit-transaction/<int:transaction_id>', methods=['GET', 'POST'])
+@transactions_crud_blueprint.route('/edit-transaction/<int:transaction_id>', methods=['GET', 'POST'])
 def edit_transaction(transaction_id):
     if request.method == 'GET':
         transaction = transaction_service.get_by_id(transaction_id)
@@ -66,7 +66,7 @@ def edit_transaction(transaction_id):
         )
         transaction_service.update(transaction)
         flash(gettext('Transaction successfully updated.'), 'success')
-        return redirect(url_for('transactions_blueprint.edit_transaction', transaction_id=transaction.id))
+        return redirect(url_for('transactions_crud_blueprint.edit_transaction', transaction_id=transaction.id))
 
 
 def load_category(category_id):
@@ -76,7 +76,7 @@ def load_category(category_id):
         return category_service.get_by_id(int(category_id))
 
 
-@transactions_blueprint.route('/transactions/delete/<int:transaction_id>', methods=['GET'])
+@transactions_crud_blueprint.route('/transactions/delete/<int:transaction_id>', methods=['GET'])
 def delete_transaction(transaction_id):
     transaction_service.delete(transaction_id)
     return '', 204
