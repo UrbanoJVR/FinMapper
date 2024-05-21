@@ -22,6 +22,7 @@ class TestConfig(Config):
     UPLOAD_DIR = '/tmp'
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    WTF_CSRF_ENABLED = False
 
     @staticmethod
     def init_app(app):

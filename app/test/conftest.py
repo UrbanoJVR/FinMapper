@@ -1,17 +1,19 @@
+import os
+import sys
+
 import pytest
 
 from app import create_app
+from database import db
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='session')
 def client():
-    yield create_app('test').test_client()
-
-
-# @pytest.fixture(scope="module")
-# def db_session():
-#     Base.metadata.create_all(engine)
-#     session = Session()
-#     yield session
-#     session.rollback()
-#     session.close()
+    app = create_app('test')
+    with app.app_context():
+        db.create_all()
+        with app.test_client() as client:
+            yield client
+        db.drop_all()
