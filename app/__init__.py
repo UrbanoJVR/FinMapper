@@ -11,7 +11,7 @@ def register_blueprints(app):
     from app.src.transactions import transactions_blueprint
     app.register_blueprint(transactions_blueprint)
 
-    from app.src.categories import categories_blueprint
+    from categories.presentation.routes import categories_blueprint
     app.register_blueprint(categories_blueprint)
 
     app.errorhandler(404)(page_not_found)

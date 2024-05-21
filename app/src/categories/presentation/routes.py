@@ -1,12 +1,12 @@
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_babel import gettext
 
-from app.src.categories import categories_blueprint
 from app.src.categories.application.category_service import CategoryService
 from app.src.categories.domain.category import Category
 from app.src.categories.infraestructure.category_repository import CategoryRepository
 from app.src.categories.presentation.forms import NewCategoryForm
 
+categories_blueprint = Blueprint('categories_blueprint', __name__, url_prefix='')
 category_service = CategoryService(CategoryRepository())
 
 
