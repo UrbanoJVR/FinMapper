@@ -1,6 +1,12 @@
+from datetime import datetime
+from decimal import Decimal
+
 import pytest
 
+from categories.domain.category import Category
 from categories.infraestructure.category_repository import CategoryRepository
+from transactions.domain.transaction import Transaction
+from transactions.infraestructure.repository.transaction_repository import TransactionRepository
 
 
 @pytest.fixture(scope='function')
@@ -16,6 +22,20 @@ def given_multiple_categories(client):
     client.post('/categories/dashboard', data=dict(name='Category3', description='Description 3'))
 
     return CategoryRepository().get_all()
+
+
+@pytest.fixture(scope='function')
+def given_a_category_used_by_transaction(client):
+    CategoryRepository().save(Category(name='TestCategory', description='Test description'))
+    category = CategoryRepository().get_by_name('TestCategory')
+    TransactionRepository().save(Transaction(
+        transaction_date=datetime.now(),
+        amount=Decimal('100'),
+        concept='TestConcept',
+        category=category
+    ))
+
+    return category
 
 
 def category_exists_on_dashboard(client, category):

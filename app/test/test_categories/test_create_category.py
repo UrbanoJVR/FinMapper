@@ -2,7 +2,7 @@ from categories.domain.category import Category
 from test_categories.conftest import category_not_exists_on_dashboard, category_exists_on_dashboard
 
 
-def test_create_categories_when_existing_category(client, given_a_category):
+def test_create_category_when_existing_category(client, given_a_category):
     new_category = Category(name="New Category", description="This is a new category.")
     existing_category = given_a_category
     category_not_exists_on_dashboard(client, new_category)
