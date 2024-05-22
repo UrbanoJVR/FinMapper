@@ -30,13 +30,16 @@ class CategoryRepository:
         return category_model_mapper.map_model_list_to_class(CategoryModel.query.all())
 
     def get_by_id(self, category_id: int) -> Category:
-        return category_model_mapper.map_to_class(CategoryModel.query.filter_by(id=category_id).first())
+        return category_model_mapper.map_to_entity(CategoryModel.query.filter_by(id=category_id).first())
 
     def exists_by_name(self, name: str) -> bool:
         if CategoryModel.query.filter_by(name=name).first() is None:
             return False
         else:
             return True
+
+    def get_by_name(self, name: str) -> Category:
+        return category_model_mapper.map_to_entity(CategoryModel.query.filter_by(name=name).first())
 
     def is_category_used(self, category_id: int) -> bool:
         query = f"SELECT COUNT(*) FROM transactions WHERE category_id = {category_id}"

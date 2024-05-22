@@ -1,12 +1,7 @@
-import os
-import sys
-
 import pytest
 
 from app import create_app
 from database import db
-
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 
 @pytest.fixture(scope='session')

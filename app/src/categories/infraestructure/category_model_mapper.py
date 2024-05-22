@@ -12,7 +12,7 @@ def map_to_model(category: Category) -> CategoryModel:
     )
 
 
-def map_to_class(model: CategoryModel) -> Category:
+def map_to_entity(model: CategoryModel) -> Category:
     return Category(
         id=model.id,
         name=model.name,
@@ -21,5 +21,5 @@ def map_to_class(model: CategoryModel) -> Category:
 
 
 def map_model_list_to_class(model_list: List[CategoryModel]) -> List[Category]:
-    categories: List[Category] = list(map(map_to_class, model_list))
+    categories: List[Category] = list(map(map_to_entity, model_list))
     return categories

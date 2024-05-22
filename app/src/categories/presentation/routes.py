@@ -6,11 +6,11 @@ from app.src.categories.domain.category import Category
 from app.src.categories.infraestructure.category_repository import CategoryRepository
 from app.src.categories.presentation.forms import NewCategoryForm
 
-categories_blueprint = Blueprint('categories_blueprint', __name__, url_prefix='')
+categories_blueprint = Blueprint('categories_blueprint', __name__, url_prefix='/categories')
 category_service = CategoryService(CategoryRepository())
 
 
-@categories_blueprint.route('/categories/dashboard', methods=['GET', 'POST'])
+@categories_blueprint.route('/dashboard', methods=['GET', 'POST'])
 def categories_dashboard():
     categories = category_service.get_all_categories()
 
@@ -26,7 +26,7 @@ def categories_dashboard():
                            new_category_form=NewCategoryForm())
 
 
-@categories_blueprint.route('/categories/delete/<int:category_id>', methods=['GET'])
+@categories_blueprint.route('/delete/<int:category_id>', methods=['GET'])
 def delete(category_id):
     if category_service.is_category_used(category_id):
         flash(gettext("Can't delete used category!"), "warning")
@@ -37,7 +37,7 @@ def delete(category_id):
     return redirect(url_for('categories_blueprint.categories_dashboard'))
 
 
-@categories_blueprint.route('/categories/edit/<int:category_id>', methods=['POST'])
+@categories_blueprint.route('/edit/<int:category_id>', methods=['POST'])
 def edit(category_id):
     form = NewCategoryForm(request.form)
     category: Category = Category(
