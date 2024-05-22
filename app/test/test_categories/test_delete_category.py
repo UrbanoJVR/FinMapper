@@ -3,21 +3,23 @@
 # Given a transaction with category should can not delete the category and show message
 from flask import url_for
 
-from test_categories.conftest import category_exists_on_dashboard
+from test_categories.conftest import category_exists_on_dashboard, category_not_exists_on_dashboard
 
 
-def test_delete_category(client, given_a_category):
-    category = given_a_category
-    category_exists_on_dashboard(client, category)
-    # response = client.get('/test_categories/dashboard/{}'.format(category.id))
+def test_delete_category(client, given_multiple_categories):
+    categories = given_multiple_categories
+    for category in categories:
+        category_exists_on_dashboard(client, category)
 
-    response = client.get('/categories/delete/' + str(category.id), follow_redirects=True)
+    response = client.get('/categories/delete/' + str(categories[1].id), follow_redirects=True)
 
     assert response.status_code == 200
     assert response.request.path == url_for('categories_blueprint.categories_dashboard')
     assert b'Category successfully deleted!' in response.data
-    assert category.name.encode() not in response.data
-    assert category.description.encode() not in response.data
+
+    category_exists_on_dashboard(client, categories[0])
+    category_not_exists_on_dashboard(client, categories[1])
+    category_exists_on_dashboard(client, categories[2])
 
 
 def test_delete_forbidden_when_category_is_used(client, given_a_category):
