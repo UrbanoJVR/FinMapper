@@ -29,19 +29,19 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">{{ _('Dashboard') }}</a>
+                    <a class="nav-link" href="#">{{ _('Dashboard') }}</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if '/movements' in request.path %}active{% endif %}" href="{{ url_for('transactions_crud_blueprint.movements') }}">{{ _('Movements') }}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ url_for('categories_blueprint.categories_dashboard') }}">{{ _('Categories') }}</a>
+                    <a class="nav-link" href="{{ url_for('categories_blueprint.categories_dashboard') }}">{{ _('Categories') }}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">{{ _('Categorize') }}</a>
+                    <a class="nav-link" href="#">{{ _('Categorize') }}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ url_for('transactions_file_blueprint.load_transactions_file') }}">{{ _('Load') }}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ url_for('transactions_crud_blueprint.movements') }}">{{ _('Movements') }}</a>
+                    <a class="nav-link" href="{{ url_for('transactions_file_blueprint.load_transactions_file') }}">{{ _('Load') }}</a>
                 </li>
             </ul>
         </div>
