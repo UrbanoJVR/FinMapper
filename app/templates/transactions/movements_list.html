@@ -1,28 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container-fluid mt-3">
-        <form id="month-year-filtering-form" method="POST">
+    <div class="container-fluid mt-4">
+        <form id="month-year-filtering-form" method="POST" class="row g-3 align-items-center">
             {{ month_year_filter_form.csrf_token }}
-            <div class="row mb-3">
-                <div class="col-auto">
-                    <button type="submit" name="direction" value="previous" class="btn btn-outline-dark"><</button>
-                </div>
-                <div class="col-auto">
-                    {{ month_year_filter_form.month(class="form-select", id="month-selector") }}
-                </div>
-                <div class="col-auto">
-                    {{ month_year_filter_form.year(type="number", class="form-control", id="year-selector") }}
-                </div>
-                <div class="col-auto">
-                    <button type="submit" name="direction" value="next" class="btn btn-outline-dark">></button>
-                </div>
+            <div class="col-auto">
+                <button type="submit" name="direction" value="previous" class="btn btn-outline-dark">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
             </div>
-            {{ month_year_filter_form.submit_by_enter() }}
-            {{ month_year_filter_form.direction() }}
+            <div class="col-auto">
+                {{ month_year_filter_form.month(class="form-select", id="month-selector") }}
+            </div>
+            <div class="col-auto">
+                {{ month_year_filter_form.year(type="number", class="form-control", id="year-selector", placeholder="YYYY") }}
+            </div>
+            <div class="col-auto">
+                <button type="submit" name="direction" value="next" class="btn btn-outline-dark">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
         </form>
-        <table class="table table-striped">
-            <thead>
+        <table class="table table-striped table-hover mt-4">
+            <thead class="bg-light text-dark">
             <tr>
                 <th scope="col">{{ _('Actions') }}</th>
                 <th scope="col">{{ _('Date') }}</th>
@@ -35,10 +35,10 @@
             {% for transaction in transactions %}
                 <tr>
                     <td>
-                        <button type="button" class="btn btn-outline-primary" onclick="editTransaction('{{ transaction.id }}')">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="editTransaction('{{ transaction.id }}')">
                             <i class="fas fa-pencil-alt"></i>
                         </button>
-                        <button type="button" class="btn btn-outline-danger" onclick="deleteTransaction('{{ transaction.id }}')">
+                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteTransaction('{{ transaction.id }}')">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </td>
@@ -63,7 +63,7 @@
 
         document.getElementById("year-selector").addEventListener("keydown", function (event) {
             if (event.key === 'Enter') {
-                document.getElementById("submit_by_enter").value = "true"
+                document.getElementById("submit_by_enter").value = "true";
             }
         });
 
@@ -75,7 +75,6 @@
             var confirmationMessage = "{{ _('Are you sure you want to delete this transaction?') }}";
             if (confirm(confirmationMessage)) {
                 window.location.href = "/transactions/delete/" + transactionId;
-                window.location.reload();
             }
         }
     </script>
