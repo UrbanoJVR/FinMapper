@@ -35,10 +35,10 @@
             {% for transaction in transactions %}
                 <tr>
                     <td>
-                        <button type="button" class="btn btn-primary" onclick="editTransaction('{{ transaction.id }}')">
+                        <button type="button" class="btn btn-outline-primary" onclick="editTransaction('{{ transaction.id }}')">
                             <i class="fas fa-pencil-alt"></i>
                         </button>
-                        <button type="button" class="btn btn-danger" onclick="deleteTransaction('{{ transaction.id }}')">
+                        <button type="button" class="btn btn-outline-danger" onclick="deleteTransaction('{{ transaction.id }}')">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </td>
