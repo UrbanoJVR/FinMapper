@@ -1,6 +1,3 @@
-# Given a category should delete it with success message
-# Given a test_categories list should delte one category with success message and still showing not delted test_categories
-# Given a transaction with category should can not delete the category and show message
 from flask import url_for
 
 from test_categories.conftest import category_exists_on_dashboard, category_not_exists_on_dashboard
