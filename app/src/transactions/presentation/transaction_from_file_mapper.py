@@ -2,7 +2,6 @@ from decimal import Decimal
 from typing import List
 
 from app.src.transactions.domain.transaction import Transaction
-from app.src.transactions.domain.transaction_from_file import TransactionFromFile
 from app.src.utils.date_utils import str_to_date
 
 

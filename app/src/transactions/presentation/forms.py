@@ -1,11 +1,11 @@
+from flask_babel import lazy_gettext
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed, FileRequired
+from flask_wtf.file import FileField, FileAllowed
 from wtforms.fields.choices import SelectField
 from wtforms.fields.datetime import DateField
 from wtforms.fields.numeric import DecimalField
 from wtforms.fields.simple import StringField, HiddenField
 from wtforms.validators import DataRequired
-from flask_babel import lazy_gettext, gettext
 
 
 def get_translated_months():
@@ -28,7 +28,7 @@ class MonthYearFilterForm(FlaskForm):
     month = SelectField(choices=get_translated_months())
     year = StringField()
     submit_by_enter = HiddenField(default="false")
-    direction = HiddenField()
+    direction = HiddenField(default="no_direction")
 
 
 class TransactionForm(FlaskForm):

@@ -117,3 +117,5 @@ def calculate_month_year(form: MonthYearFilterForm):
 
     if form.direction.data == 'next':
         return next_month(int(form.month.data), int(form.year.data))
+
+    return form.month.data, form.year.data

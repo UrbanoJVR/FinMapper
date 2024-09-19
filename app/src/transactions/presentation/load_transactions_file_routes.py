@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from typing import List
 
-from flask import request, render_template, session, redirect, url_for, current_app, Blueprint
+from flask import request, render_template, session, redirect, url_for, current_app, Blueprint, flash
 from flask_babel import gettext
 from werkzeug.datastructures import CombinedMultiDict
 
@@ -27,6 +27,7 @@ def review_file():
         transaction_service.save_transactions(
             map_to_entity_list(session.get('transactions'))
         )
+        flash(gettext('Transactions saved successfully!'), 'success')
         session.pop('transactions')
         return redirect(url_for('transactions_file_blueprint.load_transactions_file'))
 
