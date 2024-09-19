@@ -66,7 +66,9 @@ def edit_transaction(transaction_id):
         )
         transaction_service.update(transaction)
         flash(gettext('Transaction successfully updated.'), 'success')
-        return redirect(url_for('transactions_crud_blueprint.edit_transaction', transaction_id=transaction.id))
+        return redirect(url_for('transactions_crud_blueprint.movements_list',
+                                month=transaction.transaction_date.month,
+                                year=transaction.transaction_date.year))
 
 
 def load_category(category_id):
@@ -79,7 +81,7 @@ def load_category(category_id):
 @transactions_crud_blueprint.route('/transactions/delete/<int:transaction_id>', methods=['GET'])
 def delete_transaction(transaction_id):
     transaction_service.delete(transaction_id)
-    return '', 204
+    return redirect(request.referrer or url_for('home'))
 
 
 def generate_month_year_filter_form_actual_date():
