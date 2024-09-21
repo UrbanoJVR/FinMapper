@@ -53,7 +53,7 @@ def edit_transaction(transaction_id):
                                                      category_service.get_all_categories()]
         form.category_id.data = str(transaction.category.id) if transaction.category else 'None'
         form.category_id.selected = form.category_id.data
-        return render_template('transactions/edit_transaction.html', form=form)
+        return render_template('transactions/upsert_transaction.html', form=form)
 
     if request.method == 'POST':
         form: TransactionForm = TransactionForm(request.form)
@@ -69,6 +69,28 @@ def edit_transaction(transaction_id):
         return redirect(url_for('transactions_crud_blueprint.movements_list',
                                 month=transaction.transaction_date.month,
                                 year=transaction.transaction_date.year))
+
+
+@transactions_crud_blueprint.route('/transactions/add', methods=['GET', 'POST'])
+def add_transaction():
+    if request.method == 'GET':
+        form = TransactionForm()
+        form.date.data = datetime.now()
+        form.category_id.choices = [('None', '')] + [(str(category.id), category.name) for category in
+                                                     category_service.get_all_categories()]
+        return render_template('transactions/upsert_transaction.html', form=form)
+
+    if request.method == 'POST':
+        form = TransactionForm(request.form)
+        transaction = Transaction(
+            transaction_date=form.date.data,
+            amount=form.amount.data,
+            concept=form.concept.data,
+            category=load_category(form.category_id.data)
+        )
+        transaction_service.create(transaction)
+        flash(gettext('Transaction successfully created.'), 'success')
+        return redirect(url_for('transactions_crud_blueprint.add_transaction'))
 
 
 def load_category(category_id):

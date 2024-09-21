@@ -23,6 +23,9 @@ class TransactionService:
 
         return transaction.id
 
+    def create(self, transaction: Transaction):
+        self.repository.save(transaction)
+
     def delete(self, id: int):
         self.repository.delete(id)
 
