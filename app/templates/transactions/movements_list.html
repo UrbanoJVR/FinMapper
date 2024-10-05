@@ -49,7 +49,7 @@
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </td>
-                    <td>{{ transaction.transaction_date.strftime('%d-%m-%Y') }}</td>
+                    <td>{{ format_datetime(transaction.transaction_date, 'EEEE, dd-MM-yyyy') }}</td>
                     <td>{{ transaction.concept }}</td>
                     <td>{{ transaction.amount }}</td>
                     <td>{{ transaction.category.name }}</td>

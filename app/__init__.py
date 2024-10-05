@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_babel import Babel
+from flask_babel import Babel, format_datetime
 from flask_migrate import Migrate
 
 from app.common_routes import page_not_found
@@ -37,5 +37,8 @@ def create_app(config_name='default'):
     migrate.init_app(app, db)
     config[config_name].init_app(app)
     register_blueprints(app)
+
+    # Add format_datetime to Jinja2 environment globals
+    app.jinja_env.globals['format_datetime'] = format_datetime
 
     return app

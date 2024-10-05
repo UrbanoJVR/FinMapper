@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% from "shared/show_flash_messages.html" import show_flash_messages %}
+
+{% block content %}
+    <div class="container-fluid mt-4">
+        <table class="table table-striped table-hover mt-4">
+            <thead class="bg-light text-dark">
+            <tr>
+                <th scope="col">{{ _('Date') }}</th>
+                <th scope="col">{{ _('Concept') }}</th>
+                <th scope="col">{{ _('Amount') }}</th>
+                <th scope="col">{{ _('Category') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{ format_datetime(transaction.transaction_date, 'EEEE, dd-MM-yyyy') }}</td>
+                    <td>{{ transaction.concept }}</td>
+                    <td>{{ transaction.amount }}</td>
+                    <td>{{ transaction.category.name }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
