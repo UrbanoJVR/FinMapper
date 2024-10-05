@@ -39,20 +39,25 @@
                     <ul class="dropdown-menu">
                         <li>
                             <a class="dropdown-item"
-                               href="{{ url_for('transactions_crud_blueprint.movements') }}"> {{ _('View transactions') }}
+                               href="{{ url_for('transactions_crud_blueprint.movements') }}">
+                                <i class="fas fa-table"></i> {{ _('View transactions') }}
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item" href="{{ url_for('transactions_crud_blueprint.add_transaction') }}">
-                                <i class="fa-solid fa-plus"></i> {{ _('Add transaction') }}
+                                <i class="fas fa-plus"></i> {{ _('Add transaction') }}
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item" href="#">
-                                <i class="fas fa-list-alt"></i> {{ _('Categorize') }}
+                                <i class="fas fa-tag"></i> {{ _('Categorize') }}
                             </a>
                         </li>
-                        <li><a class="dropdown-item" href="#">{{ _('Load file') }}</a></li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-upload"></i> {{ _('Load file') }}
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item">
