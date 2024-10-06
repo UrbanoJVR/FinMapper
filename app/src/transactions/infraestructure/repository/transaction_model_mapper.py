@@ -1,6 +1,5 @@
 from typing import List
 
-from app.src.categories.domain.category import Category
 from app.src.transactions.domain.transaction import Transaction
 from app.src.transactions.model.transaction_model import TransactionModel
 
@@ -15,7 +14,7 @@ def map_to_model(transaction: Transaction) -> TransactionModel:
     )
 
 
-def map_to_entity(transaction_model: TransactionModel) -> Transaction:
+def map_to_domain(transaction_model: TransactionModel) -> Transaction:
     return Transaction(
         id=transaction_model.id,
         transaction_date=transaction_model.date,
@@ -38,6 +37,6 @@ def map_to_entity_list(transactions_models: List[TransactionModel]) -> List[Tran
     transactions: List[Transaction] = []
 
     for transaction_model in transactions_models:
-        transactions.append(map_to_entity(transaction_model))
+        transactions.append(map_to_domain(transaction_model))
 
     return transactions

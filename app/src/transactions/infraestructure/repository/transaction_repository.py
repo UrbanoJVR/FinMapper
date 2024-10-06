@@ -4,7 +4,7 @@ from sqlalchemy import extract
 
 from app.src.transactions.domain.transaction import Transaction
 from app.src.transactions.infraestructure.repository.transaction_model_mapper import map_to_model_list, \
-    map_to_entity_list, map_to_entity, map_to_model
+    map_to_entity_list, map_to_domain, map_to_model
 from app.src.transactions.model.transaction_model import TransactionModel
 from database import db
 
@@ -44,4 +44,20 @@ class TransactionRepository:
 
     def get_by_id(self, id: int) -> Transaction:
         transaction_model = TransactionModel.query.filter_by(id=id).first()
-        return map_to_entity(transaction_model)
+        return map_to_domain(transaction_model)
+
+    def get_last_uncategorized(self) -> Transaction:
+        model = (TransactionModel.query
+                 .filter_by(category_id=None)
+                 .order_by(TransactionModel.date.desc())
+                 .first())
+        return map_to_domain(model)
+
+    def get_uncategorized_by_month_year(self, month: int, year: int) -> List[Transaction]:
+        transactions = TransactionModel.query.filter(
+            extract('month', TransactionModel.date) == month,
+            extract('year', TransactionModel.date) == year,
+            TransactionModel.category_id is None
+        ).order_by(TransactionModel.date.desc()).all()
+
+        return map_to_entity_list(transactions)

@@ -6,10 +6,10 @@
         <table class="table table-striped table-hover mt-4">
             <thead class="bg-light text-dark">
             <tr>
-                <th scope="col">{{ _('Date') }}</th>
-                <th scope="col">{{ _('Concept') }}</th>
-                <th scope="col">{{ _('Amount') }}</th>
-                <th scope="col">{{ _('Category') }}</th>
+                <th scope="col" class="text-center">{{ _('Date') }}</th>
+                <th scope="col" class="text-center">{{ _('Concept') }}</th>
+                <th scope="col" class="text-center">{{ _('Amount') }}</th>
+                <th scope="col" class="text-center">{{ _('Category') }}</th>
             </tr>
             </thead>
             <tbody>
@@ -18,10 +18,36 @@
                     <td>{{ format_datetime(transaction.transaction_date, 'EEEE, dd-MM-yyyy') }}</td>
                     <td>{{ transaction.concept }}</td>
                     <td>{{ transaction.amount }}</td>
-                    <td>{{ transaction.category.name }}</td>
+                    <td>
+                        <select class="form-select" name="category">
+                            {% for category in categories %}
+                                <option value="{{ category.id }}" {% if category.id == transaction.category.id %}selected{% endif %}>
+                                    {{ category.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
+
+    <script>
+        function updateCategory(transactionId, categoryId) {
+            fetch(`/transactions/update-category/${transactionId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ category_id: categoryId })
+            }).then(response => {
+                if (response.ok) {
+                    alert('Category updated successfully');
+                } else {
+                    alert('Failed to update category');
+                }
+            });
+        }
+    </script>
 {% endblock %}

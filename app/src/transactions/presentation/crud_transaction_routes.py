@@ -41,6 +41,12 @@ def movements():
     return redirect(url_for('transactions_crud_blueprint.movements_list', month=now.month, year=now.year))
 
 
+@transactions_crud_blueprint.route('/transactions/categorize', methods=['GET', 'POST'])
+def categorize_transaction():
+    transactions = transaction_service.get_last_month_uncategorized()
+    return render_template('transactions/categorize_transactions.html', transactions=transactions)
+
+
 @transactions_crud_blueprint.route('/edit-transaction/<int:transaction_id>', methods=['GET', 'POST'])
 def edit_transaction(transaction_id):
     if request.method == 'GET':
