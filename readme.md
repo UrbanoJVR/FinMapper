@@ -1,5 +1,24 @@
 # Developers guide
 
+## Python pipenv management
+
+````
+#if you don't have pipenv installed
+brew install pipx
+pipx ensurepath
+pipx install pipenv
+
+#check if you have created venv
+pipenv --venv
+
+#create it
+pipenv install
+
+#update lock (when change pipfile)
+pipenv lock
+````
+
+
 ## Database management
 
 To create and update local sqlite database:
