@@ -57,7 +57,7 @@ class TransactionRepository:
         transactions = TransactionModel.query.filter(
             extract('month', TransactionModel.date) == month,
             extract('year', TransactionModel.date) == year,
-            TransactionModel.category_id is None
+            TransactionModel.category_id.is_(None)
         ).order_by(TransactionModel.date.desc()).all()
 
         return map_to_entity_list(transactions)
