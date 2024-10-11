@@ -1,7 +1,9 @@
 from typing import List
 
+from app.src.categories.domain.category import Category
 from app.src.transactions.domain.transaction import Transaction
 from app.src.transactions.infraestructure.repository.transaction_repository import TransactionRepository
+from app.src.categories.application import category_service
 
 
 class TransactionService:
@@ -36,12 +38,11 @@ class TransactionService:
         return self.repository.get_by_id(id)
 
     def get_last_month_uncategorized(self) -> List[Transaction]:
-        # TODO esto no está funcionando bien siempre devuelve lista vacía
         last_uncategorized_transaction = self.repository.get_last_uncategorized()
 
         if last_uncategorized_transaction is None:
             return []
 
         return self.repository.get_uncategorized_by_month_year(
-            last_uncategorized_transaction.transaction_date.month - 1,
+            last_uncategorized_transaction.transaction_date.month,
             last_uncategorized_transaction.transaction_date.year)

@@ -5,14 +5,19 @@ from flask_babel import gettext
 
 from app.src.categories.application.category_service import CategoryService
 from app.src.categories.infraestructure.category_repository import CategoryRepository
+from app.src.transactions.application.categorization.categorize_transaction_command import CategorizedTransaction
+from app.src.transactions.application.categorization.categorize_transaction_command_handler import \
+    CategorizeTransactionCommandHandler
 from app.src.transactions.application.transaction_service import TransactionService
 from app.src.transactions.domain.transaction import Transaction
 from app.src.transactions.infraestructure.repository.transaction_repository import TransactionRepository
 from app.src.transactions.presentation.forms import MonthYearFilterForm, TransactionForm
 
 transactions_crud_blueprint = Blueprint('transactions_crud_blueprint', __name__, url_prefix='')
-transaction_service = TransactionService(TransactionRepository())
-category_service = CategoryService(CategoryRepository())
+transaction_repository = TransactionRepository()
+transaction_service = TransactionService(transaction_repository)
+category_repository = CategoryRepository()
+category_service = CategoryService(category_repository)
 
 
 @transactions_crud_blueprint.route('/dashboard', methods=['GET'])
@@ -43,8 +48,23 @@ def movements():
 
 @transactions_crud_blueprint.route('/transactions/categorize', methods=['GET', 'POST'])
 def categorize_transaction():
-    transactions = transaction_service.get_last_month_uncategorized()
-    return render_template('transactions/categorize_transactions.html', transactions=transactions)
+    if request.method == 'GET':
+        transactions = transaction_service.get_last_month_uncategorized()
+        categories = category_service.get_all_categories()
+        return render_template('transactions/categorize_transactions.html',
+                               transactions=transactions,
+                               categories=categories)
+
+    if request.method == 'POST':
+        categorized_transactions = []
+        for transaction_id, category_id in request.form.items():
+            if category_id:
+                categorized_transactions.append(
+                    CategorizedTransaction(transaction_id=int(transaction_id),
+                                           category_id=int(category_id)))
+
+        CategorizeTransactionCommandHandler(categorized_transactions, transaction_repository, category_repository).execute()
+        return redirect(url_for('transactions_crud_blueprint.categorize_transaction'))
 
 
 @transactions_crud_blueprint.route('/edit-transaction/<int:transaction_id>', methods=['GET', 'POST'])
