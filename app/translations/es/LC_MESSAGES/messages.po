@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-05-05 02:18+0200\n"
+"POT-Creation-Date: 2024-10-18 23:22+0200\n"
 "PO-Revision-Date: 2024-03-07 18:27+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es\n"
@@ -18,7 +18,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
 
-#: app/src/transactions/presentation/load_transactions_file_routes.py:44
+#: app/src/categories/presentation/routes.py:19
+msgid "Category successfully created!"
+msgstr ""
+
+#: app/src/categories/presentation/routes.py:21
+msgid "Can't create category"
+msgstr ""
+
+#: app/src/categories/presentation/routes.py:32
+msgid "Can't delete used category!"
+msgstr ""
+
+#: app/src/categories/presentation/routes.py:35
+msgid "Category successfully deleted!"
+msgstr ""
+
+#: app/src/transactions/presentation/crud_transaction_routes.py:94
+msgid "Transaction successfully updated."
+msgstr ""
+
+#: app/src/transactions/presentation/crud_transaction_routes.py:118
+msgid "Transaction successfully created."
+msgstr ""
+
+#: app/src/transactions/presentation/load_transactions_file_routes.py:30
+msgid "Transactions saved successfully!"
+msgstr ""
+
+#: app/src/transactions/presentation/load_transactions_file_routes.py:46
 msgid "FileExtensionNotAllowed"
 msgstr "Formato de archivo no permitido"
 
@@ -26,92 +54,130 @@ msgstr "Formato de archivo no permitido"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: app/templates/base.html:35
-msgid "Categories"
-msgstr "Categorías"
-
-#: app/templates/base.html:38
-msgid "Categorize"
-msgstr "Categorizar"
-
-#: app/templates/base.html:41
-msgid "Load"
-msgstr "Cargar"
-
-#: app/templates/base.html:44
+#: app/templates/base.html:37
 msgid "Movements"
 msgstr "Movimientos"
 
-#: app/templates/transactions/edit_transaction.html:51
+#: app/templates/base.html:43
+msgid "View transactions"
+msgstr ""
+
+#: app/templates/base.html:48
+msgid "Add transaction"
+msgstr ""
+
+#: app/templates/base.html:53 app/templates/base.html:70
+msgid "Categorize"
+msgstr "Categorizar"
+
+#: app/templates/base.html:58
+#, fuzzy
+msgid "Load file"
+msgstr "Cargar"
+
+#: app/templates/base.html:66
+msgid "Categories"
+msgstr "Categorías"
+
+#: app/templates/base.html:75
+msgid "Load"
+msgstr "Cargar"
+
+#: app/templates/categories/categories_dashboard.html:86
+#, fuzzy
+msgid ""
+"Are you sure you want to delete this category? This action cannot be "
+"undone."
+msgstr "¿Estás seguro de que deseas eliminar la transacción?"
+
+#: app/templates/transactions/categorize_transactions.html:9
+msgid "Showing uncategorized transactions for"
+msgstr ""
+
+#: app/templates/transactions/categorize_transactions.html:14
 #: app/templates/transactions/review_file.html:7
+#: app/templates/transactions/upsert_transaction.html:54
 msgid "Save"
 msgstr "Guardar"
 
-#: app/templates/transactions/load_file.html:15
-msgid "Send"
-msgstr "Enviar"
-
-#: app/templates/transactions/movements_list.html:27
-msgid "Actions"
-msgstr ""
-
-#: app/templates/transactions/movements_list.html:28
-#: app/templates/transactions/review_file.html:12
+#: app/templates/transactions/categorize_transactions.html:22
+#: app/templates/transactions/movements_list.html:33
+#: app/templates/transactions/review_file.html:13
 msgid "Date"
 msgstr "Fecha"
 
-#: app/templates/transactions/movements_list.html:29
-#: app/templates/transactions/review_file.html:13
+#: app/templates/transactions/categorize_transactions.html:23
+#: app/templates/transactions/movements_list.html:34
+#: app/templates/transactions/review_file.html:14
 msgid "Concept"
 msgstr "Concepto"
 
-#: app/templates/transactions/movements_list.html:30
-#: app/templates/transactions/review_file.html:14
+#: app/templates/transactions/categorize_transactions.html:24
+#: app/templates/transactions/movements_list.html:35
+#: app/templates/transactions/review_file.html:15
 msgid "Amount"
 msgstr "Importe"
 
-#: app/templates/transactions/movements_list.html:31
+#: app/templates/transactions/categorize_transactions.html:25
+#: app/templates/transactions/movements_list.html:36
 msgid "Category"
 msgstr "Categoría"
 
-#: app/templates/transactions/movements_list.html:76
+#: app/templates/transactions/load_file.html:17
+msgid "Send"
+msgstr "Enviar"
+
+#: app/templates/transactions/movements_list.html:32
+msgid "Actions"
+msgstr ""
+
+#: app/templates/transactions/movements_list.html:82
 msgid "Are you sure you want to delete this transaction?"
 msgstr "¿Estás seguro de que deseas eliminar la transacción?"
 
+#: app/templates/transactions/review_file.html:8
+#, fuzzy
+msgid "Cancel"
+msgstr "Concepto"
+
+#: app/templates/transactions/upsert_transaction.html:55
+msgid "Return"
+msgstr ""
+
 # MANUAL TRANSLATIONS
+#~ msgid "January"
+#~ msgstr "Enero"
 
-msgid "January"
-msgstr "Enero"
+#~ msgid "February"
+#~ msgstr "Febrero"
 
-msgid "February"
-msgstr "Febrero"
+#~ msgid "March"
+#~ msgstr "Marzo"
 
-msgid "March"
-msgstr "Marzo"
+#~ msgid "April"
+#~ msgstr "Abril"
 
-msgid "April"
-msgstr "Abril"
+#~ msgid "May"
+#~ msgstr "Mayo"
 
-msgid "May"
-msgstr "Mayo"
+#~ msgid "June"
+#~ msgstr "Junio"
 
-msgid "June"
-msgstr "Junio"
+#~ msgid "July"
+#~ msgstr "Julio"
 
-msgid "July"
-msgstr "Julio"
+#~ msgid "August"
+#~ msgstr "Agosto"
 
-msgid "August"
-msgstr "Agosto"
+#~ msgid "September"
+#~ msgstr "Septiembre"
 
-msgid "September"
-msgstr "Septiembre"
+#~ msgid "October"
+#~ msgstr "Octubre"
 
-msgid "October"
-msgstr "Octubre"
+#~ msgid "November"
+#~ msgstr "Noviembre"
 
-msgid "November"
-msgstr "Noviembre"
+#~ msgid "December"
+#~ msgstr "Diciembre"
 
-msgid "December"
-msgstr "Diciembre"
