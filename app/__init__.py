@@ -8,13 +8,13 @@ from database import db
 
 
 def register_blueprints(app):
-    from app.src.transactions.presentation.crud_transaction_routes import transactions_crud_blueprint
+    from app.src.presentation.routes.crud_transaction_routes import transactions_crud_blueprint
     app.register_blueprint(transactions_crud_blueprint)
 
-    from app.src.transactions.presentation.load_transactions_file_routes import transactions_file_blueprint
+    from app.src.presentation.routes.load_transactions_file_routes import transactions_file_blueprint
     app.register_blueprint(transactions_file_blueprint)
 
-    from app.src.categories.presentation.routes import categories_blueprint
+    from app.src.presentation.routes.category_routes import categories_blueprint
     app.register_blueprint(categories_blueprint)
 
     app.errorhandler(404)(page_not_found)
