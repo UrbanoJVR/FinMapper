@@ -1,5 +1,5 @@
-from categories.domain.category import Category
-from test_categories.conftest import category_exists_on_dashboard, category_not_exists_on_dashboard
+from app.src.domain.category import Category
+from IT.test_categories.conftest import category_exists_on_dashboard, category_not_exists_on_dashboard
 
 
 def test_edit_category(client, given_a_category):

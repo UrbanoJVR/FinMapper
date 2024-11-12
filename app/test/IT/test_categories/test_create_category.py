@@ -1,5 +1,5 @@
-from categories.domain.category import Category
-from test_categories.conftest import category_not_exists_on_dashboard, category_exists_on_dashboard
+from app.src.domain.category import Category
+from IT.test_categories.conftest import category_not_exists_on_dashboard, category_exists_on_dashboard
 
 
 def test_create_category_when_existing_category(client, given_a_category):

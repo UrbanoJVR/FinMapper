@@ -10,13 +10,6 @@ class CategoryService:
     def __init__(self, repository: CategoryRepository):
         self.repository = repository
 
-    def save_category(self, category: Category) -> bool:
-        if self.repository.exists_by_name(category.name):
-            return False
-
-        self.repository.save(category)
-        return True
-
     def delete(self, category_id: int):
         if not self.repository.is_category_used(category_id):
             self.repository.delete(category_id)

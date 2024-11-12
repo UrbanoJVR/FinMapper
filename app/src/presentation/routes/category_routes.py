@@ -1,13 +1,16 @@
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_babel import gettext
 
+from app.src.application.category.command.create_category_command import CreateCategoryCommand
+from app.src.application.category.command.create_category_command_handler import CreateCategoryCommandHandler
 from app.src.application.category.service.category_service import CategoryService
 from app.src.domain.category import Category
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.presentation.form.category_forms import NewCategoryForm
 
 categories_blueprint = Blueprint('categories_blueprint', __name__, url_prefix='/categories')
-category_service = CategoryService(CategoryRepository())
+category_repository = CategoryRepository()
+category_service = CategoryService(category_repository)
 
 
 @categories_blueprint.route('/dashboard', methods=['GET', 'POST'])
@@ -53,10 +56,11 @@ def create_category(req) -> bool:
     new_category_form = NewCategoryForm(req.form)
 
     if new_category_form.validate_on_submit():
-        new_category = Category(
+        create_category_command = CreateCategoryCommand(
             name=new_category_form.name.data,
             description=new_category_form.description.data
         )
-        return category_service.save_category(new_category)
+        handler = CreateCategoryCommandHandler(category_repository)
+        return handler.execute(create_category_command)
     else:
         return False

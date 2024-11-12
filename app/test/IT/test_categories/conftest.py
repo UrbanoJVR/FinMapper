@@ -3,10 +3,10 @@ from decimal import Decimal
 
 import pytest
 
-from categories.domain.category import Category
-from categories.infraestructure.category_repository import CategoryRepository
-from transactions.domain.transaction import Transaction
-from transactions.infraestructure.repository.transaction_repository import TransactionRepository
+from app.src.domain.category import Category
+from app.src.domain.transaction import Transaction
+from app.src.infrastructure.repository.category_repository import CategoryRepository
+from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 
 @pytest.fixture(scope='function')
