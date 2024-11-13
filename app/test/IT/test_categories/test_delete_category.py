@@ -1,6 +1,6 @@
 from flask import url_for
 
-from IT.test_categories.conftest import category_exists_on_dashboard, category_not_exists_on_dashboard
+from .conftest import category_exists_on_dashboard, category_not_exists_on_dashboard
 
 
 def test_delete_category(client, given_multiple_categories):
