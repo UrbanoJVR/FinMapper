@@ -1,11 +1,10 @@
-import unittest
 from datetime import datetime
 from decimal import Decimal
 from typing import List
-from unicodedata import decimal
+from unittest import TestCase
 from unittest.mock import Mock, MagicMock, call
 
-from app.src.application.transaction.command.categorization.categorize_transaction_command import CategorizedTransaction
+from app.src.application.transaction.command.categorization.categorized_transaction import CategorizedTransaction
 from app.src.application.transaction.command.categorization.categorize_transaction_command_handler import \
     CategorizeTransactionCommandHandler
 from app.src.domain.category import Category
@@ -14,7 +13,7 @@ from app.src.infrastructure.repository.category_repository import CategoryReposi
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 
-class TestCategorizeTransactionCommandHandler(unittest.TestCase):
+class TestCategorizeTransactionCommandHandler(TestCase):
 
     def setUp(self):
         self.mock_transaction_repository = Mock(spec=TransactionRepository)

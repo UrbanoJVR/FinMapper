@@ -1,7 +1,7 @@
 from typing import List
 
 from app.src.infrastructure.repository.category_repository import CategoryRepository
-from app.src.application.transaction.command.categorization.categorize_transaction_command import CategorizedTransaction
+from app.src.application.transaction.command.categorization.categorized_transaction import CategorizedTransaction
 
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 

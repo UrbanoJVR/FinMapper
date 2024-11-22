@@ -34,13 +34,3 @@ class TransactionService:
 
     def get_by_id(self, id: int) -> Transaction:
         return self.repository.get_by_id(id)
-
-    def get_last_month_uncategorized(self) -> List[Transaction]:
-        last_uncategorized_transaction = self.repository.get_last_uncategorized()
-
-        if last_uncategorized_transaction is None:
-            return []
-
-        return self.repository.get_uncategorized_by_month_year(
-            last_uncategorized_transaction.transaction_date.month,
-            last_uncategorized_transaction.transaction_date.year)

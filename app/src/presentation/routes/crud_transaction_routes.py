@@ -4,8 +4,10 @@ from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_babel import gettext
 
 from app.src.application.category.service.category_service import CategoryService
+from app.src.application.transaction.query.search_uncategorized_transactions_from_last_month_query import \
+    SearchUncategorizedTransactionsFromLastMonthQuery
 from app.src.infrastructure.repository.category_repository import CategoryRepository
-from app.src.application.transaction.command.categorization.categorize_transaction_command import CategorizedTransaction
+from app.src.application.transaction.command.categorization.categorized_transaction import CategorizedTransaction
 from app.src.application.transaction.command.categorization.categorize_transaction_command_handler import \
     CategorizeTransactionCommandHandler
 from app.src.application.transaction.service.transaction_service import TransactionService
@@ -49,7 +51,7 @@ def movements():
 @transactions_crud_blueprint.route('/transactions/categorize', methods=['GET', 'POST'])
 def categorize_transaction():
     if request.method == 'GET':
-        transactions = transaction_service.get_last_month_uncategorized()
+        transactions = SearchUncategorizedTransactionsFromLastMonthQuery(transaction_repository).execute()
         categories = category_service.get_all_categories()
         return render_template('transactions/categorize_transactions.html',
                                transactions=transactions,
@@ -63,7 +65,8 @@ def categorize_transaction():
                     CategorizedTransaction(transaction_id=int(transaction_id),
                                            category_id=int(category_id)))
 
-        CategorizeTransactionCommandHandler(categorized_transactions, transaction_repository, category_repository).execute()
+        CategorizeTransactionCommandHandler(transaction_repository, category_repository).execute(
+            categorized_transactions)
         return redirect(url_for('transactions_crud_blueprint.categorize_transaction'))
 
 
