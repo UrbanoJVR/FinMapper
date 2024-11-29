@@ -24,6 +24,7 @@ def review_file():
         return render_template('transactions/review_file.html', transactions=session.get('transactions'))
 
     if request.method == 'POST':
+        # TODO crear command handler o query que permita acceder a las transactions pendientes de guardar
         transaction_service.save_transactions(
             map_to_entity_list(session.get('transactions'))
         )

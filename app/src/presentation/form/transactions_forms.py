@@ -1,11 +1,14 @@
 from flask_babel import lazy_gettext
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
+from wtforms import DateField
 from wtforms.fields.choices import SelectField
 from wtforms.fields.datetime import DateField
 from wtforms.fields.numeric import DecimalField
 from wtforms.fields.simple import StringField, HiddenField
 from wtforms.validators import DataRequired
+
+from app.src.application.transaction.command.create_transaction_command import CreateTransactionCommand
 
 
 def get_translated_months():
@@ -32,7 +35,7 @@ class MonthYearFilterForm(FlaskForm):
 
 
 class TransactionForm(FlaskForm):
-    date = DateField(
+    date: DateField = DateField(
         lazy_gettext('Date'),
         validators=[DataRequired(message=lazy_gettext('Date required'))]
     )
@@ -44,7 +47,25 @@ class TransactionForm(FlaskForm):
         lazy_gettext('Concept'),
         validators=[DataRequired(message=lazy_gettext('Concept required'))]
     )
+
     category_id = SelectField(
-        lazy_gettext('Category'),
-        validators=[DataRequired(message=lazy_gettext('Category required'))]
+        lazy_gettext('Category')
     )
+
+
+class UpsertTransactionFormMapper:
+
+    def map_to_create_command(self, form: TransactionForm) -> CreateTransactionCommand:
+        return CreateTransactionCommand(
+            date=form.date.data,
+            amount=form.amount.data,
+            concept=form.concept.data,
+            category_id=self.validate_empty_field(form.category_id),
+        )
+
+    @staticmethod
+    def validate_empty_field(field):
+        if not field.data or field.data == 'None':
+            return None
+
+        return field

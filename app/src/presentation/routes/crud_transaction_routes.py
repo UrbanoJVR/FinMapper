@@ -4,6 +4,8 @@ from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_babel import gettext
 
 from app.src.application.category.service.category_service import CategoryService
+from app.src.application.transaction.command.create_transaction_command import CreateTransactionCommand
+from app.src.application.transaction.command.create_transaction_command_handler import CreateTransactionCommandHandler
 from app.src.application.transaction.query.search_uncategorized_transactions_from_last_month_query import \
     SearchUncategorizedTransactionsFromLastMonthQuery
 from app.src.infrastructure.repository.category_repository import CategoryRepository
@@ -13,7 +15,8 @@ from app.src.application.transaction.command.categorization.categorize_transacti
 from app.src.application.transaction.service.transaction_service import TransactionService
 from app.src.domain.transaction import Transaction
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
-from app.src.presentation.form.transactions_forms import MonthYearFilterForm, TransactionForm
+from app.src.presentation.form.transactions_forms import MonthYearFilterForm, TransactionForm, \
+    UpsertTransactionFormMapper
 
 transactions_crud_blueprint = Blueprint('transactions_crud_blueprint', __name__, url_prefix='')
 transaction_repository = TransactionRepository()
@@ -110,14 +113,8 @@ def add_transaction():
         return render_template('transactions/upsert_transaction.html', form=form)
 
     if request.method == 'POST':
-        form = TransactionForm(request.form)
-        transaction = Transaction(
-            transaction_date=form.date.data,
-            amount=form.amount.data,
-            concept=form.concept.data,
-            category=load_category(form.category_id.data)
-        )
-        transaction_service.create(transaction)
+        command = UpsertTransactionFormMapper().map_to_create_command(TransactionForm(request.form))
+        CreateTransactionCommandHandler(transaction_repository, category_repository).execute(command)
         flash(gettext('Transaction successfully created.'), 'success')
         return redirect(url_for('transactions_crud_blueprint.add_transaction'))
 
