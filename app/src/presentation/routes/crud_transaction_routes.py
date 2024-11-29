@@ -4,7 +4,6 @@ from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_babel import gettext
 
 from app.src.application.category.service.category_service import CategoryService
-from app.src.application.transaction.command.create_transaction_command import CreateTransactionCommand
 from app.src.application.transaction.command.create_transaction_command_handler import CreateTransactionCommandHandler
 from app.src.application.transaction.query.search_uncategorized_transactions_from_last_month_query import \
     SearchUncategorizedTransactionsFromLastMonthQuery
@@ -15,8 +14,8 @@ from app.src.application.transaction.command.categorization.categorize_transacti
 from app.src.application.transaction.service.transaction_service import TransactionService
 from app.src.domain.transaction import Transaction
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
-from app.src.presentation.form.transactions_forms import MonthYearFilterForm, TransactionForm, \
-    UpsertTransactionFormMapper
+from app.src.presentation.form.transactions_forms import MonthYearFilterForm
+from app.src.presentation.form.upsert_transaction_form import UpsertTransactionForm, UpsertTransactionFormMapper
 
 transactions_crud_blueprint = Blueprint('transactions_crud_blueprint', __name__, url_prefix='')
 transaction_repository = TransactionRepository()
@@ -77,7 +76,7 @@ def categorize_transaction():
 def edit_transaction(transaction_id):
     if request.method == 'GET':
         transaction = transaction_service.get_by_id(transaction_id)
-        form = TransactionForm()
+        form = UpsertTransactionForm()
         form.date.data = transaction.transaction_date
         form.amount.data = transaction.amount
         form.concept.data = transaction.concept
@@ -88,7 +87,7 @@ def edit_transaction(transaction_id):
         return render_template('transactions/upsert_transaction.html', form=form)
 
     if request.method == 'POST':
-        form: TransactionForm = TransactionForm(request.form)
+        form: UpsertTransactionForm = UpsertTransactionForm(request.form)
         transaction = Transaction(
             id=transaction_id,
             transaction_date=form.date.data,
@@ -106,14 +105,14 @@ def edit_transaction(transaction_id):
 @transactions_crud_blueprint.route('/transactions/add', methods=['GET', 'POST'])
 def add_transaction():
     if request.method == 'GET':
-        form = TransactionForm()
+        form = UpsertTransactionForm()
         form.date.data = datetime.now()
         form.category_id.choices = [('None', '')] + [(str(category.id), category.name) for category in
                                                      category_service.get_all_categories()]
         return render_template('transactions/upsert_transaction.html', form=form)
 
     if request.method == 'POST':
-        command = UpsertTransactionFormMapper().map_to_create_command(TransactionForm(request.form))
+        command = UpsertTransactionFormMapper().map_to_create_command(UpsertTransactionForm(request.form))
         CreateTransactionCommandHandler(transaction_repository, category_repository).execute(command)
         flash(gettext('Transaction successfully created.'), 'success')
         return redirect(url_for('transactions_crud_blueprint.add_transaction'))
