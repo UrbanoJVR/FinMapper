@@ -5,5 +5,5 @@ from wtforms.validators import DataRequired
 
 
 class NewCategoryForm(FlaskForm):
-    name = StringField(lazy_gettext('Name'), validators=[DataRequired()], render_kw={"class": "form-control"})
-    description = StringField(lazy_gettext('Description'), validators=[DataRequired()], render_kw={"class": "form-control"})
+    name = StringField(str(lazy_gettext('Name')), validators=[DataRequired()], render_kw={"class": "form-control"})
+    description = StringField(str(lazy_gettext('Description')), validators=[DataRequired()], render_kw={"class": "form-control"})

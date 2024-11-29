@@ -20,8 +20,8 @@ def get_translated_months():
 
 
 class TransactionsFileForm(FlaskForm):
-    type = SelectField(lazy_gettext('Type'), choices=[('default', 'DEFAULT'), ('bbva', 'BBVA')])
-    file = FileField(lazy_gettext('File'),
+    type = SelectField(str(lazy_gettext('Type')), choices=[('default', 'DEFAULT'), ('bbva', 'BBVA')])
+    file = FileField(str(lazy_gettext('File')),
                      validators=[DataRequired(),
                                  FileAllowed(['csv'], message='FileExtensionNotAllowed')],
                      render_kw={"class": "form-control"})
@@ -35,21 +35,22 @@ class MonthYearFilterForm(FlaskForm):
 
 
 class TransactionForm(FlaskForm):
+    #TODO extraer a archivo serparado y crear tambien el mapper aparte
     date: DateField = DateField(
-        lazy_gettext('Date'),
-        validators=[DataRequired(message=lazy_gettext('Date required'))]
+        str(lazy_gettext('Date')),
+        validators=[DataRequired(message=str(lazy_gettext('Date required')))]
     )
     amount = DecimalField(
-        lazy_gettext('Amount'),
-        validators=[DataRequired(message=lazy_gettext('Amount required'))]
+        str(lazy_gettext('Amount')),
+        validators=[DataRequired(message=str(lazy_gettext('Amount required')))]
     )
     concept = StringField(
-        lazy_gettext('Concept'),
-        validators=[DataRequired(message=lazy_gettext('Concept required'))]
+        str(lazy_gettext('Concept')),
+        validators=[DataRequired(message=str(lazy_gettext('Concept required')))]
     )
 
     category_id = SelectField(
-        lazy_gettext('Category')
+        str(lazy_gettext('Category'))
     )
 
 
