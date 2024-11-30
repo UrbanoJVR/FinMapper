@@ -35,7 +35,8 @@ class TestCreateTransactionCommandHandler(TestCase):
             amount=command.amount,
             transaction_date=command.date,
             concept=command.concept,
-            category=category_from_db
+            category=category_from_db,
+            id=None
         )
         self.mock_category_repository.get_by_id.return_value = category_from_db
 
@@ -54,7 +55,9 @@ class TestCreateTransactionCommandHandler(TestCase):
         transaction = Transaction(
             amount=command.amount,
             transaction_date=command.date,
-            concept=command.concept
+            concept=command.concept,
+            category=None,
+            id=None
         )
         self.mock_category_repository.get_by_id.return_value = None
 
@@ -72,7 +75,9 @@ class TestCreateTransactionCommandHandler(TestCase):
         transaction = Transaction(
             amount=command.amount,
             transaction_date=command.date,
-            concept=command.concept
+            concept=command.concept,
+            category=None,
+            id=None
         )
         self.mock_category_repository.get_by_id.assert_not_called()
 

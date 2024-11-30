@@ -25,7 +25,8 @@ class TestSearchUncategorizedTransactionsFromLastMonthQuery(TestCase):
             concept="Concept",
             amount=Decimal(100),
             transaction_date=datetime.now(),
-            id=1
+            id=1,
+            category=None
         )
         transactions_from_db: List[Transaction] = [transaction_1]
         self.mock_transaction_repository.get_last_uncategorized.return_value = transaction_1

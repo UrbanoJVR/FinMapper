@@ -4,7 +4,9 @@ from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_babel import gettext
 
 from app.src.application.category.service.category_service import CategoryService
+from app.src.application.transaction.command.UpdateTransactionCommand import UpdateTransactionCommand
 from app.src.application.transaction.command.create_transaction_command_handler import CreateTransactionCommandHandler
+from app.src.application.transaction.command.update_transaction_command_handler import UpdateTransactionCommandHandler
 from app.src.application.transaction.query.search_uncategorized_transactions_from_last_month_query import \
     SearchUncategorizedTransactionsFromLastMonthQuery
 from app.src.infrastructure.repository.category_repository import CategoryRepository
@@ -88,18 +90,12 @@ def edit_transaction(transaction_id):
 
     if request.method == 'POST':
         form: UpsertTransactionForm = UpsertTransactionForm(request.form)
-        transaction = Transaction(
-            id=transaction_id,
-            transaction_date=form.date.data,
-            amount=form.amount.data,
-            concept=form.concept.data,
-            category=load_category(form.category_id.data)
-        )
-        transaction_service.update(transaction)
+        update_transaction_command = UpsertTransactionFormMapper().map_to_update_command(form, transaction_id)
+        UpdateTransactionCommandHandler(transaction_repository, category_repository).execute(update_transaction_command)
         flash(gettext('Transaction successfully updated.'), 'success')
         return redirect(url_for('transactions_crud_blueprint.movements_list',
-                                month=transaction.transaction_date.month,
-                                year=transaction.transaction_date.year))
+                                month=update_transaction_command.date.month,
+                                year=update_transaction_command.date.year))
 
 
 @transactions_crud_blueprint.route('/transactions/add', methods=['GET', 'POST'])

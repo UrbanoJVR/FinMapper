@@ -6,6 +6,7 @@ from wtforms.fields.numeric import DecimalField
 from wtforms.fields.simple import StringField
 from wtforms.validators import DataRequired
 
+from app.src.application.transaction.command.UpdateTransactionCommand import UpdateTransactionCommand
 from app.src.application.transaction.command.create_transaction_command import CreateTransactionCommand
 
 
@@ -34,11 +35,20 @@ class UpsertTransactionFormMapper:
             date=form.date.data,
             amount=form.amount.data,
             concept=form.concept.data,
-            category_id=self.validate_empty_field(form.category_id),
+            category_id=self._validate_empty_field(form.category_id),
+        )
+
+    def map_to_update_command(self, form: UpsertTransactionForm, transaction_id: int) -> UpdateTransactionCommand:
+        return UpdateTransactionCommand(
+            transaction_id=transaction_id,
+            date=form.date.data,
+            amount=form.amount.data,
+            concept=form.concept.data,
+            category_id=self._validate_empty_field(form.category_id),
         )
 
     @staticmethod
-    def validate_empty_field(field):
+    def _validate_empty_field(field):
         if not field.data or field.data == 'None':
             return None
 

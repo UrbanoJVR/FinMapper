@@ -21,6 +21,7 @@ class CreateTransactionCommandHandler:
             amount=command.amount,
             transaction_date=command.date,
             category=category,
+            id=None
         )
 
         self.transaction_repository.save(transaction)

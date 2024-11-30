@@ -7,7 +7,7 @@ def test_edit_category(client, given_a_category):
     category = given_a_category
     new_category: Category = Category(
         name='another_name',
-        description='another_description',
+        description='another_description'
     )
 
     response = client.post(f"/categories/edit/{category.id}", data={
