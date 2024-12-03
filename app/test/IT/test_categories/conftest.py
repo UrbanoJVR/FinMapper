@@ -10,7 +10,7 @@ from app.src.infrastructure.repository.transaction_repository import Transaction
 
 
 @pytest.fixture(scope='function')
-def given_a_category(client):
+def given_a_category(client) -> Category:
     client.post('/categories/dashboard', data=dict(name='TestCategory', description='Test description'))
     return CategoryRepository().get_by_name('TestCategory')
 

@@ -24,7 +24,7 @@ class TransactionRepository:
         db.session.add(map_to_model(transaction))
         db.session.commit()
 
-    def delete(self, transaction_id: int):
+    def delete_by_id(self, transaction_id: int):
         TransactionModel.query.filter(TransactionModel.id == transaction_id).delete()
         db.session.commit()
 

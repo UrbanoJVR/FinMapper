@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_babel import gettext
@@ -6,6 +6,7 @@ from flask_babel import gettext
 from app.src.application.category.service.category_service import CategoryService
 from app.src.application.transaction.command.UpdateTransactionCommand import UpdateTransactionCommand
 from app.src.application.transaction.command.create_transaction_command_handler import CreateTransactionCommandHandler
+from app.src.application.transaction.command.delete_transaction_command_handler import DeleteTransactionCommandHandler
 from app.src.application.transaction.command.update_transaction_command_handler import UpdateTransactionCommandHandler
 from app.src.application.transaction.query.search_uncategorized_transactions_from_last_month_query import \
     SearchUncategorizedTransactionsFromLastMonthQuery
@@ -102,7 +103,7 @@ def edit_transaction(transaction_id):
 def add_transaction():
     if request.method == 'GET':
         form = UpsertTransactionForm()
-        form.date.data = datetime.now()
+        form.date.data = date.today()
         form.category_id.choices = [('None', '')] + [(str(category.id), category.name) for category in
                                                      category_service.get_all_categories()]
         return render_template('transactions/upsert_transaction.html', form=form)
@@ -123,8 +124,8 @@ def load_category(category_id):
 
 @transactions_crud_blueprint.route('/transactions/delete/<int:transaction_id>', methods=['GET'])
 def delete_transaction(transaction_id):
-    transaction_service.delete(transaction_id)
-    return redirect(request.referrer or url_for('home'))
+    DeleteTransactionCommandHandler(transaction_repository).execute(transaction_id)
+    return redirect(request.referrer or url_for('transactions_crud_blueprint.dashboard'))
 
 
 def generate_month_year_filter_form_actual_date():
