@@ -3,7 +3,7 @@ from .conftest import transaction_exists, transaction_not_exists, count_transact
 
 class TestDeleteTransaction:
 
-    def test_delete_transaction(self, client, given_a_transaction):
+    def test_delete_transaction_and_redirect_to_transactions_table(self, client, given_a_transaction):
         transaction_to_be_deleted = given_a_transaction
         origin_url = f"/movements/{transaction_to_be_deleted.transaction_date.month}/{transaction_to_be_deleted.transaction_date.year}"
 
