@@ -100,7 +100,7 @@ def edit_transaction(transaction_id):
 
 
 @transactions_crud_blueprint.route('/transactions/add', methods=['GET', 'POST'])
-def add_transaction():
+def create_transaction():
     if request.method == 'GET':
         form = UpsertTransactionForm()
         form.date.data = date.today()
@@ -112,7 +112,7 @@ def add_transaction():
         command = UpsertTransactionFormMapper().map_to_create_command(UpsertTransactionForm(request.form))
         CreateTransactionCommandHandler(transaction_repository, category_repository).execute(command)
         flash(gettext('Transaction successfully created.'), 'success')
-        return redirect(url_for('transactions_crud_blueprint.add_transaction'))
+        return redirect(url_for('transactions_crud_blueprint.create_transaction'))
 
 
 def load_category(category_id):
