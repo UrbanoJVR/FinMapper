@@ -35,7 +35,7 @@ class UpsertTransactionFormMapper:
             date=form.date.data,
             amount=form.amount.data,
             concept=form.concept.data,
-            category_id=self._validate_empty_field(form.category_id),
+            category_id=self._get_field_data_if_not_empty(form.category_id),
         )
 
     def map_to_update_command(self, form: UpsertTransactionForm, transaction_id: int) -> UpdateTransactionCommand:
@@ -44,12 +44,12 @@ class UpsertTransactionFormMapper:
             date=form.date.data,
             amount=form.amount.data,
             concept=form.concept.data,
-            category_id=self._validate_empty_field(form.category_id),
+            category_id=self._get_field_data_if_not_empty(form.category_id),
         )
 
     @staticmethod
-    def _validate_empty_field(field):
+    def _get_field_data_if_not_empty(field):
         if not field.data or field.data == 'None':
             return None
 
-        return field
+        return field.data

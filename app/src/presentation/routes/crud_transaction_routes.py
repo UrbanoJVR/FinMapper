@@ -4,7 +4,6 @@ from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_babel import gettext
 
 from app.src.application.category.service.category_service import CategoryService
-from app.src.application.transaction.command.UpdateTransactionCommand import UpdateTransactionCommand
 from app.src.application.transaction.command.create_transaction_command_handler import CreateTransactionCommandHandler
 from app.src.application.transaction.command.delete_transaction_command_handler import DeleteTransactionCommandHandler
 from app.src.application.transaction.command.update_transaction_command_handler import UpdateTransactionCommandHandler
@@ -15,7 +14,6 @@ from app.src.application.transaction.command.categorization.categorized_transact
 from app.src.application.transaction.command.categorization.categorize_transaction_command_handler import \
     CategorizeTransactionCommandHandler
 from app.src.application.transaction.service.transaction_service import TransactionService
-from app.src.domain.transaction import Transaction
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 from app.src.presentation.form.transactions_forms import MonthYearFilterForm
 from app.src.presentation.form.upsert_transaction_form import UpsertTransactionForm, UpsertTransactionFormMapper

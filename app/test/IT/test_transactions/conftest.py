@@ -2,13 +2,17 @@ import pytest
 from bs4 import BeautifulSoup
 from flask_babel import format_datetime
 
+from app.src.domain.category import Category
 from app.src.domain.transaction import Transaction
+from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 
 @pytest.fixture(scope='function')
 def given_a_transaction(client) -> Transaction:
-    client.post('/transactions/add', data=dict(amount=100, concept='concept', date='2024-12-01'))
+    CategoryRepository().save(Category(name="Category for transaction", description="Category description"))
+    category_id = CategoryRepository().get_by_name("Category for transaction").id
+    client.post('/transactions/add', data=dict(amount=100, concept='concept', date='2024-12-01', category_id=category_id))
     return TransactionRepository().get_by_id(1)
 
 
