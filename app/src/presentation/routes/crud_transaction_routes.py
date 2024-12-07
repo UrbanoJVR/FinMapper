@@ -45,7 +45,7 @@ def movements_list(month: int, year: int):
         return redirect(url_for('transactions_crud_blueprint.movements_list', month=month, year=year))
 
 
-@transactions_crud_blueprint.route('/movements', methods=['GET', 'POST'])
+@transactions_crud_blueprint.route('/movements', methods=['GET'])
 def movements():
     now = datetime.now()
     return redirect(url_for('transactions_crud_blueprint.movements_list', month=now.month, year=now.year))

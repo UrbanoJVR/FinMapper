@@ -6,8 +6,7 @@ from flask import url_for
 
 from app.src.domain.transaction import Transaction
 from app.src.infrastructure.repository.category_repository import CategoryRepository
-from conftest import assert_flash_message_success_is_present
-
+from app.test.conftest import assert_flash_message_success_is_present
 
 class TestEditTransaction:
 
@@ -21,22 +20,23 @@ class TestEditTransaction:
             id=existing_transaction.id,
         )
         edit_transaction_url = f"/edit-transaction/{existing_transaction.id}"
+        # assert existing category is in table
         self._assert_edit_form_contains_transaction_data(client, existing_transaction)
 
-        # assert que retorna a página donde aparece ese gasto (mes año) y que aparece el mensaje en verde de success
-        # hay que hacer assert de que contiene los nuevos datos, por lo que podemos ir a editar de nuevo esa categoría y validar que tiene esos datos
-        # se puede añadir también un assert de que el movimiento editado está en la tabla
-
+        # send new data to edit existing transaction
         result_after_edit = client.post(edit_transaction_url,
                                         data=dict(amount=new_transaction.amount,
                                                   concept=new_transaction.concept,
                                                   date=new_transaction.transaction_date.strftime('%Y-%m-%d'))
                                         , follow_redirects=True)
         assert result_after_edit.status_code == 200
+        # assert reload works
         assert result_after_edit.request.path == url_for('transactions_crud_blueprint.movements_list',
                                                          month=new_transaction.transaction_date.month,
                                                          year=new_transaction.transaction_date.year)
+        # assert transaction exists with new data
         self._assert_edit_form_contains_transaction_data(client, new_transaction)
+        # assert success message is visible
         assert_flash_message_success_is_present(result_after_edit.data, 'Transaction successfully updated.')
 
     def _assert_edit_form_contains_transaction_data(self, client, transaction):

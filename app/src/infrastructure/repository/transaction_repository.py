@@ -38,8 +38,6 @@ class TransactionRepository:
             extract('year', TransactionModel.date) == year
         ).order_by(TransactionModel.date.desc()).all()
 
-        # transactions = TransactionModel.query.all()
-
         return map_to_entity_list(transactions)
 
     def get_by_id(self, id: int) -> Transaction:
@@ -60,4 +58,8 @@ class TransactionRepository:
             TransactionModel.category_id.is_(None)
         ).order_by(TransactionModel.date.desc()).all()
 
+        return map_to_entity_list(transactions)
+
+    def find_all(self):
+        transactions = TransactionModel.query.all()
         return map_to_entity_list(transactions)

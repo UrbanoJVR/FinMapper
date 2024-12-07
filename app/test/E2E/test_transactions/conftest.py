@@ -1,3 +1,6 @@
+from datetime import datetime
+from decimal import Decimal
+
 import pytest
 from bs4 import BeautifulSoup
 from flask_babel import format_datetime
@@ -12,7 +15,17 @@ from app.src.infrastructure.repository.transaction_repository import Transaction
 def given_a_transaction(client) -> Transaction:
     CategoryRepository().save(Category(name="Category for transaction", description="Category description"))
     category_id = CategoryRepository().get_by_name("Category for transaction").id
-    client.post('/transactions/add', data=dict(amount=100, concept='concept', date='2024-12-01', category_id=category_id))
+    client.post('/transactions/add',
+                data=dict(amount=100, concept='concept', date='2024-12-01', category_id=category_id))
+    return TransactionRepository().get_by_id(1)
+
+
+@pytest.fixture(scope='function')
+def given_a_transaction_with_specific_date(client, date: datetime.date) -> Transaction:
+    CategoryRepository().save(Category(name="Category for transaction", description="Category description"))
+    category = CategoryRepository().get_by_name("Category for transaction")
+    TransactionRepository().save(
+        Transaction(transaction_date=date, amount=Decimal(100), concept="Concept", category=category))
     return TransactionRepository().get_by_id(1)
 
 
