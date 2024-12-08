@@ -15,8 +15,8 @@ class TransactionRepository:
         pass
 
     def save_transactions(self, transactions: List[Transaction]):
-        for tm in map_to_model_list(transactions):
-            db.session.add(tm)
+        for transaction_model in map_to_model_list(transactions):
+            db.session.add(transaction_model)
 
         db.session.commit()
 
