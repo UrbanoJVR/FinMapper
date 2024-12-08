@@ -16,6 +16,12 @@ update:
 test:
 	pipenv run pytest
 
+coverage:
+	pipenv run pytest --cov --cov-report term-missing
+
+coverage-html:
+	pipenv run pytest --cov --cov-report term-missing --cov-report html
+
 # Verifica linting y calidad de código
 lint:
 	pipenv run flake8 app tests

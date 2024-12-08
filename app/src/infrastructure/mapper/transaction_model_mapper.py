@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Sequence
 
 from app.src.domain.transaction import Transaction
 from app.src.infrastructure.model.transaction_model import TransactionModel
@@ -33,7 +33,7 @@ def map_to_model_list(transactions: List[Transaction]) -> List[TransactionModel]
     return tm_list
 
 
-def map_to_entity_list(transactions_models: List[TransactionModel]) -> List[Transaction]:
+def map_to_entity_list(transactions_models: Sequence[TransactionModel]) -> List[Transaction]:
     transactions: List[Transaction] = []
 
     for transaction_model in transactions_models:

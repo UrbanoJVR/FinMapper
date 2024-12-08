@@ -1,65 +1,83 @@
 from typing import List
 
-from sqlalchemy import extract
+from sqlalchemy import extract, select, delete
+from sqlalchemy.orm import Session
 
 from app.src.domain.transaction import Transaction
-from app.src.infrastructure.mapper.transaction_model_mapper import map_to_model_list, \
-    map_to_entity_list, map_to_domain, map_to_model
+from app.src.infrastructure.mapper.transaction_model_mapper import (
+    map_to_model_list,
+    map_to_entity_list,
+    map_to_domain,
+    map_to_model,
+)
 from app.src.infrastructure.model.transaction_model import TransactionModel
 from database import db
 
 
 class TransactionRepository:
-
     def __init__(self):
-        pass
+        self.session: Session = db.session
 
     def save_transactions(self, transactions: List[Transaction]):
-        for transaction_model in map_to_model_list(transactions):
-            db.session.add(transaction_model)
-
-        db.session.commit()
+        transaction_models = map_to_model_list(transactions)
+        self.session.add_all(transaction_models)
+        self.session.commit()
 
     def save(self, transaction: Transaction):
-        db.session.add(map_to_model(transaction))
-        db.session.commit()
+        transaction_model = map_to_model(transaction)
+        self.session.add(transaction_model)
+        self.session.commit()
 
     def delete_by_id(self, transaction_id: int):
-        TransactionModel.query.filter(TransactionModel.id == transaction_id).delete()
-        db.session.commit()
+        stmt = delete(TransactionModel).where(TransactionModel.id.__eq__(transaction_id))
+        self.session.execute(stmt)
+        self.session.commit()
 
     def update(self, transaction: Transaction):
-        db.session.merge(map_to_model(transaction))
-        db.session.commit()
+        transaction_model = map_to_model(transaction)
+        self.session.merge(transaction_model)
+        self.session.commit()
 
     def get_by_month_year(self, month: int, year: int) -> List[Transaction]:
-        transactions = TransactionModel.query.filter(
-            extract('month', TransactionModel.date) == month,
-            extract('year', TransactionModel.date) == year
-        ).order_by(TransactionModel.date.desc()).all()
-
-        return map_to_entity_list(transactions)
+        stmt = (
+            select(TransactionModel)
+            .where(
+                extract('month', TransactionModel.date) == month,
+                extract('year', TransactionModel.date) == year,
+            )
+            .order_by(TransactionModel.date.desc())
+        )
+        result = self.session.execute(stmt).scalars().all()
+        return map_to_entity_list(result)
 
     def get_by_id(self, id: int) -> Transaction:
-        transaction_model = TransactionModel.query.filter_by(id=id).first()
-        return map_to_domain(transaction_model)
+        stmt = select(TransactionModel).where(TransactionModel.id.__eq__(id))
+        result = self.session.execute(stmt).scalars().first()
+        return map_to_domain(result)
 
     def get_last_uncategorized(self) -> Transaction:
-        model = (TransactionModel.query
-                 .filter_by(category_id=None)
-                 .order_by(TransactionModel.date.desc())
-                 .first())
-        return map_to_domain(model)
+        stmt = (
+            select(TransactionModel)
+            .where(TransactionModel.category_id.__eq__(None))
+            .order_by(TransactionModel.date.desc())
+        )
+        result = self.session.execute(stmt).scalars().first()
+        return map_to_domain(result)
 
     def get_uncategorized_by_month_year(self, month: int, year: int) -> List[Transaction]:
-        transactions = TransactionModel.query.filter(
-            extract('month', TransactionModel.date) == month,
-            extract('year', TransactionModel.date) == year,
-            TransactionModel.category_id.is_(None)
-        ).order_by(TransactionModel.date.desc()).all()
-
-        return map_to_entity_list(transactions)
+        stmt = (
+            select(TransactionModel)
+            .where(
+                extract('month', TransactionModel.date) == month,
+                extract('year', TransactionModel.date) == year,
+                TransactionModel.category_id.__eq__(None),
+            )
+            .order_by(TransactionModel.date.desc())
+        )
+        result = self.session.execute(stmt).scalars().all()
+        return map_to_entity_list(result)
 
     def find_all(self):
-        transactions = TransactionModel.query.all()
-        return map_to_entity_list(transactions)
+        stmt = select(TransactionModel)
+        result = self.session.execute(stmt).scalars().all()
+        return map_to_entity_list(result)
