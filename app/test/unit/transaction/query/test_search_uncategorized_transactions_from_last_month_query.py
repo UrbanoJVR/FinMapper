@@ -1,6 +1,3 @@
-# test success
-# test return empty list when repository returns none
-
 from datetime import datetime
 from decimal import Decimal
 from typing import List
