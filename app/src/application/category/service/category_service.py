@@ -23,9 +23,6 @@ class CategoryService:
         self.repository.update(category)
         return category.id
 
-    def get_all_categories(self) -> List[Category]:
-        return self.repository.get_all()
-
     def get_by_id(self, id: int) -> Category:
         return self.repository.get_by_id(id)
 

@@ -3,6 +3,7 @@ from datetime import datetime, date
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_babel import gettext
 
+from app.src.application.category.query.GetAllCategoriesQueryHandler import GetAllCategoriesQueryHandler
 from app.src.application.category.service.category_service import CategoryService
 from app.src.application.transaction.command.create_transaction_command_handler import CreateTransactionCommandHandler
 from app.src.application.transaction.command.delete_transaction_command_handler import DeleteTransactionCommandHandler
@@ -60,7 +61,7 @@ def movements():
 def categorize_transaction():
     if request.method == 'GET':
         transactions = SearchUncategorizedTransactionsFromLastMonthQuery(transaction_repository).execute()
-        categories = category_service.get_all_categories()
+        categories = GetAllCategoriesQueryHandler(category_repository).execute()
         return render_template('transactions/categorize_transactions.html',
                                transactions=transactions,
                                categories=categories)
@@ -82,14 +83,8 @@ def categorize_transaction():
 def edit_transaction(transaction_id):
     if request.method == 'GET':
         transaction = transaction_service.get_by_id(transaction_id)
-        form = UpsertTransactionForm()
-        form.date.data = transaction.transaction_date
-        form.amount.data = transaction.amount
-        form.concept.data = transaction.concept
-        form.category_id.choices = [('None', '')] + [(str(category.id), category.name) for category in
-                                                     category_service.get_all_categories()]
-        form.category_id.data = str(transaction.category.id) if transaction.category else 'None'
-        form.category_id.selected = form.category_id.data
+        selectable_categories = GetAllCategoriesQueryHandler(category_repository).execute()
+        form: UpsertTransactionForm = UpsertTransactionFormMapper().map_from_domain(transaction, selectable_categories)
         return render_template('transactions/upsert_transaction.html', form=form)
 
     if request.method == 'POST':
@@ -105,10 +100,11 @@ def edit_transaction(transaction_id):
 @transactions_crud_blueprint.route('/transactions/add', methods=['GET', 'POST'])
 def create_transaction():
     if request.method == 'GET':
-        form = UpsertTransactionForm()
+        selectable_categories = GetAllCategoriesQueryHandler(category_repository).execute()
+        form = UpsertTransactionFormMapper().initialize(selectable_categories)
         form.date.data = date.today()
         form.category_id.choices = [('None', '')] + [(str(category.id), category.name) for category in
-                                                     category_service.get_all_categories()]
+                                                     selectable_categories]
         return render_template('transactions/upsert_transaction.html', form=form)
 
     if request.method == 'POST':

@@ -1,3 +1,6 @@
+from datetime import date
+from typing import List
+
 from flask_babel import lazy_gettext
 from flask_wtf import FlaskForm
 from wtforms.fields.choices import SelectField
@@ -8,6 +11,8 @@ from wtforms.validators import DataRequired
 
 from app.src.application.transaction.command.UpdateTransactionCommand import UpdateTransactionCommand
 from app.src.application.transaction.command.create_transaction_command import CreateTransactionCommand
+from app.src.domain.category import Category
+from app.src.domain.transaction import Transaction
 
 
 class UpsertTransactionForm(FlaskForm):
@@ -29,6 +34,26 @@ class UpsertTransactionForm(FlaskForm):
 
 
 class UpsertTransactionFormMapper:
+
+    def initialize(self, selectable_categories: List[Category]) -> UpsertTransactionForm:
+        form = UpsertTransactionForm()
+        form.date.data = date.today()
+        form.category_id.choices = [('None', '')] + [(str(category.id), category.name) for category in
+                                                     selectable_categories]
+
+        return form
+
+    def map_from_domain(self, transaction: Transaction, selectable_categories: List[Category]) -> UpsertTransactionForm:
+        form = UpsertTransactionForm()
+        form.date.data = transaction.transaction_date
+        form.amount.data = transaction.amount
+        form.concept.data = transaction.concept
+        form.category_id.choices = [('None', '')] + [(str(category.id), category.name) for category in
+                                                     selectable_categories]
+        form.category_id.data = str(transaction.category.id) if transaction.category else 'None'
+        form.category_id.selected = form.category_id.data
+
+        return form
 
     def map_to_create_command(self, form: UpsertTransactionForm) -> CreateTransactionCommand:
         return CreateTransactionCommand(
