@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Sequence
 
 from app.src.domain.category import Category
 from app.src.infrastructure.model.category_model import CategoryModel
@@ -20,6 +20,6 @@ def map_to_entity(model: CategoryModel) -> Category:
     )
 
 
-def map_model_list_to_class(model_list: List[CategoryModel]) -> List[Category]:
+def map_model_list_to_class(model_list: Sequence[CategoryModel]) -> List[Category]:
     categories: List[Category] = list(map(map_to_entity, model_list))
     return categories

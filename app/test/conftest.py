@@ -10,7 +10,7 @@ from database import db
 
 
 @pytest.fixture(scope='function')
-def db_test():
+def db_test_it():
     _delete_db_file()
 
     app = create_app('test-it')

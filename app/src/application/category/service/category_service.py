@@ -12,7 +12,7 @@ class CategoryService:
 
     def delete(self, category_id: int):
         if not self.repository.is_category_used(category_id):
-            self.repository.delete(category_id)
+            self.repository.delete_by_id(category_id)
 
     def update(self, category: Category):
         category_on_db: Category = self.repository.get_by_id(category.id)

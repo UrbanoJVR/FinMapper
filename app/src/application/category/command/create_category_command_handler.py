@@ -1,5 +1,3 @@
-from sqlalchemy import false
-
 from app.src.application.category.command.create_category_command import CreateCategoryCommand
 from app.src.domain.category import Category
 from app.src.infrastructure.repository.category_repository import CategoryRepository
