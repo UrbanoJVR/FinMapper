@@ -7,6 +7,10 @@ from app.src.application.category.service.category_service import CategoryServic
 from app.src.application.transaction.command.create_transaction_command_handler import CreateTransactionCommandHandler
 from app.src.application.transaction.command.delete_transaction_command_handler import DeleteTransactionCommandHandler
 from app.src.application.transaction.command.update_transaction_command_handler import UpdateTransactionCommandHandler
+from app.src.application.transaction.query.search_transactions_by_month_year_query import \
+    SearchTransactionsByMonthYearQuery
+from app.src.application.transaction.query.search_transactions_by_month_year_query_handler import \
+    SearchTransactionsByMonthYearQueryHandler
 from app.src.application.transaction.query.search_uncategorized_transactions_from_last_month_query import \
     SearchUncategorizedTransactionsFromLastMonthQuery
 from app.src.infrastructure.repository.category_repository import CategoryRepository
@@ -34,9 +38,10 @@ def dashboard():
 def movements_list(month: int, year: int):
     if request.method == 'GET':
         form = MonthYearFilterForm(month=month, year=year)
+        query = SearchTransactionsByMonthYearQuery(month=month, year=year)
         return render_template(
             'transactions/movements_list.html',
-            transactions=transaction_service.get_by_month_year(int(form.month.data), int(form.year.data)),
+            transactions=SearchTransactionsByMonthYearQueryHandler(transaction_repository).execute(query),
             month_year_filter_form=form
         )
 
