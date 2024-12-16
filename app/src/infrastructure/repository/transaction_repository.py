@@ -81,3 +81,7 @@ class TransactionRepository:
         stmt = select(TransactionModel)
         result = self.session.execute(stmt).scalars().all()
         return map_to_entity_list(result)
+
+    def find_first_by_category_id(self, category_id: int) -> Transaction:
+        query = select(TransactionModel).where(TransactionModel.category_id.__eq__(category_id))
+        return map_to_domain(self.session.execute(query).scalar())

@@ -1,6 +1,7 @@
 from typing import List, Sequence
 
 from app.src.domain.transaction import Transaction
+from app.src.infrastructure.mapper.category_model_mapper import CategoryModelMapper
 from app.src.infrastructure.model.transaction_model import TransactionModel
 
 
@@ -20,7 +21,8 @@ def map_to_domain(transaction_model: TransactionModel) -> Transaction:
         transaction_date=transaction_model.date,
         amount=transaction_model.amount,
         concept=transaction_model.concept,
-        category=transaction_model.category
+        category=CategoryModelMapper.map_to_domain(
+            transaction_model.category) if transaction_model.category is not None else None
     )
 
 

@@ -3,7 +3,7 @@ from flask_babel import gettext
 
 from app.src.application.category.command.create_category_command import CreateCategoryCommand
 from app.src.application.category.command.create_category_command_handler import CreateCategoryCommandHandler
-from app.src.application.category.query.GetAllCategoriesQueryHandler import GetAllCategoriesQueryHandler
+from app.src.application.category.query.get_all_categories_query_handler import GetAllCategoriesQueryHandler
 from app.src.application.category.service.category_service import CategoryService
 from app.src.domain.category import Category
 from app.src.infrastructure.repository.category_repository import CategoryRepository

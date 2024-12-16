@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import Mock
 
-from app.src.application.category.query.GetAllCategoriesQueryHandler import GetAllCategoriesQueryHandler
+from app.src.application.category.query.get_all_categories_query_handler import GetAllCategoriesQueryHandler
 from app.src.domain.category import Category
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 

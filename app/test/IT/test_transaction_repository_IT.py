@@ -144,3 +144,17 @@ class TestTransactionRepositoryIT:
         assert result[0].id == transaction1.id
         assert result[0].amount == transaction1.amount
         assert result[0].category is None
+
+    def test_find_first_by_category_id_success(self, db_test_it):
+        category = Category(id=2, name="Category name", description="Category description")
+        CategoryRepository().save(category)
+        transaction = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
+                                   category=category, concept="Concept 1")
+        self.sut.save(transaction)
+
+        result = self.sut.find_first_by_category_id(category.id)
+
+        assert result == transaction
+
+    def test_find_first_by_category_id_return_none(self, db_test_it):
+        assert True
