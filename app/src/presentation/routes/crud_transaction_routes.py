@@ -111,13 +111,6 @@ def create_transaction():
         return redirect(url_for('transactions_crud_blueprint.create_transaction'))
 
 
-def load_category(category_id):
-    if category_id == 'None':
-        return None
-    else:
-        return category_service.get_by_id(int(category_id))
-
-
 @transactions_crud_blueprint.route('/transactions/delete/<int:transaction_id>', methods=['GET'])
 def delete_transaction(transaction_id):
     DeleteTransactionCommandHandler(transaction_repository).execute(transaction_id)

@@ -18,6 +18,3 @@ class CategoryService:
 
         self.repository.update(category)
         return category.id
-
-    def get_by_id(self, id: int) -> Category:
-        return self.repository.get_by_id(id)
