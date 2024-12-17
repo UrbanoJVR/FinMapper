@@ -13,15 +13,14 @@ class TestIsCategoryUsedQueryHandler(TestCase):
         self.sut = IsCategoryUsedQueryHandler(self.mock_transaction_repository)
 
     def test_return_true(self):
-        self.mock_transaction_repository.find_first_by_category_id.return_value = Mock(spec=Transaction)
+        self.mock_transaction_repository.count_by_category_id.return_value = 5
 
         result = self.sut.execute(1)
 
         assert result == True
 
     def test_return_false(self):
-        self.mock_transaction_repository.find_first_by_category_id.return_value = None
+        self.mock_transaction_repository.count_by_category_id.return_value = 0
         result = self.sut.execute(2)
 
         assert result == False
-        self.mock_transaction_repository.find_first_by_category_id.assert_called_once_with(2)
