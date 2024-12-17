@@ -85,21 +85,3 @@ class TestCategoryRepositoryIT:
         result = self.sut.get_by_name(category.name)
 
         assert result == category
-
-    def test_is_category_used_should_return_true(self, db_test_it):
-        category = Category(id=1, name="test name", description="test description")
-        self.sut.save(category)
-        transaction = Transaction(id=1, concept="concept", amount=Decimal("100"), transaction_date=date.today(), category=category)
-        TransactionRepository().save(transaction)
-
-        result = self.sut.is_category_used(category.id)
-
-        assert result is True
-
-    def test_is_category_used_should_return_false(self, db_test_it):
-        category = Category(id=1, name="test name", description="test description")
-        self.sut.save(category)
-
-        result = self.sut.is_category_used(category.id)
-
-        assert result is False

@@ -158,3 +158,19 @@ class TestTransactionRepositoryIT:
 
     def test_find_first_by_category_id_return_none(self, db_test_it):
         assert True
+
+    def test_count_by_category_id_should_return_zero(self, db_test_it):
+        result = self.sut.count_by_category_id(1)
+
+        assert result == 0
+
+    def test_count_by_category_id_should_return_one(self, db_test_it):
+        category = Category(id=1, name="Category name", description="Category description")
+        CategoryRepository().save(category)
+        transaction = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
+                                  category=category, concept="Concept 1")
+        self.sut.save(transaction)
+
+        result = self.sut.count_by_category_id(1)
+
+        assert result == 1

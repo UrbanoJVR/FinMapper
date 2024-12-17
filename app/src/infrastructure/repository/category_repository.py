@@ -47,10 +47,3 @@ class CategoryRepository:
     def get_by_name(self, name: str) -> Category:
         query = select(CategoryModel).where(CategoryModel.name.__eq__(name))
         return self.category_model_mapper.map_to_domain(self.session.execute(query).scalar())
-
-    def is_category_used(self, category_id: int) -> bool:
-        # TODO pensar refactor para no mezclar responsabilidades en repos
-        query = f"SELECT COUNT(*) FROM transactions WHERE category_id = {category_id}"
-        result = self.session.execute(text(query))
-        count = result.scalar()
-        return count > 0

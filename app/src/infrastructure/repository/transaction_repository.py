@@ -1,6 +1,6 @@
 from typing import List
 
-from sqlalchemy import extract, select, delete
+from sqlalchemy import extract, select, delete, func
 from sqlalchemy.orm import Session
 
 from app.src.domain.transaction import Transaction
@@ -85,3 +85,7 @@ class TransactionRepository:
     def find_first_by_category_id(self, category_id: int) -> Transaction:
         query = select(TransactionModel).where(TransactionModel.category_id.__eq__(category_id))
         return map_to_domain(self.session.execute(query).scalar())
+
+    def count_by_category_id(self, category_id: int) -> int:
+        query = select(func.count()).select_from(TransactionModel).where(TransactionModel.category_id.__eq__(category_id))
+        return self.session.execute(query).scalar()
