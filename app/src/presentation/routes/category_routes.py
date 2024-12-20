@@ -8,7 +8,6 @@ from app.src.application.category.command.update_category_command import UpdateC
 from app.src.application.category.command.update_category_command_handler import UpdateCategoryCommandHandler
 from app.src.application.category.query.get_all_categories_query_handler import GetAllCategoriesQueryHandler
 from app.src.application.category.query.is_category_used_query_handler import IsCategoryUsedQueryHandler
-from app.src.application.category.service.category_service import CategoryService
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 from app.src.presentation.form.upsert_category_form import UpsertCategoryForm, UpsertCategoryFormMapper
@@ -16,7 +15,6 @@ from app.src.presentation.form.upsert_category_form import UpsertCategoryForm, U
 categories_blueprint = Blueprint('categories_blueprint', __name__, url_prefix='/categories')
 category_repository = CategoryRepository()
 transaction_repository = TransactionRepository()
-category_service = CategoryService(category_repository)
 
 
 @categories_blueprint.route('/dashboard', methods=['GET'])

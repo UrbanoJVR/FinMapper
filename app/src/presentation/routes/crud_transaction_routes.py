@@ -4,7 +4,6 @@ from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_babel import gettext
 
 from app.src.application.category.query.get_all_categories_query_handler import GetAllCategoriesQueryHandler
-from app.src.application.category.service.category_service import CategoryService
 from app.src.application.transaction.command.create_transaction_command_handler import CreateTransactionCommandHandler
 from app.src.application.transaction.command.delete_transaction_command_handler import DeleteTransactionCommandHandler
 from app.src.application.transaction.command.update_transaction_command_handler import UpdateTransactionCommandHandler
@@ -27,7 +26,6 @@ transactions_crud_blueprint = Blueprint('transactions_crud_blueprint', __name__,
 transaction_repository = TransactionRepository()
 transaction_service = TransactionService(transaction_repository)
 category_repository = CategoryRepository()
-category_service = CategoryService(category_repository)
 
 
 @transactions_crud_blueprint.route('/dashboard', methods=['GET'])
