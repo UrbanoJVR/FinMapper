@@ -4,6 +4,8 @@ from flask_babel import gettext
 from app.src.application.category.command.create_category_command import CreateCategoryCommand
 from app.src.application.category.command.create_category_command_handler import CreateCategoryCommandHandler
 from app.src.application.category.command.delete_category_process_manager import DeleteCategoryProcessManager
+from app.src.application.category.command.update_category_command import UpdateCategoryCommand
+from app.src.application.category.command.update_category_command_handler import UpdateCategoryCommandHandler
 from app.src.application.category.query.get_all_categories_query_handler import GetAllCategoriesQueryHandler
 from app.src.application.category.query.is_category_used_query_handler import IsCategoryUsedQueryHandler
 from app.src.application.category.service.category_service import CategoryService
@@ -11,6 +13,7 @@ from app.src.domain.category import Category
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 from app.src.presentation.form.category_forms import NewCategoryForm
+from app.src.presentation.form.upsert_category_form import UpsertCategoryForm, UpsertCategoryFormMapper
 
 categories_blueprint = Blueprint('categories_blueprint', __name__, url_prefix='/categories')
 category_repository = CategoryRepository()
@@ -48,13 +51,9 @@ def delete(category_id):
 
 @categories_blueprint.route('/edit/<int:category_id>', methods=['POST'])
 def edit(category_id):
-    form = NewCategoryForm(request.form)
-    category: Category = Category(
-        id=category_id,
-        name=form.name.data,
-        description=form.description.data
-    )
-    category_service.update(category)
+    form = UpsertCategoryForm(request.form)
+    command: UpdateCategoryCommand = UpsertCategoryFormMapper.map_to_update_command(category_id, form)
+    UpdateCategoryCommandHandler(category_repository).execute(command)
     return redirect(url_for('categories_blueprint.categories_dashboard'))
 
 
