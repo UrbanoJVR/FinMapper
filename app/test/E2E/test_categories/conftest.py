@@ -11,15 +11,15 @@ from app.src.infrastructure.repository.transaction_repository import Transaction
 
 @pytest.fixture(scope='function')
 def given_a_category(client) -> Category:
-    client.post('/categories/dashboard', data=dict(name='TestCategory', description='Test description'))
+    client.post('/categories/create', data=dict(name='TestCategory', description='Test description'))
     return CategoryRepository().get_by_name('TestCategory')
 
 
 @pytest.fixture(scope='function')
 def given_multiple_categories(client):
-    client.post('/categories/dashboard', data=dict(name='Category1', description='Description 1'))
-    client.post('/categories/dashboard', data=dict(name='Category2', description='Description 2'))
-    client.post('/categories/dashboard', data=dict(name='Category3', description='Description 3'))
+    client.post('/categories/create', data=dict(name='Category1', description='Description 1'))
+    client.post('/categories/create', data=dict(name='Category2', description='Description 2'))
+    client.post('/categories/create', data=dict(name='Category3', description='Description 3'))
 
     return CategoryRepository().get_all()
 
