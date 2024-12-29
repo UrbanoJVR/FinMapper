@@ -38,14 +38,15 @@ def load_transactions_file():
     form = TransactionsFileForm(CombinedMultiDict((request.files, request.form)))
 
     if request.method == 'GET':
-        return render_template('transactions/load_file.html', form=form, error=None)
+        return render_template('transactions/load_file.html', form=form)
 
     if form.validate_on_submit():
         read_file(save_file(form.file.data))
+        # load__transactions_file_to_memory
         return redirect(url_for('transactions_file_blueprint.review_file'))
     else:
-        error_text = gettext('FileExtensionNotAllowed')
-        return render_template('transactions/load_file.html', form=form, error=error_text)
+        flash(gettext("FileExtensionNotAllowed"), 'error')
+        return render_template('transactions/load_file.html', form=form)
 
 
 def read_file(filename: str):
