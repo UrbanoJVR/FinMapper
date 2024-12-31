@@ -57,7 +57,7 @@
                             <i class="fas fa-plus"></i>
                         </button>
                         {% call centered_modal('newCategoryModal', 'Create category') %}
-                            <form class="form" method="post">
+                            <form class="form" method="post" action="{{ url_for('categories_blueprint.create_category') }}">
                                 {{ upsert_category_form.hidden_tag() }}
                                 <div class="mb-3">
                                     {{ upsert_category_form.name.label(class='form-label') }}
