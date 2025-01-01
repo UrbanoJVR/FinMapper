@@ -7,6 +7,7 @@ from app.src.application.category.query.get_all_categories_query_handler import 
 from app.src.application.transaction.command.create_transaction_command_handler import CreateTransactionCommandHandler
 from app.src.application.transaction.command.delete_transaction_command_handler import DeleteTransactionCommandHandler
 from app.src.application.transaction.command.update_transaction_command_handler import UpdateTransactionCommandHandler
+from app.src.application.transaction.query.get_transaction_by_id_query_handler import GetTransactionByIdQueryHandler
 from app.src.application.transaction.query.search_transactions_by_month_year_query import \
     SearchTransactionsByMonthYearQuery
 from app.src.application.transaction.query.search_transactions_by_month_year_query_handler import \
@@ -80,7 +81,7 @@ def categorize_transaction():
 @transactions_crud_blueprint.route('/edit-transaction/<int:transaction_id>', methods=['GET', 'POST'])
 def edit_transaction(transaction_id):
     if request.method == 'GET':
-        transaction = transaction_service.get_by_id(transaction_id)
+        transaction = GetTransactionByIdQueryHandler(transaction_repository).execute(transaction_id)
         selectable_categories = GetAllCategoriesQueryHandler(category_repository).execute()
         form: UpsertTransactionForm = UpsertTransactionFormMapper().map_from_domain(transaction, selectable_categories)
         return render_template('transactions/upsert_transaction.html', form=form)
