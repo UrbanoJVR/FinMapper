@@ -1,12 +1,11 @@
 from typing import List
 
 from sqlalchemy.orm import Session
-from sqlalchemy import text, delete, select
+from sqlalchemy import delete, select
 
 from app.src.domain.category import Category
-from app.src.infrastructure.mapper import category_model_mapper
 from app.src.infrastructure.mapper.category_model_mapper import CategoryModelMapper
-from app.src.infrastructure.model.category_model import CategoryModel
+from app.src.infrastructure.repository.model.category_model import CategoryModel
 from database import db
 
 

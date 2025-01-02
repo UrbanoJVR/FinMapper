@@ -1,7 +1,7 @@
 from typing import List, Sequence
 
 from app.src.domain.category import Category
-from app.src.infrastructure.model.category_model import CategoryModel
+from app.src.infrastructure.repository.model.category_model import CategoryModel
 
 
 class CategoryModelMapper:

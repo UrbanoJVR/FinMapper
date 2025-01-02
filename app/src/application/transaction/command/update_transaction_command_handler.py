@@ -1,4 +1,4 @@
-from app.src.application.transaction.command.UpdateTransactionCommand import UpdateTransactionCommand
+from app.src.application.transaction.command.update_transaction_command import UpdateTransactionCommand
 from app.src.domain.transaction import Transaction
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository

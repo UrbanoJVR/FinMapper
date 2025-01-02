@@ -3,7 +3,7 @@ import os
 import pytest
 from bs4 import BeautifulSoup
 from flask.testing import FlaskClient
-from flask_migrate import upgrade
+from flask_migrate import upgrade, Config
 
 from app import create_app
 from database import db
@@ -15,7 +15,8 @@ def db_test_it():
 
     app = create_app('test-it')
     with app.app_context():
-        # db.create_all()
+        config = Config()
+        config.set_main_option('script_location', os.path.join(os.path.dirname(__file__), '../../migrations'))
         upgrade()
         connection = db.engine.connect()
         transaction = connection.begin()

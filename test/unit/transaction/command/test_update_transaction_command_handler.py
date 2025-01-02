@@ -3,7 +3,7 @@ from decimal import Decimal
 from unittest import TestCase
 from unittest.mock import Mock
 
-from app.src.application.transaction.command.UpdateTransactionCommand import UpdateTransactionCommand
+from app.src.application.transaction.command.update_transaction_command import UpdateTransactionCommand
 from app.src.application.transaction.command.update_transaction_command_handler import UpdateTransactionCommandHandler
 from app.src.domain.category import Category
 from app.src.domain.transaction import Transaction

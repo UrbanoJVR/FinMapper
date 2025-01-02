@@ -2,7 +2,7 @@ from typing import List, Sequence
 
 from app.src.domain.transaction import Transaction
 from app.src.infrastructure.mapper.category_model_mapper import CategoryModelMapper
-from app.src.infrastructure.model.transaction_model import TransactionModel
+from app.src.infrastructure.repository.model.transaction_model import TransactionModel
 
 
 def map_to_model(transaction: Transaction) -> TransactionModel:

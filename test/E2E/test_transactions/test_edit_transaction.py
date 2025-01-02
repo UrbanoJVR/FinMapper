@@ -6,7 +6,7 @@ from flask import url_for
 
 from app.src.domain.transaction import Transaction
 from app.src.infrastructure.repository.category_repository import CategoryRepository
-from app.test.conftest import assert_flash_message_success_is_present
+from test.conftest import assert_flash_message_success_is_present
 
 class TestEditTransaction:
 

@@ -10,7 +10,7 @@ from app.src.infrastructure.mapper.transaction_model_mapper import (
     map_to_domain,
     map_to_model,
 )
-from app.src.infrastructure.model.transaction_model import TransactionModel
+from app.src.infrastructure.repository.model.transaction_model import TransactionModel
 from database import db
 
 
