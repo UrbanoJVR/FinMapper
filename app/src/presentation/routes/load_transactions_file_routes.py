@@ -13,20 +13,14 @@ from app.src.application.transaction.command.read_transactions_from_file_command
     ReadTransactionsFromFileCommandHandler
 from app.src.application.transaction.query.get_transactions_in_memory_query_handler import \
     GetTransactionsInMemoryQueryHandler
-from app.src.application.transaction.service.transaction_service import TransactionService
 from app.src.domain.file_type import FileType
 from app.src.domain.transaction import Transaction
-from app.src.domain.transaction_from_file import TransactionFromFile
-from app.src.infrastructure.filesystem.csv_file_reader import CsvFileReader
 from app.src.infrastructure.filesystem.file_reader_factory import FileReaderFactory
-from app.src.infrastructure.filesystem.transactions_file_reader import TransactionsFileReader
 from app.src.infrastructure.in_memory.transaction_memory_repository import TransactionMemoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 from app.src.presentation.form.transactions_forms import TransactionsFileForm
-from app.src.presentation.mapper.transaction_from_file_mapper import map_to_entity_list
 
 transactions_file_blueprint = Blueprint('transactions_file_blueprint', __name__, url_prefix='')
-transaction_service = TransactionService(TransactionRepository())
 
 
 @transactions_file_blueprint.route('/load/review', methods=['GET', 'POST'])

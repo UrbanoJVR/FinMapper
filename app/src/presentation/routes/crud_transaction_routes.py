@@ -18,14 +18,12 @@ from app.src.infrastructure.repository.category_repository import CategoryReposi
 from app.src.application.transaction.command.categorization.categorized_transaction import CategorizedTransaction
 from app.src.application.transaction.command.categorization.categorize_transaction_command_handler import \
     CategorizeTransactionCommandHandler
-from app.src.application.transaction.service.transaction_service import TransactionService
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 from app.src.presentation.form.transactions_forms import MonthYearFilterForm
 from app.src.presentation.form.upsert_transaction_form import UpsertTransactionForm, UpsertTransactionFormMapper
 
 transactions_crud_blueprint = Blueprint('transactions_crud_blueprint', __name__, url_prefix='')
 transaction_repository = TransactionRepository()
-transaction_service = TransactionService(transaction_repository)
 category_repository = CategoryRepository()
 
 
