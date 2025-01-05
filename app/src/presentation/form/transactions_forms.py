@@ -9,6 +9,7 @@ from wtforms.fields.simple import StringField, HiddenField
 from wtforms.validators import DataRequired
 
 from app.src.application.transaction.command.create_transaction_command import CreateTransactionCommand
+from app.src.domain.file_type import FileType
 
 
 def get_translated_months():
@@ -20,7 +21,7 @@ def get_translated_months():
 
 
 class TransactionsFileForm(FlaskForm):
-    type = SelectField(str(lazy_gettext('Type')), choices=[('default', 'DEFAULT'), ('bbva', 'BBVA')])
+    type = SelectField(str(lazy_gettext('Type')), choices=[(ft.value, ft.name) for ft in FileType])
     file = FileField(str(lazy_gettext('File')),
                      validators=[DataRequired(),
                                  FileAllowed(['csv'], message='FileExtensionNotAllowed')],

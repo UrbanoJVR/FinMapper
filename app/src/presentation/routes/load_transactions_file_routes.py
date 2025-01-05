@@ -4,12 +4,23 @@ from typing import List
 
 from flask import request, render_template, session, redirect, url_for, current_app, Blueprint, flash
 from flask_babel import gettext
-from werkzeug.datastructures import CombinedMultiDict
+from werkzeug.datastructures import CombinedMultiDict, FileStorage
 
+from app.src.application.transaction.command.create_multiple_transactions_command_handler import \
+    CreateMultipleTransactionsCommandHandler
+from app.src.application.transaction.command.read_transactions_from_file_command import ReadTransactionsFromFileCommand
+from app.src.application.transaction.command.read_transactions_from_file_command_handler import \
+    ReadTransactionsFromFileCommandHandler
+from app.src.application.transaction.query.get_transactions_in_memory_query_handler import \
+    GetTransactionsInMemoryQueryHandler
 from app.src.application.transaction.service.transaction_service import TransactionService
+from app.src.domain.file_type import FileType
+from app.src.domain.transaction import Transaction
 from app.src.domain.transaction_from_file import TransactionFromFile
 from app.src.infrastructure.filesystem.csv_file_reader import CsvFileReader
+from app.src.infrastructure.filesystem.file_reader_factory import FileReaderFactory
 from app.src.infrastructure.filesystem.transactions_file_reader import TransactionsFileReader
+from app.src.infrastructure.in_memory.transaction_memory_repository import TransactionMemoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 from app.src.presentation.form.transactions_forms import TransactionsFileForm
 from app.src.presentation.mapper.transaction_from_file_mapper import map_to_entity_list
@@ -20,14 +31,13 @@ transaction_service = TransactionService(TransactionRepository())
 
 @transactions_file_blueprint.route('/load/review', methods=['GET', 'POST'])
 def review_file():
+    transactions: list[Transaction] = GetTransactionsInMemoryQueryHandler(TransactionMemoryRepository()).execute()
+
     if request.method == 'GET':
-        return render_template('transactions/review_file.html', transactions=session.get('transactions'))
+        return render_template('transactions/review_file.html', transactions=transactions)
 
     if request.method == 'POST':
-        # TODO crear command handler o query que permita acceder a las transactions pendientes de guardar
-        transaction_service.save_transactions(
-            map_to_entity_list(session.get('transactions'))
-        )
+        CreateMultipleTransactionsCommandHandler(TransactionRepository()).execute(transactions)
         flash(gettext('Transactions saved successfully!'), 'success')
         session.pop('transactions')
         return redirect(url_for('transactions_file_blueprint.load_transactions_file'))
@@ -41,23 +51,10 @@ def load_transactions_file():
         return render_template('transactions/load_file.html', form=form)
 
     if form.validate_on_submit():
-        read_file(save_file(form.file.data))
-        # load__transactions_file_to_memory
+        command = ReadTransactionsFromFileCommand(form.file.data, FileType(form.type.data))
+        handler = ReadTransactionsFromFileCommandHandler(TransactionMemoryRepository(), FileReaderFactory())
+        handler.execute(command)
         return redirect(url_for('transactions_file_blueprint.review_file'))
     else:
         flash(gettext("FileExtensionNotAllowed"), 'error')
         return render_template('transactions/load_file.html', form=form)
-
-
-def read_file(filename: str):
-    reader: TransactionsFileReader = CsvFileReader(filename)
-    transactions: List[TransactionFromFile] = reader.read_all_transactions()
-    session['transactions'] = transactions
-    reader.delete_file()
-
-
-def save_file(data_file):
-    _, extension = data_file.filename.split('.')
-    filename = f'{datetime.now().timestamp()}.{extension}'
-    data_file.save(os.path.join(current_app.config['UPLOAD_DIR'], filename))
-    return filename

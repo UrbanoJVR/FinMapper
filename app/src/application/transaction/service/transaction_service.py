@@ -12,6 +12,3 @@ class TransactionService:
 
     def save_transactions(self, transactions: List[Transaction]):
         self.repository.save_transactions(transactions)
-
-    def get_by_id(self, id: int) -> Transaction:
-        return self.repository.get_by_id(id)

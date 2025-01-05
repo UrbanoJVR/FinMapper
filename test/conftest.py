@@ -44,6 +44,11 @@ def client() -> FlaskClient:
             yield client
         db.drop_all()
 
+@pytest.fixture
+def flask_app():
+    app = create_app('test')
+    app.secret_key = "test_secret_key"
+    return app
 
 def assert_flash_message_success_is_present(html_data, expected_message):
     html = BeautifulSoup(html_data, 'html.parser')

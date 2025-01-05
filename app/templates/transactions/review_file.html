@@ -18,7 +18,7 @@
             <tbody>
             {% for transaction in transactions %}
                 <tr>
-                    <td>{{ transaction.date }}</td>
+                    <td>{{ format_datetime(transaction.transaction_date, 'EEEE, dd-MM-yyyy') }}</td>
                     <td>{{ transaction.concept }}</td>
                     <td>{{ transaction.amount }}</td>
                 </tr>

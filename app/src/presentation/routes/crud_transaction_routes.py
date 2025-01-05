@@ -39,9 +39,10 @@ def movements_list(month: int, year: int):
     if request.method == 'GET':
         form = MonthYearFilterForm(month=month, year=year)
         query = SearchTransactionsByMonthYearQuery(month=month, year=year)
+        transactions = SearchTransactionsByMonthYearQueryHandler(transaction_repository).execute(query)
         return render_template(
             'transactions/movements_list.html',
-            transactions=SearchTransactionsByMonthYearQueryHandler(transaction_repository).execute(query),
+            transactions=transactions,
             month_year_filter_form=form
         )
 

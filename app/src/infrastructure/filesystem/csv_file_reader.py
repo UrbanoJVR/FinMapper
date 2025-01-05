@@ -1,38 +1,36 @@
 import os
+from decimal import Decimal
+from io import BytesIO
 from pathlib import Path
 
 from flask import current_app
 
-from app.src.domain.transaction_from_file import TransactionFromFile
+from app.src.domain.transaction import Transaction
 from app.src.infrastructure.filesystem.transactions_file_reader import TransactionsFileReader
+from app.src.shared.date_utils import str_to_date
 
 
 class CsvFileReader(TransactionsFileReader):
 
-    def __init__(self, file_name):
-        self.file_name = file_name
-
-    def read_all_transactions(self):
-        path = Path(str(os.path.join(current_app.config['UPLOAD_DIR'], self.file_name)))
-        content_lines = path.read_text(encoding='utf-8').strip().splitlines()
+    @staticmethod
+    def read_all_transactions(file: BytesIO) -> list[Transaction]:
         transactions = []
 
-        if content_lines[0].startswith('\ufeff'):
-            content_lines[0] = content_lines[0][1:]
+        for i, line in enumerate(file):
+            line = line.decode('utf-8').strip()
 
-        for line in content_lines:
-            transaction = TransactionFromFile(
-                line.split(';')[0],
-                line.split(';')[1],
-                line.split(';')[2]
+            if i == 0 and line.startswith('\ufeff'):
+                line = line[1:]
+
+            if not line:
+                continue
+
+            fields = line.split(';')
+            transaction = Transaction(
+                transaction_date=str_to_date(fields[0]),
+                concept=fields[1],
+                amount=Decimal(fields[2].replace(',', '.'))
             )
-
             transactions.append(transaction)
 
         return transactions
-
-    def delete_file(self):
-        path = Path(str(os.path.join(current_app.config['UPLOAD_DIR'], self.file_name)))
-
-        if path.exists():
-            path.unlink()
