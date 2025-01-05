@@ -27,11 +27,6 @@ transaction_repository = TransactionRepository()
 category_repository = CategoryRepository()
 
 
-@transactions_crud_blueprint.route('/dashboard', methods=['GET'])
-def dashboard():
-    return render_template('transactions/transactions_dashboard.html')
-
-
 @transactions_crud_blueprint.route('/movements/<int:month>/<int:year>', methods=['GET', 'POST'])
 def movements_list(month: int, year: int):
     if request.method == 'GET':
@@ -112,7 +107,7 @@ def create_transaction():
 @transactions_crud_blueprint.route('/transactions/delete/<int:transaction_id>', methods=['GET'])
 def delete_transaction(transaction_id):
     DeleteTransactionCommandHandler(transaction_repository).execute(transaction_id)
-    return redirect(request.referrer or url_for('transactions_crud_blueprint.dashboard'))
+    return redirect(request.referrer or url_for('dashboard_blueprint.dashboard'))
 
 
 def generate_month_year_filter_form_actual_date():

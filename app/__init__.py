@@ -17,6 +17,9 @@ def register_blueprints(app):
     from app.src.presentation.routes.category_routes import categories_blueprint
     app.register_blueprint(categories_blueprint)
 
+    from app.src.presentation.routes.dashboard_routes import dashboard_blueprint
+    app.register_blueprint(dashboard_blueprint)
+
     app.errorhandler(404)(page_not_found)
 
 
