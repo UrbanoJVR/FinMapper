@@ -107,7 +107,7 @@ def create_transaction():
 @transactions_crud_blueprint.route('/transactions/delete/<int:transaction_id>', methods=['GET'])
 def delete_transaction(transaction_id):
     DeleteTransactionCommandHandler(transaction_repository).execute(transaction_id)
-    return redirect(request.referrer or url_for('dashboard_blueprint.dashboard'))
+    return redirect(request.referrer or url_for('dashboard_blueprint.report'))
 
 
 def generate_month_year_filter_form_actual_date():

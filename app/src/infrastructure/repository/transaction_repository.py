@@ -1,6 +1,6 @@
 from typing import List
 
-from sqlalchemy import extract, select, delete, func
+from sqlalchemy import extract, select, delete, func, Integer
 from sqlalchemy.orm import Session
 
 from app.src.domain.transaction import Transaction
@@ -50,8 +50,21 @@ class TransactionRepository:
         result = self.session.execute(stmt).scalars().all()
         return map_to_entity_list(result)
 
-    def get_by_id(self, id: int) -> Transaction:
-        stmt = select(TransactionModel).where(TransactionModel.id.__eq__(id))
+    def get_by_month_year_and_category_id(self, month: int, year: int, category_id: int) -> List[Transaction]:
+        statement = (
+            select(TransactionModel)
+            .where(
+                extract('month', TransactionModel.date) == month,
+                extract('year', TransactionModel.date) == year,
+                TransactionModel.category_id.__eq__(category_id)
+            )
+            .order_by(TransactionModel.date.desc())
+        )
+        result = self.session.execute(statement).scalars().all()
+        return map_to_entity_list(result)
+
+    def get_by_id(self, transaction_id: int) -> Transaction:
+        stmt = select(TransactionModel).where(TransactionModel.id.__eq__(transaction_id))
         result = self.session.execute(stmt).scalars().first()
         return map_to_domain(result)
 
@@ -87,5 +100,6 @@ class TransactionRepository:
         return map_to_domain(self.session.execute(query).scalar())
 
     def count_by_category_id(self, category_id: int) -> int:
-        query = select(func.count()).select_from(TransactionModel).where(TransactionModel.category_id.__eq__(category_id))
+        query = select(func.count()).select_from(TransactionModel).where(
+            TransactionModel.category_id.__eq__(category_id))
         return self.session.execute(query).scalar()

@@ -39,14 +39,14 @@ def given_a_category_used_by_transaction(client):
 
 
 def category_exists_on_dashboard(client, category):
-    response = client.get('/categories/dashboard')
+    response = client.get('/categories/report')
     assert response.status_code == 200
     assert category.name.encode() in response.data
     assert category.description.encode() in response.data
 
 
 def category_not_exists_on_dashboard(client, category):
-    response = client.get('/categories/dashboard')
+    response = client.get('/categories/report')
     assert response.status_code == 200
     assert category.name.encode() not in response.data
     assert category.description.encode() not in response.data

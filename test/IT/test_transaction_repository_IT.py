@@ -12,6 +12,7 @@ class TestTransactionRepositoryIT:
 
     def setup_method(self):
         self.sut = TransactionRepository()
+        self.category_repository = CategoryRepository()
 
     def test_autoincrement_id(self, db_test_it):
         transaction = Transaction(transaction_date=date(2024, 12, 1), amount=Decimal(100),
@@ -50,7 +51,6 @@ class TestTransactionRepositoryIT:
         assert transactions[1].id == 2
         assert transactions[1].amount == transactions[1].amount
 
-
     def test_delete_by_id(self, db_test_it):
         transaction1 = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
                                    category=None, concept="Concept")
@@ -68,7 +68,7 @@ class TestTransactionRepositoryIT:
 
     def test_update(self, db_test_it):
         origin_transaction = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
-                                   category=None, concept="Concept")
+                                         category=None, concept="Concept")
         edited_transaction = Transaction(id=1, transaction_date=date(2025, 12, 1), amount=Decimal(50),
                                          category=None, concept="New Concept")
         self.sut.save(origin_transaction)
@@ -97,6 +97,21 @@ class TestTransactionRepositoryIT:
         assert transactions[0].id == transaction1.id
         assert transactions[0].amount == transaction1.amount
 
+    def test_get_by_month_year_and_category(self, save_transactions_from_different_months_and_categories):
+        category_zero = self.category_repository.get_by_name('Category 0')
+        expected_transactions = [
+            Transaction(amount=Decimal(199.75), transaction_date=date(2025, 1, 20), concept="Random concept",
+                        category=self.category_repository.get_by_name('Category 0'), id=3),
+            Transaction(amount=Decimal(999.25), transaction_date=date(2025, 1, 5), concept="Random concept",
+                        category=self.category_repository.get_by_name('Category 0'), id=2),
+            Transaction(amount=Decimal(100.50), transaction_date=date(2025, 1, 1), concept="Random concept",
+                        category=self.category_repository.get_by_name('Category 0'), id=1)
+        ]
+
+        result = self.sut.get_by_month_year_and_category_id(1, 2025, category_zero.id)
+
+        assert result == expected_transactions
+
     def test_get_by_id(self, db_test_it):
         transaction1 = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
                                    category=None, concept="Concept")
@@ -111,7 +126,7 @@ class TestTransactionRepositoryIT:
 
     def test_get_last_uncategorized(self, db_test_it):
         category = Category(id=1, name="Category name", description="Category description")
-        CategoryRepository().save(category)
+        self.category_repository.save(category)
         transaction1 = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
                                    category=None, concept="Concept 1")
         transaction2 = Transaction(id=2, transaction_date=date(2024, 11, 1), amount=Decimal(50),
@@ -129,7 +144,7 @@ class TestTransactionRepositoryIT:
 
     def test_get_uncategorized_by_month_year(self, db_test_it):
         category = Category(id=1, name="Category name", description="Category description")
-        CategoryRepository().save(category)
+        self.category_repository.save(category)
         transaction1 = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
                                    category=None, concept="Concept 1")
         transaction2 = Transaction(id=2, transaction_date=date(2024, 11, 1), amount=Decimal(50),
@@ -147,9 +162,9 @@ class TestTransactionRepositoryIT:
 
     def test_find_first_by_category_id_success(self, db_test_it):
         category = Category(id=2, name="Category name", description="Category description")
-        CategoryRepository().save(category)
+        self.category_repository.save(category)
         transaction = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
-                                   category=category, concept="Concept 1")
+                                  category=category, concept="Concept 1")
         self.sut.save(transaction)
 
         result = self.sut.find_first_by_category_id(category.id)
@@ -166,7 +181,7 @@ class TestTransactionRepositoryIT:
 
     def test_count_by_category_id_should_return_one(self, db_test_it):
         category = Category(id=1, name="Category name", description="Category description")
-        CategoryRepository().save(category)
+        self.category_repository.save(category)
         transaction = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
                                   category=category, concept="Concept 1")
         self.sut.save(transaction)
