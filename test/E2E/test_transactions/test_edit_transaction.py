@@ -37,7 +37,7 @@ class TestEditTransaction:
         # assert transaction exists with new data
         self._assert_edit_form_contains_transaction_data(client, new_transaction)
         # assert success message is visible
-        assert_flash_message_success_is_present(result_after_edit.data, 'Transaction successfully updated.')
+        assert_flash_message_success_is_present(result_after_edit.data, "Transacción actualizada exitosamente")
 
     def _assert_edit_form_contains_transaction_data(self, client, transaction):
         response = client.get(f"/edit-transaction/{transaction.id}")

@@ -11,5 +11,6 @@ class Transaction:
     transaction_date: date
     amount: decimal.Decimal
     concept: str
+    comments: str | None = None
     category: Category | None = None
     id: int | None = None

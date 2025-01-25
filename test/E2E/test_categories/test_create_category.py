@@ -16,7 +16,7 @@ def test_create_category_when_existing_category(client, given_a_category):
     assert response.status_code == 200
     category_exists_on_dashboard(client, existing_category)
     category_exists_on_dashboard(client, new_category)
-    assert b"Category successfully created!" in response.data
+    assert b"Categor\xc3\xada creada" in response.data
 
 
 def test_create_category_without_name_is_forbidden(client):
@@ -26,4 +26,4 @@ def test_create_category_without_name_is_forbidden(client):
     }, follow_redirects=True)
 
     assert response.status_code == 200
-    assert b"Can&#39;t create category. Invalid data" in response.data
+    assert b"Categor\xc3\xada no creada. Datos no v\xc3\xa1lidos" in response.data

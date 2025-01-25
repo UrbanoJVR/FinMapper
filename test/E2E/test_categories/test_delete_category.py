@@ -12,7 +12,7 @@ def test_delete_category(client, given_multiple_categories):
 
     assert response.status_code == 200
     assert response.request.path == url_for('categories_blueprint.categories_dashboard')
-    assert b'Category successfully deleted!' in response.data
+    assert b'Categor\xc3\xada creada' in response.data
 
     category_exists_on_dashboard(client, categories[0])
     category_not_exists_on_dashboard(client, categories[1])
@@ -27,5 +27,5 @@ def test_delete_forbidden_when_category_is_used(client, given_a_category_used_by
 
     assert response.status_code == 200
     assert response.request.path == url_for('categories_blueprint.categories_dashboard')
-    assert b'Can&#39;t delete used category!' in response.data
+    assert b"No es posible eliminar una categor\xc3\xada que est\xc3\xa1 en uso" in response.data
     category_exists_on_dashboard(client, category)

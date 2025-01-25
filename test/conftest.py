@@ -52,6 +52,7 @@ def flask_app():
 
 def assert_flash_message_success_is_present(html_data, expected_message):
     html = BeautifulSoup(html_data, 'html.parser')
+    print(html.prettify())
     flash_messages = html.find_all(class_='alert-success')
     assert any(expected_message in message.text for message in flash_messages), (
         f"Expected flash message '{expected_message}' not found."

@@ -1,51 +1,55 @@
 # Translations template for PROJECT.
-# Copyright (C) 2024 ORGANIZATION
+# Copyright (C) 2025 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-10-18 23:22+0200\n"
+"POT-Creation-Date: 2025-01-25 16:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.16.0\n"
 
-#: app/src/categories/presentation/routes.py:19
+#: app/src/presentation/routes/category_routes.py:34
+msgid "Can't create category. Invalid data"
+msgstr ""
+
+#: app/src/presentation/routes/category_routes.py:41
 msgid "Category successfully created!"
 msgstr ""
 
-#: app/src/categories/presentation/routes.py:21
+#: app/src/presentation/routes/category_routes.py:43
 msgid "Can't create category"
 msgstr ""
 
-#: app/src/categories/presentation/routes.py:32
-msgid "Can't delete used category!"
-msgstr ""
-
-#: app/src/categories/presentation/routes.py:35
+#: app/src/presentation/routes/category_routes.py:54
 msgid "Category successfully deleted!"
 msgstr ""
 
-#: app/src/transactions/presentation/crud_transaction_routes.py:94
+#: app/src/presentation/routes/category_routes.py:56
+msgid "Can't delete used category!"
+msgstr ""
+
+#: app/src/presentation/routes/crud_transaction_routes.py:87
 msgid "Transaction successfully updated."
 msgstr ""
 
-#: app/src/transactions/presentation/crud_transaction_routes.py:118
+#: app/src/presentation/routes/crud_transaction_routes.py:103
 msgid "Transaction successfully created."
 msgstr ""
 
-#: app/src/transactions/presentation/load_transactions_file_routes.py:30
+#: app/src/presentation/routes/load_transactions_file_routes.py:31
 msgid "Transactions saved successfully!"
 msgstr ""
 
-#: app/src/transactions/presentation/load_transactions_file_routes.py:46
+#: app/src/presentation/routes/load_transactions_file_routes.py:49
 msgid "FileExtensionNotAllowed"
 msgstr ""
 
@@ -134,6 +138,10 @@ msgstr ""
 
 #: app/templates/transactions/review_file.html:8
 msgid "Cancel"
+msgstr ""
+
+#: app/templates/transactions/review_file.html:16
+msgid "Comments"
 msgstr ""
 
 #: app/templates/transactions/upsert_transaction.html:55
