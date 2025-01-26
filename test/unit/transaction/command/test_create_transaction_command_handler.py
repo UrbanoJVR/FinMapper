@@ -23,6 +23,7 @@ class TestCreateTransactionCommandHandler(TestCase):
         command = CreateTransactionCommand(
             amount=Decimal(10),
             concept="concept",
+            comments="comments",
             category_id=1,
             date=datetime.now()
         )
@@ -35,6 +36,7 @@ class TestCreateTransactionCommandHandler(TestCase):
             amount=command.amount,
             transaction_date=command.date,
             concept=command.concept,
+            comments=command.comments,
             category=category_from_db,
             id=None
         )
@@ -49,6 +51,7 @@ class TestCreateTransactionCommandHandler(TestCase):
         command = CreateTransactionCommand(
             amount=Decimal(10),
             concept="concept",
+            comments="comments",
             category_id=1,
             date=datetime.now()
         )
@@ -56,6 +59,7 @@ class TestCreateTransactionCommandHandler(TestCase):
             amount=command.amount,
             transaction_date=command.date,
             concept=command.concept,
+            comments=command.comments,
             category=None,
             id=None
         )
@@ -70,12 +74,14 @@ class TestCreateTransactionCommandHandler(TestCase):
         command = CreateTransactionCommand(
             amount=Decimal(10),
             concept="concept",
+            comments="comments",
             date=datetime.now()
         )
         transaction = Transaction(
             amount=command.amount,
             transaction_date=command.date,
             concept=command.concept,
+            comments=command.comments,
             category=None,
             id=None
         )

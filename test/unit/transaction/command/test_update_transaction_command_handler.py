@@ -21,6 +21,7 @@ class TestUpdateTransactionCommandHandler(TestCase):
     def test_execute_success(self):
         command = UpdateTransactionCommand(
             concept="New concept",
+            comments="New comments",
             amount=Decimal(11),
             date=date.today(),
             transaction_id=1,
@@ -31,6 +32,7 @@ class TestUpdateTransactionCommandHandler(TestCase):
         expected_transaction_to_update = Transaction(
             amount=command.amount,
             concept=command.concept,
+            comments=command.comments,
             category=category,
             transaction_date=command.date,
             id=command.transaction_id
@@ -48,8 +50,9 @@ class TestUpdateTransactionCommandHandler(TestCase):
         command = self._command_with_empty_category()
         transaction_from_db_with_category = self._random_transaction()
         expected_transaction_to_update = Transaction(
-            amount = command.amount,
+            amount=command.amount,
             concept=command.concept,
+            comments=command.comments,
             category=None,
             transaction_date=command.date,
             id=command.transaction_id
@@ -83,6 +86,7 @@ class TestUpdateTransactionCommandHandler(TestCase):
         return Transaction(
             amount=Decimal(10),
             concept="Concept",
+            comments="Comments",
             category=None,
             transaction_date=date.today(),
             id=1
@@ -92,6 +96,7 @@ class TestUpdateTransactionCommandHandler(TestCase):
         return Transaction(
             amount=Decimal(10),
             concept="Concept",
+            comments="Comments",
             category=self._random_category(),
             transaction_date=date.today(),
             id=1)
@@ -100,6 +105,7 @@ class TestUpdateTransactionCommandHandler(TestCase):
     def _command_with_empty_category() -> UpdateTransactionCommand:
         return UpdateTransactionCommand(
             concept="New concept",
+            comments="New comments",
             amount=Decimal(10),
             date=date.today(),
             transaction_id=1,

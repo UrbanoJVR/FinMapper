@@ -14,11 +14,13 @@ class TestCreateTransaction:
         transaction_to_create = Transaction(
             amount=Decimal(20.50),
             concept='Transaction concept',
-            transaction_date=date(2024, 12, 1)
+            transaction_date=date(2024, 12, 1),
+            comments='Transaction comments'
         )
 
         response = client.post('/transactions/add',
                                data=dict(amount=transaction_to_create.amount, concept=transaction_to_create.concept,
+                                         comments=transaction_to_create.comments,
                                          date=transaction_to_create.transaction_date.strftime('%Y-%m-%d')),
                                follow_redirects=True)
 
@@ -54,3 +56,8 @@ class TestCreateTransaction:
         assert category_field is not None, "Category field not found"
         selected_option = category_field.find('option', {'selected': True})
         assert selected_option is None or selected_option['value'] == 'None', "Category field is not empty"
+
+        # Check that the comments field is empty
+        comments_field = form.find('input', {'name': 'comments'})
+        assert comments_field is not None, "Comments field not found"
+        assert comments_field['value'] == '', "Comments field is not empty"

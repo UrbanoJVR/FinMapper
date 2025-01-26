@@ -6,6 +6,7 @@ from decimal import Decimal
 @dataclass
 class CreateTransactionCommand:
     concept: str
+    comments: str
     amount: Decimal
     date: date
     category_id: int = None

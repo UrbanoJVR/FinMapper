@@ -16,7 +16,7 @@ def given_a_transaction(client) -> Transaction:
     CategoryRepository().save(Category(name="Category for transaction", description="Category description"))
     category_id = CategoryRepository().get_by_name("Category for transaction").id
     client.post('/transactions/add',
-                data=dict(amount=100, concept='concept', date='2024-12-01', category_id=category_id))
+                data=dict(amount=100, concept='concept', comments='comments', date='2024-12-01', category_id=category_id))
     return TransactionRepository().get_by_id(1)
 
 
@@ -51,11 +51,12 @@ def transaction_not_exists(client, transaction: Transaction) -> bool:
 
 def _transaction_in_table(response_data: bytes, transaction: Transaction) -> bool:
     html_parser = BeautifulSoup(response_data, 'html.parser')
+    print(html_parser.prettify())
 
     formatted_date: str = format_datetime(transaction.transaction_date, 'EEEE, dd-MM-yyyy')
     formatted_amount: str = f"{transaction.amount:.2f}"
     category_name: str = transaction.category.name if transaction.category else ""
-    transaction_data = [formatted_date, transaction.concept, formatted_amount, category_name]
+    transaction_data = [formatted_date, transaction.concept, transaction.comments, formatted_amount, category_name]
 
     table = html_parser.find('table', {'class': 'table'})
     assert table is not None

@@ -21,6 +21,7 @@ class UpdateTransactionCommandHandler:
 
     def _update_transaction_from_command(self, transaction: Transaction, command: UpdateTransactionCommand) -> Transaction:
         transaction.concept = command.concept
+        transaction.comments = command.comments
         transaction.transaction_date = command.date
         transaction.amount = command.amount
 

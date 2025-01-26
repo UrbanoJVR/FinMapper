@@ -6,9 +6,8 @@ from sqlalchemy.orm import Session
 from app.src.domain.transaction import Transaction
 from app.src.infrastructure.mapper.transaction_model_mapper import (
     map_to_model_list,
-    map_to_entity_list,
     map_to_domain,
-    map_to_model,
+    map_to_model, map_to_domain_list,
 )
 from app.src.infrastructure.repository.model.transaction_model import TransactionModel
 from database import db
@@ -48,7 +47,7 @@ class TransactionRepository:
             .order_by(TransactionModel.date.desc())
         )
         result = self.session.execute(stmt).scalars().all()
-        return map_to_entity_list(result)
+        return map_to_domain_list(result)
 
     def get_by_month_year_and_category_id(self, month: int, year: int, category_id: int) -> List[Transaction]:
         statement = (
@@ -61,7 +60,7 @@ class TransactionRepository:
             .order_by(TransactionModel.date.desc())
         )
         result = self.session.execute(statement).scalars().all()
-        return map_to_entity_list(result)
+        return map_to_domain_list(result)
 
     def get_by_id(self, transaction_id: int) -> Transaction:
         stmt = select(TransactionModel).where(TransactionModel.id.__eq__(transaction_id))
@@ -88,12 +87,12 @@ class TransactionRepository:
             .order_by(TransactionModel.date.desc())
         )
         result = self.session.execute(stmt).scalars().all()
-        return map_to_entity_list(result)
+        return map_to_domain_list(result)
 
     def find_all(self):
         stmt = select(TransactionModel)
         result = self.session.execute(stmt).scalars().all()
-        return map_to_entity_list(result)
+        return map_to_domain_list(result)
 
     def find_first_by_category_id(self, category_id: int) -> Transaction:
         query = select(TransactionModel).where(TransactionModel.category_id.__eq__(category_id))

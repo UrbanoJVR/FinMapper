@@ -40,6 +40,17 @@
             {% endif %}
         </div>
         <div class="mb-3">
+            {{ form.comments.label(class="form-label") }}
+            {{ form.comments(class="form-control") }}
+            {% if form.comments.errors %}
+                <div class="invalid-feedback">
+                    {% for error in form.comments.errors %}
+                        <span>{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
             {{ form.category_id.label(class="form-label") }}
             {{ form.category_id(class="form-select") }}
             {% if form.category_id.errors %}

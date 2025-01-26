@@ -28,6 +28,9 @@ class UpsertTransactionForm(FlaskForm):
         str(lazy_gettext('Concept')),
         validators=[DataRequired(message=str(lazy_gettext('Concept required')))]
     )
+    comments = StringField(
+        str(lazy_gettext('Comments')),
+    )
     category_id = SelectField(
         str(lazy_gettext('Category'))
     )
@@ -48,6 +51,7 @@ class UpsertTransactionFormMapper:
         form.date.data = transaction.transaction_date
         form.amount.data = transaction.amount
         form.concept.data = transaction.concept
+        form.comments.data = transaction.comments
         form.category_id.choices = [('None', '')] + [(str(category.id), category.name) for category in
                                                      selectable_categories]
         form.category_id.data = str(transaction.category.id) if transaction.category else 'None'
@@ -60,6 +64,7 @@ class UpsertTransactionFormMapper:
             date=form.date.data,
             amount=form.amount.data,
             concept=form.concept.data,
+            comments=form.comments.data,
             category_id=self._get_field_data_if_not_empty(form.category_id),
         )
 
@@ -69,6 +74,7 @@ class UpsertTransactionFormMapper:
             date=form.date.data,
             amount=form.amount.data,
             concept=form.concept.data,
+            comments=form.comments.data,
             category_id=self._get_field_data_if_not_empty(form.category_id),
         )
 

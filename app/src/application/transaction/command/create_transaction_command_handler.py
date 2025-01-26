@@ -18,6 +18,7 @@ class CreateTransactionCommandHandler:
 
         transaction = Transaction(
             concept=command.concept,
+            comments=command.comments,
             amount=command.amount,
             transaction_date=command.date,
             category=category,

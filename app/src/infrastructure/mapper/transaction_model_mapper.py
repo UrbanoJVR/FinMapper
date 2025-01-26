@@ -11,6 +11,7 @@ def map_to_model(transaction: Transaction) -> TransactionModel:
         date=transaction.transaction_date,
         amount=transaction.amount,
         concept=transaction.concept,
+        comments=transaction.comments,
         category_id=transaction.category.id if transaction.category is not None else None
     )
 
@@ -21,6 +22,7 @@ def map_to_domain(transaction_model: TransactionModel) -> Transaction:
         transaction_date=transaction_model.date,
         amount=transaction_model.amount,
         concept=transaction_model.concept,
+        comments=transaction_model.comments,
         category=CategoryModelMapper.map_to_domain(
             transaction_model.category) if transaction_model.category is not None else None
     )
@@ -35,7 +37,7 @@ def map_to_model_list(transactions: List[Transaction]) -> List[TransactionModel]
     return tm_list
 
 
-def map_to_entity_list(transactions_models: Sequence[TransactionModel]) -> List[Transaction]:
+def map_to_domain_list(transactions_models: Sequence[TransactionModel]) -> List[Transaction]:
     transactions: List[Transaction] = []
 
     for transaction_model in transactions_models:

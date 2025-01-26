@@ -7,6 +7,7 @@ from decimal import Decimal
 class UpdateTransactionCommand:
     transaction_id: int
     concept: str
+    comments: str
     amount: Decimal
     date: date
     category_id: int | None

@@ -21,8 +21,6 @@ def flask_request_context(flask_app):
         yield
 
 
-# @pytest.mark.skip(
-#     reason="deshabilitado hasta conseguir hacer que el almacenamiento en la sessión se comporte igual en los tests que en entorno real")
 class TestTransactionMemoryRepository:
 
     def setup_method(self):
@@ -40,4 +38,4 @@ class TestTransactionMemoryRepository:
 
         result = TransactionMemoryRepository.get_transactions()
 
-        #asserts ...
+        # asserts ...

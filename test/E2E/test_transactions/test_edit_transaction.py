@@ -15,6 +15,7 @@ class TestEditTransaction:
         new_transaction = Transaction(
             amount=Decimal(999.00),
             concept="New concept",
+            comments="New comments",
             transaction_date=date.min,
             category=None,
             id=existing_transaction.id,
@@ -27,6 +28,7 @@ class TestEditTransaction:
         result_after_edit = client.post(edit_transaction_url,
                                         data=dict(amount=new_transaction.amount,
                                                   concept=new_transaction.concept,
+                                                  comments=new_transaction.comments,
                                                   date=new_transaction.transaction_date.strftime('%Y-%m-%d'))
                                         , follow_redirects=True)
         assert result_after_edit.status_code == 200
@@ -63,6 +65,11 @@ class TestEditTransaction:
         concept_field = form.find('input', {'name': 'concept'})
         assert concept_field is not None, "Concept field not found"
         assert concept_field['value'] == transaction.concept, "Concept field is the same than transaction"
+
+        # Check comments field
+        comments_field = form.find('input', {'name': 'comments'})
+        assert comments_field is not None, "Comments field not found"
+        assert comments_field['value'] == transaction.comments, "Comments field is not the same than transaction"
 
         # Check category field
         category_field = form.find('select', {'name': 'category_id'})
