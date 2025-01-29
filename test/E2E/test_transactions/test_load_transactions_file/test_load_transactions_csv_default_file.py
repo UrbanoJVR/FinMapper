@@ -1,39 +1,45 @@
 import os
-
 from bs4 import BeautifulSoup
 from flask import url_for
 from werkzeug.datastructures import FileStorage
 
+from app.src.domain.file_type import FileType
 
-class TestLoadTransactionsFile:
+
+class TestLoadTransactionsCsvDefaultFile:
 
     def test_load_default_csv_file(self, client):
-        test_file_path = os.path.join(os.path.dirname(__file__), 'sources', 'test_transactions.csv')
+        test_file_path = os.path.join(os.path.dirname(__file__), 'sources', 'test_transactions_default.csv')
 
         with open(test_file_path, 'rb') as test_file:
             data = {
-                'type': 'default',
+                'type': FileType.DEFAULT.name,
                 'file': (FileStorage(test_file), 'sample_transactions.csv')
             }
 
             response = client.post("/load", data=data, content_type='multipart/form-data', follow_redirects=True)
 
-        assert response.status_code == 200
+        assert response.status_code == 200, f"Expected status code 200 but got {response.status_code}"
         print(response.data.decode('utf-8'))
-        assert response.request.path == url_for('transactions_file_blueprint.review_file')
-        assert self._response_contains_expected_transactions(response.data) is True
 
-    def _response_contains_expected_transactions(self, response_data: bytes):
+        assert response.request.path == url_for('transactions_file_blueprint.review_file')
+
+        missing_transactions = self._missing_transactions_in_response(response.data)
+        assert not missing_transactions, f"Missing transactions in response: {missing_transactions}"
+
+    def _missing_transactions_in_response(self, response_data: bytes):
+        """ Returns a list of transactions that are missing from the response table """
         html = BeautifulSoup(response_data, 'html.parser')
 
         table = html.find('table', {'class': 'table'})
-        assert table is not None
+        assert table is not None, "No table found in the HTML response!"
 
+        missing_transactions = []
         for transaction in self._expected_transactions_data():
             if not self._transaction_exists_in_table(transaction, table):
-                return False
+                missing_transactions.append(transaction)
 
-        return True
+        return missing_transactions
 
     @staticmethod
     def _transaction_exists_in_table(transaction_data: list[str], html_table):

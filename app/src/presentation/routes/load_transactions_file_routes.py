@@ -1,6 +1,6 @@
-from flask import request, render_template, session, redirect, url_for, current_app, Blueprint, flash
+from flask import request, render_template, session, redirect, url_for, Blueprint, flash
 from flask_babel import gettext
-from werkzeug.datastructures import CombinedMultiDict, FileStorage
+from werkzeug.datastructures import CombinedMultiDict
 
 from app.src.application.transaction.command.create_multiple_transactions_command_handler import \
     CreateMultipleTransactionsCommandHandler
@@ -14,7 +14,7 @@ from app.src.domain.transaction import Transaction
 from app.src.infrastructure.filesystem.file_reader_factory import FileReaderFactory
 from app.src.infrastructure.in_memory.transaction_memory_repository import TransactionMemoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
-from app.src.presentation.form.transactions_forms import TransactionsFileForm
+from app.src.presentation.form.transactions_file_form import TransactionsFileForm
 
 transactions_file_blueprint = Blueprint('transactions_file_blueprint', __name__, url_prefix='')
 
@@ -41,7 +41,7 @@ def load_transactions_file():
         return render_template('transactions/load_file.html', form=form)
 
     if form.validate_on_submit():
-        command = ReadTransactionsFromFileCommand(form.file.data, FileType(form.type.data))
+        command = ReadTransactionsFromFileCommand(form.file.data, FileType.__getitem__(form.type.data))
         handler = ReadTransactionsFromFileCommandHandler(TransactionMemoryRepository(), FileReaderFactory())
         handler.execute(command)
         return redirect(url_for('transactions_file_blueprint.review_file'))
