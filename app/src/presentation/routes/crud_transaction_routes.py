@@ -4,6 +4,7 @@ from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_babel import gettext
 
 from app.src.application.category.query.get_all_categories_query_handler import GetAllCategoriesQueryHandler
+from app.src.application.command_bus import CommandBus
 from app.src.application.transaction.command.create_transaction_command_handler import CreateTransactionCommandHandler
 from app.src.application.transaction.command.delete_transaction_command_handler import DeleteTransactionCommandHandler
 from app.src.application.transaction.command.update_transaction_command_handler import UpdateTransactionCommandHandler
@@ -25,6 +26,7 @@ from app.src.presentation.form.upsert_transaction_form import UpsertTransactionF
 transactions_crud_blueprint = Blueprint('transactions_crud_blueprint', __name__, url_prefix='')
 transaction_repository = TransactionRepository()
 category_repository = CategoryRepository()
+command_bus = CommandBus()
 
 
 @transactions_crud_blueprint.route('/movements/<int:month>/<int:year>', methods=['GET', 'POST'])
@@ -99,7 +101,7 @@ def create_transaction():
 
     if request.method == 'POST':
         command = UpsertTransactionFormMapper().map_to_create_command(UpsertTransactionForm(request.form))
-        CreateTransactionCommandHandler(transaction_repository, category_repository).execute(command)
+        command_bus.execute(command)
         flash(gettext('Transaction successfully created.'), 'success')
         return redirect(url_for('transactions_crud_blueprint.create_transaction'))
 
