@@ -4,6 +4,7 @@ from decimal import Decimal
 
 from flask import session
 
+from app.src.domain.category import Category
 from app.src.domain.transaction import Transaction
 
 
@@ -21,12 +22,9 @@ class TransactionMemoryRepository:
     @staticmethod
     def get_transactions() -> list[Transaction]:
         tmp_transactions: list[dict] = session.get('transactions', [])
-        transactions: list[Transaction] = []
+        transactions: list[Transaction] = [TmpTransaction.from_dict_to_domain(tmp) for tmp in tmp_transactions]
 
-        for tmp_transaction in tmp_transactions:
-            transactions.append(TmpTransaction.from_dict_to_domain(tmp_transaction))
-
-        return transactions
+        return sorted(transactions, key=lambda t: t.transaction_date, reverse=True)
 
     @staticmethod
     def clear():
@@ -38,20 +36,29 @@ class TmpTransaction:
     amount: str
     date: str
     concept: str
+    comments: str
+    category_name: str
+    category_id: int
 
     @staticmethod
     def from_domain(transaction: Transaction):
-        return TmpTransaction(str(transaction.amount), str(transaction.transaction_date), str(transaction.concept))
+        return TmpTransaction(str(transaction.amount),
+                              str(transaction.transaction_date),
+                              str(transaction.concept),
+                              str(transaction.comments),
+                              str(transaction.category.name if transaction.category else None),
+                              transaction.category.id if transaction.category else None)
 
     def to_domain(self) -> Transaction:
         return Transaction(
             amount=Decimal(self.amount.replace(',', '.')),
             transaction_date=datetime.fromisoformat(self.date).date(),
-            concept=self.concept
+            concept=self.concept,
+            comments=self.comments if self.comments and self.comments != "nan" else None,
+            category=Category(name=self.category_name, id=self.category_id) if self.category_name else None
         )
 
     def to_dict(self) -> dict:
-
         # noinspection PyTypeChecker
         return asdict(self)
 

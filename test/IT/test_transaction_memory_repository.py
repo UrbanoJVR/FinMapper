@@ -26,12 +26,13 @@ class TestTransactionMemoryRepository:
     def setup_method(self):
         self.sut = TransactionMemoryRepository()
 
+    # TODO ¿cuándo dejamos esto sin acabar?
     def test_save_and_get_transactions(self, flask_request_context):
         transactions = [
             Transaction(id=None, category=None, amount=Decimal(100.25), concept="Concept 1",
-                        transaction_date=datetime.now()),
+                        comments = "Comments 1", transaction_date=datetime.now()),
             Transaction(id=None, category=None, amount=Decimal(200.99), concept="Concept 2",
-                        transaction_date=datetime.now())
+                        comments = "Comments 2", transaction_date=datetime.now())
         ]
 
         TransactionMemoryRepository.save_transactions(transactions)

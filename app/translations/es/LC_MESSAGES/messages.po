@@ -48,7 +48,7 @@ msgstr "Transacción creada exitosamente"
 
 #: app/src/presentation/routes/load_transactions_file_routes.py:31
 msgid "Transactions saved successfully!"
-msgstr "Transacción guardada exitosamente"
+msgstr "Transaccines guardadas exitosamente"
 
 #: app/src/presentation/routes/load_transactions_file_routes.py:49
 msgid "FileExtensionNotAllowed"

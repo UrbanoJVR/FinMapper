@@ -2,6 +2,7 @@ from app.src.domain.file_type import FileType
 from app.src.infrastructure.filesystem.csv_file_reader import CsvFileReader
 from app.src.infrastructure.filesystem.money_manager_file_reader import MoneyManagerFileReader
 from app.src.infrastructure.filesystem.transactions_file_reader import TransactionsFileReader
+from app.src.infrastructure.repository.category_repository import CategoryRepository
 
 
 class FileReaderFactory:
@@ -12,4 +13,4 @@ class FileReaderFactory:
             return CsvFileReader()
 
         if file_type == FileType.MONEY_MANAGER_APP:
-            return MoneyManagerFileReader()
+            return MoneyManagerFileReader(CategoryRepository())

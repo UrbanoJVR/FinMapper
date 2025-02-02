@@ -14,6 +14,7 @@
                 <th scope="col">{{ _('Concept') }}</th>
                 <th scope="col">{{ _('Amount') }}</th>
                 <th scope="col">{{ _('Comments') }}</th>
+                <th scope="col">{{ _('Category') }}</th>
             </tr>
             </thead>
             <tbody>
@@ -22,7 +23,8 @@
                     <td>{{ format_datetime(transaction.transaction_date, 'EEEE, dd-MM-yyyy') }}</td>
                     <td>{{ transaction.concept }}</td>
                     <td>{{ transaction.amount }}</td>
-                    <td>{{ transaction.comments }}</td>
+                    <td>{{ transaction.comments if transaction.comments }}</td>
+                    <td>{{ transaction.category.name if transaction.category }}</td>
                 </tr>
             {% endfor %}
             </tbody>
