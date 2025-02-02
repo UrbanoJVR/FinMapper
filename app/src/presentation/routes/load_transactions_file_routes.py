@@ -1,3 +1,5 @@
+import logging
+
 from flask import request, render_template, session, redirect, url_for, Blueprint, flash
 from flask_babel import gettext
 from werkzeug.datastructures import CombinedMultiDict
@@ -43,8 +45,15 @@ def load_transactions_file():
     if form.validate_on_submit():
         command = ReadTransactionsFromFileCommand(form.file.data, FileType.__getitem__(form.type.data))
         handler = ReadTransactionsFromFileCommandHandler(TransactionMemoryRepository(), FileReaderFactory())
-        handler.execute(command)
-        return redirect(url_for('transactions_file_blueprint.review_file'))
+
+        try:
+            handler.execute(command)
+            return redirect(url_for('transactions_file_blueprint.review_file'))
+        except Exception as e:
+            logging.exception("Error while loading file" + f": {str(e)}")
+            flash(gettext("Error loading file") + f": {str(e)}", "error")
+            return redirect(url_for('transactions_file_blueprint.load_transactions_file'))
+
     else:
-        flash(gettext("FileExtensionNotAllowed"), 'error')
+        flash(gettext("FileExtensionNotAllowed"), "warning")
         return render_template('transactions/load_file.html', form=form)
