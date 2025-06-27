@@ -54,10 +54,10 @@ class TestLoadTransactionsCsvDefaultFile:
 
     @staticmethod
     def _expected_transactions_data() -> list[list[str]]:
-        t1 = ["jueves, 25-04-2024", "Adeudo a su cargo pequeneces", "-395"]
-        t2 = ["domingo, 21-04-2024", "Www.dazn.com", "-12.99"]
-        t3 = ["domingo, 21-04-2024", "Coviran", "-8.38"]
-        t4 = ["viernes, 19-04-2024", "Dia", "-5.73"]
-        t5 = ["viernes, 19-04-2024", "Adeudo repsol, s.l.u.", "-55.01"]
+        t1 = ["jueves, 25-04-2024", "Adeudo a su cargo pequeneces", "-395", "", ""]
+        t2 = ["domingo, 21-04-2024", "Www.dazn.com", "-12.99", "", ""]
+        t3 = ["domingo, 21-04-2024", "Coviran", "-8.38", "", ""]
+        t4 = ["viernes, 19-04-2024", "Dia", "-5.73", "", ""]
+        t5 = ["viernes, 19-04-2024", "Adeudo repsol, s.l.u.", "-55.01", "", ""]
 
         return [t1, t2, t3, t4, t5]

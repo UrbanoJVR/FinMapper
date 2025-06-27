@@ -14,7 +14,7 @@ class TestTransactionRepositoryIT:
         self.sut = TransactionRepository()
         self.category_repository = CategoryRepository()
 
-    def test_autoincrement_id(self, db_test_it):
+    def test_when_create_should_autoincrement_id(self, db_test_it):
         transaction = Transaction(transaction_date=date(2024, 12, 1), amount=Decimal(100),
                                   category=None, concept="Concept")
 
@@ -24,7 +24,7 @@ class TestTransactionRepositoryIT:
         assert len(transactions) == 1
         assert transactions[0].id == 1
 
-    def test_save_and_find_all(self, db_test_it):
+    def test_when_save_should_save_and_find_should_find_saved(self, db_test_it):
         transaction = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
                                   category=None, concept="Concept")
         self.sut.save(transaction)
@@ -35,7 +35,7 @@ class TestTransactionRepositoryIT:
         assert transactions[0].id == transaction.id
         assert transactions[0].amount == transaction.amount
 
-    def test_save_array(self, db_test_it):
+    def test_when_save_and_array_then_should_find(self, db_test_it):
         transaction1 = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
                                    category=None, concept="Concept")
         transaction2 = Transaction(id=2, transaction_date=date(2024, 11, 1), amount=Decimal(50),
@@ -51,7 +51,7 @@ class TestTransactionRepositoryIT:
         assert transactions[1].id == 2
         assert transactions[1].amount == transactions[1].amount
 
-    def test_delete_by_id(self, db_test_it):
+    def test_whe_delete_by_id_then_not_find(self, db_test_it):
         transaction1 = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
                                    category=None, concept="Concept")
         transaction2 = Transaction(id=2, transaction_date=date(2024, 11, 1), amount=Decimal(50),
@@ -66,7 +66,7 @@ class TestTransactionRepositoryIT:
         assert transactions[0].id == 2
         assert transactions[0].amount == transaction2.amount
 
-    def test_update(self, db_test_it):
+    def test_when_update_then_save_new_values_and_find_them(self, db_test_it):
         origin_transaction = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
                                          category=None, concept="Concept")
         edited_transaction = Transaction(id=1, transaction_date=date(2025, 12, 1), amount=Decimal(50),
@@ -83,7 +83,7 @@ class TestTransactionRepositoryIT:
         assert transactions[0].transaction_date == edited_transaction.transaction_date
         assert transactions[0].concept == edited_transaction.concept
 
-    def test_get_by_month_year(self, db_test_it):
+    def test_whe_get_by_month_year_should_works(self, db_test_it):
         transaction1 = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
                                    category=None, concept="Concept")
         transaction2 = Transaction(id=2, transaction_date=date(2024, 11, 1), amount=Decimal(50),
@@ -97,7 +97,7 @@ class TestTransactionRepositoryIT:
         assert transactions[0].id == transaction1.id
         assert transactions[0].amount == transaction1.amount
 
-    def test_get_by_month_year_and_category(self, save_transactions_from_different_months_and_categories):
+    def test_when_get_by_month_year_and_category_should_works(self, save_transactions_from_different_months_and_categories):
         category_zero = self.category_repository.get_by_name('Category 0')
         expected_transactions = [
             Transaction(amount=Decimal(199.75), transaction_date=date(2025, 1, 20), concept="Random concept",
@@ -112,7 +112,7 @@ class TestTransactionRepositoryIT:
 
         assert result == expected_transactions
 
-    def test_get_by_id(self, db_test_it):
+    def test_whe_get_by_id_should_works(self, db_test_it):
         transaction1 = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
                                    category=None, concept="Concept")
         transaction2 = Transaction(id=2, transaction_date=date(2024, 11, 1), amount=Decimal(50),
@@ -124,7 +124,7 @@ class TestTransactionRepositoryIT:
         assert transaction_result.amount == transaction2.amount
         assert transaction_result.id == transaction2.id
 
-    def test_get_last_uncategorized(self, db_test_it):
+    def test_when_get_last_uncategorized_should_return_last_uncategorized_transaction_by_date(self, db_test_it):
         category = Category(id=1, name="Category name", description="Category description")
         self.category_repository.save(category)
         transaction1 = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
@@ -172,6 +172,7 @@ class TestTransactionRepositoryIT:
         assert result == transaction
 
     def test_find_first_by_category_id_return_none(self, db_test_it):
+        # TODO
         assert True
 
     def test_count_by_category_id_should_return_zero(self, db_test_it):

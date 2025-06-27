@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-01-25 16:42+0100\n"
+"POT-Creation-Date: 2025-02-17 01:01+0100\n"
 "PO-Revision-Date: 2024-03-07 18:27+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es\n"
@@ -38,19 +38,25 @@ msgstr "Categoría creada"
 msgid "Can't delete used category!"
 msgstr "No es posible eliminar una categoría que está en uso"
 
-#: app/src/presentation/routes/crud_transaction_routes.py:87
+#: app/src/presentation/routes/crud_transaction_routes.py:81
 msgid "Transaction successfully updated."
 msgstr "Transacción actualizada exitosamente"
 
-#: app/src/presentation/routes/crud_transaction_routes.py:103
+#: app/src/presentation/routes/crud_transaction_routes.py:97
 msgid "Transaction successfully created."
 msgstr "Transacción creada exitosamente"
 
-#: app/src/presentation/routes/load_transactions_file_routes.py:31
-msgid "Transactions saved successfully!"
-msgstr "Transaccines guardadas exitosamente"
+#: app/src/presentation/routes/load_transactions_file_routes.py:33
+#, fuzzy
+msgid "File processed successfully!"
+msgstr "El archivo se ha procesado."
 
-#: app/src/presentation/routes/load_transactions_file_routes.py:49
+#: app/src/presentation/routes/load_transactions_file_routes.py:54
+#, fuzzy
+msgid "Error loading file"
+msgstr "Cargar"
+
+#: app/src/presentation/routes/load_transactions_file_routes.py:58
 msgid "FileExtensionNotAllowed"
 msgstr "Formato de archivo no permitido"
 
@@ -100,7 +106,7 @@ msgstr "Mostrando transacciones no categorizadas de"
 
 #: app/templates/transactions/categorize_transactions.html:14
 #: app/templates/transactions/review_file.html:7
-#: app/templates/transactions/upsert_transaction.html:54
+#: app/templates/transactions/upsert_transaction.html:65
 msgid "Save"
 msgstr "Guardar"
 
@@ -117,13 +123,14 @@ msgid "Concept"
 msgstr "Concepto"
 
 #: app/templates/transactions/categorize_transactions.html:24
-#: app/templates/transactions/movements_list.html:35
+#: app/templates/transactions/movements_list.html:36
 #: app/templates/transactions/review_file.html:15
 msgid "Amount"
 msgstr "Importe"
 
 #: app/templates/transactions/categorize_transactions.html:25
-#: app/templates/transactions/movements_list.html:36
+#: app/templates/transactions/movements_list.html:37
+#: app/templates/transactions/review_file.html:17
 msgid "Category"
 msgstr "Categoría"
 
@@ -135,7 +142,13 @@ msgstr "Enviar"
 msgid "Actions"
 msgstr "Acciones"
 
-#: app/templates/transactions/movements_list.html:82
+#: app/templates/transactions/movements_list.html:35
+#: app/templates/transactions/review_file.html:16
+#, fuzzy
+msgid "Comments"
+msgstr "Comentarios"
+
+#: app/templates/transactions/movements_list.html:84
 msgid "Are you sure you want to delete this transaction?"
 msgstr "¿Estás seguro de que deseas eliminar la transacción?"
 
@@ -144,12 +157,7 @@ msgstr "¿Estás seguro de que deseas eliminar la transacción?"
 msgid "Cancel"
 msgstr "Concepto"
 
-#: app/templates/transactions/review_file.html:16
-#, fuzzy
-msgid "Comments"
-msgstr "Comentarios"
-
-#: app/templates/transactions/upsert_transaction.html:55
+#: app/templates/transactions/upsert_transaction.html:66
 msgid "Return"
 msgstr "Volver"
 

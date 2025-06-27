@@ -30,7 +30,7 @@ def review_file():
 
     if request.method == 'POST':
         CreateMultipleTransactionsCommandHandler(TransactionRepository()).execute(transactions)
-        flash(gettext('Transactions saved successfully!'), 'success')
+        flash(gettext('File processed successfully!'), 'success')
         session.pop('transactions')
         return redirect(url_for('transactions_file_blueprint.load_transactions_file'))
 

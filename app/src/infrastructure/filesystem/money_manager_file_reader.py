@@ -15,9 +15,10 @@ from app.src.infrastructure.repository.category_repository import CategoryReposi
 class MoneyManagerFileReader(TransactionsFileReader):
     DATE_HEADER = "Fecha"
     CONCEPT_HEADER = "Nota"
-    COMMENTS_HEADER = "Nota"
+    COMMENTS_HEADER = "Descripción"
     AMOUNT_HEADER = "EUR"
     CATEGORY_HEADER = "Categoría"
+    TRANSACTION_TYPE_HEADER = "Ingreso/Gasto"
 
     def __init__(self, category_repository: CategoryRepository):
         self.category_repository = category_repository
@@ -32,7 +33,7 @@ class MoneyManagerFileReader(TransactionsFileReader):
                 transaction_date=self._parse_date(row[self.DATE_HEADER]),
                 concept=self._parse_concept(row[self.CONCEPT_HEADER]),
                 comments=str(row[self.COMMENTS_HEADER]),
-                amount=self._parse_amount(row[self.AMOUNT_HEADER]),
+                amount=self._parse_amount(row[self.AMOUNT_HEADER], row[self.TRANSACTION_TYPE_HEADER]),
                 category=self._find_category_by_name(row[self.CATEGORY_HEADER])
             )
             transactions.append(transaction)
@@ -48,23 +49,24 @@ class MoneyManagerFileReader(TransactionsFileReader):
 
         return self.category_repository.get_by_name(clean_name)
 
-    def _parse_date(self, row_value: str) -> date:
-        if pd.isna(row_value) or str(row_value).strip() == "":
+    def _parse_date(self, cell_value: str) -> date:
+        if pd.isna(cell_value) or str(cell_value).strip() == "":
             logging.exception("Date cannot be empty")
             raise ValueError("Date cannot be empty")
 
-        return pd.to_datetime(row_value, dayfirst=True, errors="raise").date()
+        return pd.to_datetime(cell_value, dayfirst=True, errors="raise").date()
 
-    def _parse_concept(self, row_value: str) -> str:
-        if pd.isna(row_value) or str(row_value).strip() == "":
+    def _parse_concept(self, cell_value: str) -> str:
+        if pd.isna(cell_value) or str(cell_value).strip() == "":
             logging.exception("Concept cannot be empty")
             raise ValueError("Concept cannot be empty")
 
-        return row_value
+        return cell_value
 
-    def _parse_amount(self, row_value: str) -> Decimal:
-        if pd.isna(row_value) or str(row_value).strip() == "":
+    def _parse_amount(self, cell_value: str, type_value: str) -> Decimal:
+        if pd.isna(cell_value) or str(cell_value).strip() == "":
             logging.exception("Amount cannot be empty")
             raise ValueError("Amount cannot be empty")
 
-        return Decimal(row_value).quantize(Decimal("0.01"), rounding=ROUND_HALF_EVEN)
+        sign = -1 if type_value.strip().upper() == "GASTO" else 1
+        return sign * Decimal(cell_value).quantize(Decimal("0.01"), rounding=ROUND_HALF_EVEN)
