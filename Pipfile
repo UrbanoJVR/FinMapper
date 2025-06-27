@@ -32,6 +32,9 @@ WTForms = "==3.2.1"
 [dev-packages]
 beautifulsoup4 = "4.12.3"
 pytest-cov = "*"
+mkdocs = "*"
+mkdocs-material = "*"
+mkdocs-mermaid2-plugin = "*"
 
 [requires]
 python_version = "3.12"
