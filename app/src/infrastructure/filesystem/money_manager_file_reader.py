@@ -77,6 +77,7 @@ class MoneyManagerFileReader(TransactionsFileReader):
 
         logging.exception("Invalid date format: %s", value)
         raise ValueError(f"Invalid date format: {value}")
+
     def _parse_concept(self, cell_value) -> str:
         if not cell_value or str(cell_value).strip() == "":
             logging.exception("Concept cannot be empty")
