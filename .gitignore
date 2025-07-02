@@ -34,3 +34,6 @@ apps/static/assets/.temp
 data.sqlite
 
 .idea
+
+# mkdocs generated site
+docs/site/

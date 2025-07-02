@@ -1,0 +1,21 @@
+site_name: FinMapper
+theme:
+  name: material
+
+plugins:
+  - search
+  - mermaid2
+
+nav:
+  - Inicio: index.md
+  - Configuración: setup.md
+  - Arquitectura: architecture.md
+  - Flujos:
+      - Crear usuario: flows/create-user.md
+      - Proceso oportunidad: flows/process-opportunity.md
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
