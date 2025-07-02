@@ -54,8 +54,9 @@ class TmpTransaction:
             amount=Decimal(self.amount.replace(',', '.')),
             transaction_date=datetime.fromisoformat(self.date).date(),
             concept=self.concept,
-            comments=self.comments if self.comments and self.comments != "nan" else None,
-            category=Category(name=self.category_name, id=self.category_id) if self.category_name else None
+            comments=self.comments if self.comments not in [None, "", "None", "nan"] else None,
+            category=Category(name=self.category_name, id=self.category_id)
+            if self.category_name not in [None, "", "None", "null", "nan"] else None
         )
 
     def to_dict(self) -> dict:
