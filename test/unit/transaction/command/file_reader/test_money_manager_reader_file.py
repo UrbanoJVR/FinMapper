@@ -3,7 +3,7 @@ from io import BytesIO
 from unittest import TestCase
 from unittest.mock import Mock
 
-import pandas as pd
+import pyexcel as pe
 
 from app.src.domain.category import Category
 from app.src.infrastructure.filesystem.money_manager_file_reader import MoneyManagerFileReader
@@ -16,136 +16,115 @@ class TestMoneyManagerFileReader(TestCase):
         self.mock_category_repository = Mock(spec=CategoryRepository)
         self.reader = MoneyManagerFileReader(self.mock_category_repository)
 
-    def _create_test_excel(self, data: dict) -> BytesIO:
-        df = pd.DataFrame(data)
-        excel_buffer = BytesIO()
-        with pd.ExcelWriter(excel_buffer, engine="openpyxl") as writer:
-            df.to_excel(writer, index=False)
+    def _create_xls_file(self, records: list[dict]) -> BytesIO:
+        sheet = pe.get_sheet(records=records)
+        output = BytesIO()
+        sheet.save_to_memory("xls", output)
+        output.seek(0)
+        return output
 
-        excel_buffer.seek(0)
-        return excel_buffer
-
-    def test_read_all_transactions_category_found(self):
-        test_data = {
-            "Fecha": ["01/01/2025 16:20:00"],
-            "Nota": ["Compra en Amazon"],
-            "EUR": ["50.00"],
-            "Categoría": ["🛒 Necesidades básicas"]
-        }
-
-        self.mock_category_repository.get_by_name.return_value = Category(name="Necesidades básicas", id=1)
-
-        file = self._create_test_excel(test_data)
-        transactions = self.reader.read_all_transactions(file)
-
-        self.assertEqual(len(transactions), 1)
-        self.assertEqual(transactions[0].concept, "Compra en Amazon")
-        self.assertEqual(transactions[0].amount, Decimal("50.00"))
-        self.assertIsNotNone(transactions[0].category)
-        self.assertEqual(transactions[0].category.name, "Necesidades básicas")
-
-    def test_read_all_transactions_category_not_found(self):
-        test_data = {
-            "Fecha": ["01/01/2025"],
-            "Nota": ["Compra en Amazon"],
-            "EUR": ["50.00"],
-            "Categoría": ["Categoría Inexistente"]
-        }
-
-        self.mock_category_repository.get_by_name.return_value = None
-
-        file = self._create_test_excel(test_data)
-        transactions = self.reader.read_all_transactions(file)
-
-        self.assertEqual(len(transactions), 1)
-        self.assertEqual(transactions[0].concept, "Compra en Amazon")
-        self.assertEqual(transactions[0].amount, Decimal("50.00"))
-        self.assertIsNone(transactions[0].category)
-
-    def test_read_all_transactions_invalid_date_should_raise_error(self):
-        test_data = {
-            "Fecha": ["invalid-date"],
-            "Nota": ["Compra en Amazon"],
-            "EUR": ["50.00"],
-            "Categoría": ["🛒 Necesidades básicas"]
-        }
+    def test_valid_transaction_with_category(self):
+        data = [{
+            "Fecha": "01/01/2025 16:20:00",
+            "Nota": "Compra Amazon",
+            "Descripción": "Pedido #123",
+            "EUR": "50.00",
+            "Categoría": "🛒 Necesidades básicas",
+            "Ingreso/Gasto": "Gasto"
+        }]
 
         self.mock_category_repository.get_by_name.return_value = Category(name="Necesidades básicas", id=1)
-
-        file = self._create_test_excel(test_data)
-        with self.assertRaises(ValueError):
-            self.reader.read_all_transactions(file)
-
-    def test_read_all_transactions_empty_date_should_raise_error(self):
-        test_data = {
-            "Fecha": [None],
-            "Nota": ["Compra en Amazon"],
-            "EUR": ["50.00"],
-            "Categoría": ["🛒 Necesidades básicas"]
-        }
-
-        self.mock_category_repository.get_by_name.return_value = None
-
-        file = self._create_test_excel(test_data)
-        with self.assertRaises(ValueError):
-            self.reader.read_all_transactions(file)
-
-    def test_read_all_transactions_empty_concept_should_raise_error(self):
-        test_data = {
-            "Fecha": ["01/01/2025 16:20:00"],
-            "Nota": [None],
-            "EUR": ["50.00"],
-            "Categoría": ["🛒 Necesidades básicas"]
-        }
-
-        self.mock_category_repository.get_by_name.return_value = None
-
-        file = self._create_test_excel(test_data)
-        with self.assertRaises(ValueError):
-            self.reader.read_all_transactions(file)
-
-    def test_read_all_transactions_empty_amount_should_raise_error(self):
-        test_data = {
-            "Fecha": ["01/01/2025 16:20:00"],
-            "Nota": ["Concept"],
-            "EUR": [None],
-            "Categoría": ["🛒 Necesidades básicas"]
-        }
-
-        self.mock_category_repository.get_by_name.return_value = None
-
-        file = self._create_test_excel(test_data)
-        with self.assertRaises(ValueError):
-            self.reader.read_all_transactions(file)
-
-    def test_read_all_transactions_invalid_amount_should_raise_error(self):
-        test_data = {
-            "Fecha": ["01/01/2025 16:20:00"],
-            "Nota": ["Concept"],
-            "EUR": ["Paco pepe"],
-            "Categoría": ["🛒 Necesidades básicas"]
-        }
-
-        self.mock_category_repository.get_by_name.return_value = None
-
-        file = self._create_test_excel(test_data)
-        with self.assertRaises(InvalidOperation):
-            self.reader.read_all_transactions(file)
-
-    def test_read_all_transactions_empty_category(self):
-        test_data = {
-            "Fecha": ["01/01/2025 16:20:00"],
-            "Nota": ["Concept"],
-            "EUR": ["50.00"],
-            "Categoría": [None]
-        }
-
-        self.mock_category_repository.get_by_name.return_value = None
-
-        file = self._create_test_excel(test_data)
+        file = self._create_xls_file(data)
         transactions = self.reader.read_all_transactions(file)
 
         self.assertEqual(len(transactions), 1)
-        self.assertEqual(transactions[0].concept, "Concept")
-        self.assertEqual(transactions[0].amount, Decimal("50.00"))
+        tx = transactions[0]
+        self.assertEqual(tx.concept, "Compra Amazon")
+        self.assertEqual(tx.comments, "Pedido #123")
+        self.assertEqual(tx.amount, Decimal("-50.00"))
+        self.assertEqual(tx.category.name, "Necesidades básicas")
+
+    def test_transaction_without_category(self):
+        data = [{
+            "Fecha": "01/01/2025",
+            "Nota": "Pago Netflix",
+            "Descripción": "",
+            "EUR": "15.00",
+            "Categoría": "",
+            "Ingreso/Gasto": "Gasto"
+        }]
+
+        self.mock_category_repository.get_by_name.return_value = None
+        file = self._create_xls_file(data)
+        transactions = self.reader.read_all_transactions(file)
+
+        self.assertEqual(len(transactions), 1)
         self.assertIsNone(transactions[0].category)
+
+    def test_income_transaction(self):
+        data = [{
+            "Fecha": "01/01/2025",
+            "Nota": "Nómina",
+            "Descripción": "",
+            "EUR": "2000.00",
+            "Categoría": "💼 Ingresos",
+            "Ingreso/Gasto": "Ingreso"
+        }]
+
+        self.mock_category_repository.get_by_name.return_value = Category(name="Ingresos", id=2)
+        file = self._create_xls_file(data)
+        transactions = self.reader.read_all_transactions(file)
+
+        self.assertEqual(transactions[0].amount, Decimal("2000.00"))
+
+    def test_given_invalid_date_then_skip_transaction(self):
+        data = [{
+            "Fecha": "fecha no válida",
+            "Nota": "Compra",
+            "Descripción": "",
+            "EUR": "10.00",
+            "Categoría": "Otros",
+            "Ingreso/Gasto": "Gasto"
+        }]
+        file = self._create_xls_file(data)
+        transactions = self.reader.read_all_transactions(file)
+        self.assertEqual(len(transactions), 0)
+
+    def test_given_empty_concept_then_skip_transaction(self):
+        data = [{
+            "Fecha": "01/01/2025",
+            "Nota": "",
+            "Descripción": "",
+            "EUR": "20.00",
+            "Categoría": "Otros",
+            "Ingreso/Gasto": "Gasto"
+        }]
+        file = self._create_xls_file(data)
+        transactions = self.reader.read_all_transactions(file)
+        self.assertEqual(len(transactions), 0)
+
+    def test_given_empty_amount_then_skip_transaction(self):
+        data = [{
+            "Fecha": "01/01/2025",
+            "Nota": "Compra",
+            "Descripción": "",
+            "EUR": "",
+            "Categoría": "Otros",
+            "Ingreso/Gasto": "Gasto"
+        }]
+        file = self._create_xls_file(data)
+        transactions = self.reader.read_all_transactions(file)
+        self.assertEqual(len(transactions), 0)
+
+    def test_given_invalid_amount_then_skip_transaction(self):
+        data = [{
+            "Fecha": "01/01/2025",
+            "Nota": "Compra",
+            "Descripción": "",
+            "EUR": "noesnumero",
+            "Categoría": "Otros",
+            "Ingreso/Gasto": "Gasto"
+        }]
+        file = self._create_xls_file(data)
+        transactions = self.reader.read_all_transactions(file)
+        self.assertEqual(len(transactions), 0)
