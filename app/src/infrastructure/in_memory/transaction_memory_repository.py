@@ -28,7 +28,7 @@ class TransactionMemoryRepository:
 
     @staticmethod
     def clear():
-        session.pop('transactions')
+        session.pop('transactions', None)
 
 
 @dataclass
