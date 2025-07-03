@@ -36,7 +36,6 @@ def review_file():
         CreateMultipleTransactionsCommandHandler(TransactionRepository()).execute(transactions)
         transaction_memory_repository.clear()
         flash(gettext('File processed successfully!'), 'success')
-        session.pop('transactions')
         return redirect(url_for('transactions_file_blueprint.load_transactions_file'))
 
 
