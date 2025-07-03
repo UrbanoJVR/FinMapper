@@ -28,7 +28,8 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{{ url_for('dashboard_blueprint.dashboard') }}"><i
+                    <a class="nav-link {% if request.path == '/' %}active{% endif %}"
+                       href="{{ url_for('dashboard_blueprint.dashboard') }}"><i
                             class="fas fa-tachometer-alt"></i> {{ _('Dashboard') }}</a>
                 </li>
                 <li class="nav-item dropdown">
@@ -44,12 +45,14 @@
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="{{ url_for('transactions_crud_blueprint.create_transaction') }}">
+                            <a class="dropdown-item"
+                               href="{{ url_for('transactions_crud_blueprint.create_transaction') }}">
                                 <i class="fas fa-plus"></i> {{ _('Add transaction') }}
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="{{ url_for('transactions_crud_blueprint.categorize_transaction') }}">
+                            <a class="dropdown-item"
+                               href="{{ url_for('transactions_crud_blueprint.categorize_transaction') }}">
                                 <i class="fas fa-tag"></i> {{ _('Categorize') }}
                             </a>
                         </li>
