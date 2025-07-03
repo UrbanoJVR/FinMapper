@@ -1,16 +1,9 @@
 {% macro show_flash_messages(messages) %}
     {% if messages %}
+        {% set alert_classes = {"warning": "alert-warning", "success": "alert-success", "error": "alert-danger"} %}
         {% for category, message in messages %}
-            {% if category == "warning" %}
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <ul>
-                        <li>{{ message }}</li>
-                    </ul>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endif %}
-            {% if category == "success" %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {% if category in alert_classes %}
+                <div class="alert {{ alert_classes[category] }} alert-dismissible fade show" role="alert">
                     <ul>
                         <li>{{ message }}</li>
                     </ul>

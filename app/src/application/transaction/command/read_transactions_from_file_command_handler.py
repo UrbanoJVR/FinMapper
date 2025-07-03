@@ -11,5 +11,6 @@ class ReadTransactionsFromFileCommandHandler:
         self.reader_factory = reader_factory
 
     def execute(self, command: ReadTransactionsFromFileCommand):
-        transactions: list[Transaction] = self.reader_factory.get_reader(command.file_type).read_all_transactions(command.file.stream)
+        transactions: list[Transaction] = (self.reader_factory.get_reader(command.file_type)
+                                           .read_all_transactions(command.file.stream))
         self.transaction_repository.save_transactions(transactions)

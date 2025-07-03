@@ -1,10 +1,5 @@
-from datetime import datetime, date
-from decimal import Decimal
-
 from app.src.domain.category import Category
-from app.src.domain.transaction import Transaction
 from app.src.infrastructure.repository.category_repository import CategoryRepository
-from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 
 class TestCategoryRepositoryIT:
@@ -65,6 +60,11 @@ class TestCategoryRepositoryIT:
         result = self.sut.get_by_id(category.id)
         assert result == category
 
+    def test_get_by_id_return_none(self, db_test_it):
+        result = self.sut.get_by_id(1)
+
+        assert result is None
+
     def test_exists_by_name_return_true(self, db_test_it):
         category = Category(name="test name", description="test description")
         self.sut.save(category)
@@ -85,3 +85,8 @@ class TestCategoryRepositoryIT:
         result = self.sut.get_by_name(category.name)
 
         assert result == category
+
+    def test_get_by_name_when_no_exists(self, db_test_it):
+        result = self.sut.get_by_name("Name that doesn't exist")
+
+        assert result is None

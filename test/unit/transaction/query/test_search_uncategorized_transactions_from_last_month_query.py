@@ -4,8 +4,8 @@ from typing import List
 from unittest import TestCase
 from unittest.mock import Mock
 
-from app.src.application.transaction.query.search_uncategorized_transactions_from_last_month_query import \
-    SearchUncategorizedTransactionsFromLastMonthQuery
+from app.src.application.transaction.query.search_last_uncategorized_transactions_query_handler import \
+    SearchLastUncategorizedTransactionsQueryHandler
 from app.src.domain.transaction import Transaction
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
@@ -14,7 +14,7 @@ class TestSearchUncategorizedTransactionsFromLastMonthQuery(TestCase):
 
     def setUp(self):
         self.mock_transaction_repository = Mock(spec=TransactionRepository)
-        self.sut = SearchUncategorizedTransactionsFromLastMonthQuery(self.mock_transaction_repository)
+        self.sut = SearchLastUncategorizedTransactionsQueryHandler(self.mock_transaction_repository)
 
 
     def test_execute_success(self):

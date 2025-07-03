@@ -4,9 +4,10 @@ from typing import List
 from unittest import TestCase
 from unittest.mock import Mock, MagicMock, call
 
-from app.src.application.transaction.command.categorization.categorized_transaction import CategorizedTransaction
-from app.src.application.transaction.command.categorization.categorize_transaction_command_handler import \
-    CategorizeTransactionCommandHandler
+from app.src.application.transaction.command.categorization.categorize_transactions_command import \
+    CategorizedTransaction, CategorizeTransactionsCommand
+from app.src.application.transaction.command.categorization.categorize_transactions_command_handler import \
+    CategorizeTransactionsCommandHandler
 from app.src.domain.category import Category
 from app.src.domain.transaction import Transaction
 from app.src.infrastructure.repository.category_repository import CategoryRepository
@@ -18,13 +19,14 @@ class TestCategorizeTransactionCommandHandler(TestCase):
     def setUp(self):
         self.mock_transaction_repository = Mock(spec=TransactionRepository)
         self.mock_category_repository = Mock(spec=CategoryRepository)
-        self.sut = CategorizeTransactionCommandHandler(
+        self.sut = CategorizeTransactionsCommandHandler(
             transaction_repository=self.mock_transaction_repository,
             category_repository=self.mock_category_repository)
 
     def test_execute_success(self):
         categorized_transaction_1 = CategorizedTransaction(1, 1)
         categorized_transactions: List[CategorizedTransaction] = [categorized_transaction_1]
+        command = CategorizeTransactionsCommand(categorized_transactions)
 
         category_from_db = Category(
             name="Category name",
@@ -40,7 +42,7 @@ class TestCategorizeTransactionCommandHandler(TestCase):
         self.mock_transaction_repository.get_by_id.return_value = transaction_from_db
         self.mock_category_repository.get_by_id.return_value = category_from_db
 
-        self.sut.execute(categorized_transactions)
+        self.sut.execute(command)
 
         self.mock_transaction_repository.get_by_id.assert_any_call(categorized_transaction_1.transaction_id)
         self.mock_transaction_repository.update.assert_any_call(transaction_from_db)
@@ -50,6 +52,7 @@ class TestCategorizeTransactionCommandHandler(TestCase):
             CategorizedTransaction(transaction_id=1, category_id=10),
             CategorizedTransaction(transaction_id=2, category_id=20)
         ]
+        command = CategorizeTransactionsCommand(categorized_transactions)
 
         transaction_mock_1 = MagicMock()
         transaction_mock_2 = MagicMock()
@@ -59,7 +62,7 @@ class TestCategorizeTransactionCommandHandler(TestCase):
         self.mock_transaction_repository.get_by_id.side_effect = [transaction_mock_1, transaction_mock_2]
         self.mock_category_repository.get_by_id.side_effect = [category_mock_1, category_mock_2]
 
-        self.sut.execute(categorized_transactions)
+        self.sut.execute(command)
 
         self.mock_transaction_repository.get_by_id.assert_has_calls([call(categorized_transactions[0].transaction_id), call(categorized_transactions[1].transaction_id)])
         self.mock_category_repository.get_by_id.assert_has_calls([call(categorized_transactions[0].category_id), call(categorized_transactions[1].category_id)])

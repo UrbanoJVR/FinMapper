@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import List
 
 from app.src.domain.category import Category
@@ -11,3 +12,8 @@ class GetAllCategoriesQueryHandler:
 
     def execute(self) -> List[Category]:
         return self.category_repository.get_all()
+
+@dataclass
+class GetAllCategoriesQuery:
+    """Empty query"""
+    pass

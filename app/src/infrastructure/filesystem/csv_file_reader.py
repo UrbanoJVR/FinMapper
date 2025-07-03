@@ -1,9 +1,5 @@
-import os
 from decimal import Decimal
 from io import BytesIO
-from pathlib import Path
-
-from flask import current_app
 
 from app.src.domain.transaction import Transaction
 from app.src.infrastructure.filesystem.transactions_file_reader import TransactionsFileReader

@@ -20,14 +20,6 @@ def get_translated_months():
     return months
 
 
-class TransactionsFileForm(FlaskForm):
-    type = SelectField(str(lazy_gettext('Type')), choices=[(ft.value, ft.name) for ft in FileType])
-    file = FileField(str(lazy_gettext('File')),
-                     validators=[DataRequired(),
-                                 FileAllowed(['csv'], message='FileExtensionNotAllowed')],
-                     render_kw={"class": "form-control"})
-
-
 class MonthYearFilterForm(FlaskForm):
     month = SelectField(choices=get_translated_months())
     year = StringField()

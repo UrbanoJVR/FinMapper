@@ -1,38 +1,33 @@
-from datetime import datetime, date
+from datetime import datetime
 
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_babel import gettext
 
-from app.src.application.category.query.get_all_categories_query_handler import GetAllCategoriesQueryHandler
-from app.src.application.transaction.command.create_transaction_command_handler import CreateTransactionCommandHandler
-from app.src.application.transaction.command.delete_transaction_command_handler import DeleteTransactionCommandHandler
-from app.src.application.transaction.command.update_transaction_command_handler import UpdateTransactionCommandHandler
-from app.src.application.transaction.query.get_transaction_by_id_query_handler import GetTransactionByIdQueryHandler
+from app.src.application.category.query.get_all_categories_query_handler import GetAllCategoriesQuery
+from app.src.application.command_bus import CommandBus
+from app.src.application.query_bus import QueryBus
+from app.src.application.transaction.command.categorization.categorize_transactions_command import \
+    CategorizeTransactionsCommand, CategorizedTransaction
+from app.src.application.transaction.command.delete_transaction_command_handler import DeleteTransactionCommandHandler, \
+    DeleteTransactionCommand
+from app.src.application.transaction.query.get_transaction_by_id_query_handler import GetTransactionByIdQuery
+from app.src.application.transaction.query.search_last_uncategorized_transactions_query_handler import \
+    SearchLastUncategorizedTransactionsQuery
 from app.src.application.transaction.query.search_transactions_by_month_year_query import \
     SearchTransactionsByMonthYearQuery
-from app.src.application.transaction.query.search_transactions_by_month_year_query_handler import \
-    SearchTransactionsByMonthYearQueryHandler
-from app.src.application.transaction.query.search_uncategorized_transactions_from_last_month_query import \
-    SearchUncategorizedTransactionsFromLastMonthQuery
-from app.src.infrastructure.repository.category_repository import CategoryRepository
-from app.src.application.transaction.command.categorization.categorized_transaction import CategorizedTransaction
-from app.src.application.transaction.command.categorization.categorize_transaction_command_handler import \
-    CategorizeTransactionCommandHandler
-from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 from app.src.presentation.form.transactions_forms import MonthYearFilterForm
 from app.src.presentation.form.upsert_transaction_form import UpsertTransactionForm, UpsertTransactionFormMapper
 
 transactions_crud_blueprint = Blueprint('transactions_crud_blueprint', __name__, url_prefix='')
-transaction_repository = TransactionRepository()
-category_repository = CategoryRepository()
+command_bus = CommandBus()
+query_bus = QueryBus()
 
 
 @transactions_crud_blueprint.route('/movements/<int:month>/<int:year>', methods=['GET', 'POST'])
 def movements_list(month: int, year: int):
     if request.method == 'GET':
         form = MonthYearFilterForm(month=month, year=year)
-        query = SearchTransactionsByMonthYearQuery(month=month, year=year)
-        transactions = SearchTransactionsByMonthYearQueryHandler(transaction_repository).execute(query)
+        transactions = query_bus.ask(SearchTransactionsByMonthYearQuery(month, year))
         return render_template(
             'transactions/movements_list.html',
             transactions=transactions,
@@ -53,8 +48,8 @@ def movements():
 @transactions_crud_blueprint.route('/transactions/categorize', methods=['GET', 'POST'])
 def categorize_transaction():
     if request.method == 'GET':
-        transactions = SearchUncategorizedTransactionsFromLastMonthQuery(transaction_repository).execute()
-        categories = GetAllCategoriesQueryHandler(category_repository).execute()
+        transactions = query_bus.ask(SearchLastUncategorizedTransactionsQuery())
+        categories = query_bus.ask(GetAllCategoriesQuery())
         return render_template('transactions/categorize_transactions.html',
                                transactions=transactions,
                                categories=categories)
@@ -67,23 +62,22 @@ def categorize_transaction():
                     CategorizedTransaction(transaction_id=int(transaction_id),
                                            category_id=int(category_id)))
 
-        CategorizeTransactionCommandHandler(transaction_repository, category_repository).execute(
-            categorized_transactions)
+        command_bus.execute(CategorizeTransactionsCommand(categorized_transactions))
         return redirect(url_for('transactions_crud_blueprint.categorize_transaction'))
 
 
 @transactions_crud_blueprint.route('/edit-transaction/<int:transaction_id>', methods=['GET', 'POST'])
 def edit_transaction(transaction_id):
     if request.method == 'GET':
-        transaction = GetTransactionByIdQueryHandler(transaction_repository).execute(transaction_id)
-        selectable_categories = GetAllCategoriesQueryHandler(category_repository).execute()
+        transaction = query_bus.ask(GetTransactionByIdQuery(transaction_id))
+        selectable_categories = query_bus.ask(GetAllCategoriesQuery())
         form: UpsertTransactionForm = UpsertTransactionFormMapper().map_from_domain(transaction, selectable_categories)
         return render_template('transactions/upsert_transaction.html', form=form)
 
     if request.method == 'POST':
         form: UpsertTransactionForm = UpsertTransactionForm(request.form)
         update_transaction_command = UpsertTransactionFormMapper().map_to_update_command(form, transaction_id)
-        UpdateTransactionCommandHandler(transaction_repository, category_repository).execute(update_transaction_command)
+        command_bus.execute(update_transaction_command)
         flash(gettext('Transaction successfully updated.'), 'success')
         return redirect(url_for('transactions_crud_blueprint.movements_list',
                                 month=update_transaction_command.date.month,
@@ -93,20 +87,20 @@ def edit_transaction(transaction_id):
 @transactions_crud_blueprint.route('/transactions/add', methods=['GET', 'POST'])
 def create_transaction():
     if request.method == 'GET':
-        selectable_categories = GetAllCategoriesQueryHandler(category_repository).execute()
+        selectable_categories = query_bus.ask(GetAllCategoriesQuery())
         form = UpsertTransactionFormMapper().initialize(selectable_categories)
         return render_template('transactions/upsert_transaction.html', form=form)
 
     if request.method == 'POST':
         command = UpsertTransactionFormMapper().map_to_create_command(UpsertTransactionForm(request.form))
-        CreateTransactionCommandHandler(transaction_repository, category_repository).execute(command)
+        command_bus.execute(command)
         flash(gettext('Transaction successfully created.'), 'success')
         return redirect(url_for('transactions_crud_blueprint.create_transaction'))
 
 
 @transactions_crud_blueprint.route('/transactions/delete/<int:transaction_id>', methods=['GET'])
 def delete_transaction(transaction_id):
-    DeleteTransactionCommandHandler(transaction_repository).execute(transaction_id)
+    command_bus.execute(DeleteTransactionCommand(transaction_id))
     return redirect(request.referrer or url_for('dashboard_blueprint.report'))
 
 

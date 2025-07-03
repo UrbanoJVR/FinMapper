@@ -32,9 +32,11 @@ class CategoryRepository:
         query = select(CategoryModel).order_by(CategoryModel.id)
         return self.category_model_mapper.map_model_list_to_class(self.session.execute(query).scalars().all())
 
-    def get_by_id(self, category_id: int) -> Category:
+    def get_by_id(self, category_id: int) -> Category | None:
         query = select(CategoryModel).where(CategoryModel.id.__eq__(category_id))
-        return self.category_model_mapper.map_to_domain(self.session.execute(query).scalars().first())
+        model_entity = self.session.execute(query).scalars().first()
+
+        return None if model_entity is None else self.category_model_mapper.map_to_domain(model_entity)
 
     def exists_by_name(self, name: str) -> bool:
         query = select(CategoryModel).where(CategoryModel.name.__eq__(name))
@@ -43,6 +45,8 @@ class CategoryRepository:
         else:
             return True
 
-    def get_by_name(self, name: str) -> Category:
+    def get_by_name(self, name: str) -> Category | None:
         query = select(CategoryModel).where(CategoryModel.name.__eq__(name))
-        return self.category_model_mapper.map_to_domain(self.session.execute(query).scalar())
+        model_entity = self.session.execute(query).scalar_one_or_none()
+
+        return None if model_entity is None else self.category_model_mapper.map_to_domain(model_entity)
