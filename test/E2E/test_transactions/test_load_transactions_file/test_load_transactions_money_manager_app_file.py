@@ -6,6 +6,7 @@ from decimal import Decimal
 
 from bs4 import BeautifulSoup
 from flask import url_for
+from flask_babel import gettext
 from werkzeug.datastructures import FileStorage
 
 from app.src.domain.category import Category
@@ -15,9 +16,10 @@ from app.src.infrastructure.repository.category_repository import CategoryReposi
 
 class TestLoadTransactionsMoneyManagerAppFile:
 
-    def test_load_transactions_money_manager_app_file(self, client):
+    def test_given_money_manager_transactions_file_when_load_then_success(self, client):
+        # load file and send
         self._create_categories()
-        test_file_path = os.path.join(os.path.dirname(__file__), 'sources', 'test_money_manager_transactions.xlsx')
+        test_file_path = os.path.join(os.path.dirname(__file__), 'sources', 'test_money_manager_transactions.xls')
 
         review_file_response = self._send_file(test_file_path, client)
 
@@ -25,18 +27,28 @@ class TestLoadTransactionsMoneyManagerAppFile:
         print(review_file_response.data.decode('utf-8'))
         assert review_file_response.request.path == url_for('transactions_file_blueprint.review_file')
 
-        # TODO refactor with another test to reduce duplicated code
+        # verify that loaded file is showing correctly in review page
         expected_transactions_data = self._expected_transactions_data()
         missing_transactions = self._missing_transactions_in_response(review_file_response.data,
                                                                       expected_transactions_data)
         assert not missing_transactions, f"Missing transactions in response: {missing_transactions}"
         assert len(expected_transactions_data) == self._count_transactions_in_response(review_file_response.data)
 
+        # confirm review to save all transactions
         confirm_response = client.post("/load/review", follow_redirects=True)
-        # then navigate to show transactions from specific month/year and check contains expected
-
+        expected_message = gettext("File processed successfully!")
+        assert expected_message.encode() in confirm_response.data
 
         # then review that exactly same transactions are in dashboard
+        transactions_by_month_year = self._group_transactions_by_month_year(expected_transactions_data)
+
+        for (month, year), transactions in transactions_by_month_year.items():
+            response = client.get(f"/movements/{month}/{year}")
+            assert response.status_code == 200, f"Falló GET /movements/{month}/{year}"
+
+            missing = self._missing_transactions_in_response(response.data, transactions)
+            assert not missing, f"Missing transactions in /movements/{month}/{year}: {missing}"
+
 
     def _send_file(self, test_file_path: str, client):
         with open(test_file_path, 'rb') as test_file:
@@ -46,7 +58,7 @@ class TestLoadTransactionsMoneyManagerAppFile:
             }
 
             return client.post("/load", data=data, content_type='multipart/form-data',
-                                               follow_redirects=True)
+                               follow_redirects=True)
 
     def _missing_transactions_in_response(self, response_data: bytes,
                                           expected_transactions_data: list[list[str]]) -> list[list[str]]:
@@ -85,23 +97,24 @@ class TestLoadTransactionsMoneyManagerAppFile:
         locale.setlocale(locale.LC_TIME, 'es_ES')
 
         data = [
-            ("31/01/2025 16:29:00", "⛽ Transporte", "Índigo María Molina madrid", "17.99",
-             "Parking cañas pre cena autentios"),
-            ("31/01/2025 16:27:56", "🪑 Hogar", "Amazon* wk3mq3lw5", "17.99",
-             "Baldas transparentes para interior mueble caldera"),
-            ("31/01/2025 16:25:15", "🏦 Prestamos", "Cargo por amortización de prestamo/credito", "348.24", ""),
-            ("31/01/2025 16:10:10", "🛒 Necesidades básicas", "Recibo wizink", "496.21", "Compras en supermercados"),
-            ("30/01/2025 16:24:15", "⚡ Suministros", "Adeudo de endesa", "17.69", "Luz"),
-            ("30/01/2025 16:23:29", "⚡ Suministros", "Adeudo digi Spain telecom", "3.00", "Número digi antonio"),
-            ("29/01/2025 22:49:27", "🎁 Regalos", "Pastelería raquel", "20.79", "Palmeritas despedida autentia"),
-            ("29/01/2025 22:48:43", "⚡ Suministros", "Adeudo orange-france telecom", "85.50", ""),
-            ("29/01/2025 16:22:45", "🤱🏻 Cuidado infantil", "Nappy", "81.59", "Pañales y toallitas")
+            ("01/07/2025", "🤱🏻 Cuidado infantil", "Guardería Alfonso", "247", ""),
+            ("01/07/2025", "🍝 Restaurantes", "Consumo tarjeta restaurante", "171", ""),
+            ("30/06/2025 22:50:02", "🛒 Necesidades básicas", "Compras con edenred", "71", ""),
+            ("30/06/2025 22:48:29", "🪑 Hogar", "Amazon", "6.97", "Colgador rollo papel cocina"),
+            ("01/06/2025", "🍝 Restaurantes", "Consumo tarjeta restaurante", "100", ""),
+            ("01/06/2025", "🤱🏻 Cuidado infantil", "Guardería Alfonso", "247", ""),
+            ("30/05/2025 23:28:41", "🤱🏻 Cuidado infantil", "Decathlon", "21.96", ""),
+            ("01/05/2025", "🍝 Restaurantes", "Consumo tarjeta restaurante", "171", ""),
+            ("01/05/2025", "🤱🏻 Cuidado infantil", "Guardería Alfonso", "247", ""),
+            ("30/04/2025 13:27:49", "🏨 Viajes y vacaciones", "Casi todo Torrejon de ardoz", "25.10",
+             "Carbón puente mayo"),
+            ("21/03/2025 23:47:46", "⛽ Transporte", "Misparkings.com", "12.80", "Parking noche piedrahita"),
         ]
 
         formatted_data = []
 
         for date, category, concept, amount, comments in data:
-            # Formating date
+            # Formatting date
             date_dt = datetime.strptime(date, "%d/%m/%Y %H:%M:%S") if " " in date else datetime.strptime(date,
                                                                                                          "%d/%m/%Y")
             date_str = date_dt.strftime("%A, %d-%m-%Y").lower()
@@ -125,3 +138,15 @@ class TestLoadTransactionsMoneyManagerAppFile:
         cr.save(Category(name="Suministros", description="Suministros"))
         cr.save(Category(name="Regalos", description="Regalos"))
         cr.save(Category(name="Cuidado infantil", description="Cuidado infantil"))
+        cr.save(Category(name="Restaurantes", description="Comida que no cocinas en casa"))
+        cr.save(Category(name="Viajes y vacaciones", description="Pues eso, veranito veranito"))
+
+    def _group_transactions_by_month_year(self, transactions: list[list[str]]) -> dict[tuple[int, int], list[list[str]]]:
+        grouped = {}
+        for tx in transactions:
+            date_str = tx[0]  # e.g. "martes, 01-07-2025"
+            date_dt = datetime.strptime(date_str, "%A, %d-%m-%Y")  # español
+
+            key = (date_dt.month, date_dt.year)
+            grouped.setdefault(key, []).append(tx)
+        return grouped
