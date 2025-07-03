@@ -39,6 +39,7 @@ pytest-cov = "*"
 mkdocs = "*"
 mkdocs-material = "*"
 mkdocs-mermaid2-plugin = "*"
+pyexcel-xls = "*"
 
 [requires]
 python_version = "3.12"
