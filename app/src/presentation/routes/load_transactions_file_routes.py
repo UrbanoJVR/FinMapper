@@ -20,16 +20,21 @@ from app.src.presentation.form.transactions_file_form import TransactionsFileFor
 
 transactions_file_blueprint = Blueprint('transactions_file_blueprint', __name__, url_prefix='')
 
+transaction_memory_repository = TransactionMemoryRepository()
 
 @transactions_file_blueprint.route('/load/review', methods=['GET', 'POST'])
 def review_file():
-    transactions: list[Transaction] = GetTransactionsInMemoryQueryHandler(TransactionMemoryRepository()).execute()
+    transactions: list[Transaction] = GetTransactionsInMemoryQueryHandler(transaction_memory_repository).execute()
 
     if request.method == 'GET':
+        transactions: list[Transaction] = GetTransactionsInMemoryQueryHandler(transaction_memory_repository).execute()
         return render_template('transactions/review_file.html', transactions=transactions)
 
     if request.method == 'POST':
+        # TODO refactor to use case like SaveCachedTransactions
+        # and it contains clear memory repository
         CreateMultipleTransactionsCommandHandler(TransactionRepository()).execute(transactions)
+        transaction_memory_repository.clear()
         flash(gettext('File processed successfully!'), 'success')
         session.pop('transactions')
         return redirect(url_for('transactions_file_blueprint.load_transactions_file'))
@@ -44,7 +49,7 @@ def load_transactions_file():
 
     if form.validate_on_submit():
         command = ReadTransactionsFromFileCommand(form.file.data, FileType.__getitem__(form.type.data))
-        handler = ReadTransactionsFromFileCommandHandler(TransactionMemoryRepository(), FileReaderFactory())
+        handler = ReadTransactionsFromFileCommandHandler(transaction_memory_repository, FileReaderFactory())
 
         try:
             handler.execute(command)
