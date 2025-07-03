@@ -28,7 +28,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="#"><i
+                    <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{{ url_for('dashboard_blueprint.dashboard') }}"><i
                             class="fas fa-tachometer-alt"></i> {{ _('Dashboard') }}</a>
                 </li>
                 <li class="nav-item dropdown">
