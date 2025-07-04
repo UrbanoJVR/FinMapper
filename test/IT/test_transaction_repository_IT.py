@@ -190,3 +190,42 @@ class TestTransactionRepositoryIT:
         result = self.sut.count_by_category_id(1)
 
         assert result == 1
+
+    def test_given_no_transactions_when_request_years_with_transactions_then_return_empty_list(self, db_test_it):
+        result = self.sut.get_years_with_transactions()
+
+        assert result == []
+
+    def test_given_a_year_with_more_than_one_transactions_when_reqeust_years_with_transactions_then_return_one_year_list(self, db_test_it):
+        transaction1 = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
+                                  category=None, concept="Concept 1")
+        transaction2 = Transaction(id=2, transaction_date=date(2024, 12, 1), amount=Decimal(100),
+                                  category=None, concept="Concept 1")
+        self.sut.save(transaction1)
+        self.sut.save(transaction2)
+
+        result = self.sut.get_years_with_transactions()
+
+        assert len(result) == 1
+        assert result[0] == 2024
+
+    def test_given_different_years_with_transactions_then_return_correct_list(self, db_test_it):
+        transaction1 = Transaction(id=1, transaction_date=date(2024, 12, 1), amount=Decimal(100),
+                                  category=None, concept="Concept 1")
+        transaction2 = Transaction(id=2, transaction_date=date(2025, 12, 1), amount=Decimal(100),
+                                  category=None, concept="Concept 1")
+        transaction3 = Transaction(id=3, transaction_date=date(2025, 12, 1), amount=Decimal(100),
+                                  category=None, concept="Concept 1")
+        transaction4 = Transaction(id=4, transaction_date=date(2023, 12, 1), amount=Decimal(100),
+                                  category=None, concept="Concept 1")
+        self.sut.save(transaction1)
+        self.sut.save(transaction2)
+        self.sut.save(transaction3)
+        self.sut.save(transaction4)
+
+        result = self.sut.get_years_with_transactions()
+
+        assert len(result) == 3
+        assert result[0] == 2023
+        assert result[1] == 2024
+        assert result[2] == 2025

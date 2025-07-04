@@ -102,3 +102,12 @@ class TransactionRepository:
         query = select(func.count()).select_from(TransactionModel).where(
             TransactionModel.category_id.__eq__(category_id))
         return self.session.execute(query).scalar()
+
+    def get_years_with_transactions(self) -> List[int]:
+        query = (
+            select(extract('year', TransactionModel.date).label("year"))
+            .distinct()
+            .order_by("year")
+        )
+        result = self.session.execute(query).scalars().all()
+        return [int(year) for year in result if year is not None]
