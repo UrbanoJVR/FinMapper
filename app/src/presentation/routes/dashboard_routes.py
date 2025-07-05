@@ -13,8 +13,16 @@ query_bus = QueryBus()
 @dashboard_blueprint.route('/dashboard', methods=['GET'])
 def dashboard():
     latest_year_with_transactions = query_bus.ask(GetLatestAvailableTransactionYearQuery())
+
+    if latest_year_with_transactions is None:
+        return redirect(url_for('dashboard_blueprint.empty_dashboard'))
+
     return redirect(url_for('dashboard_blueprint.dashboard_year', year=latest_year_with_transactions))
 
 @dashboard_blueprint.route('/dashboard/<int:year>', methods=['GET'])
 def dashboard_year(year: int):
-    return render_template('dashboard/dashboard.html')
+    return render_template('dashboard/dashboard.html', selected_year=year)
+
+@dashboard_blueprint.route('/dashboard/empty', methods=['GET'])
+def empty_dashboard():
+    return render_template('dashboard/empty_dashboard.html', selected_year=None)

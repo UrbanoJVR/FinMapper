@@ -4,8 +4,8 @@ from decimal import Decimal
 from bs4 import BeautifulSoup
 from flask import url_for
 
-from .conftest import transaction_exists
 from app.src.domain.transaction import Transaction
+from .conftest import transaction_exists
 
 
 class TestCreateTransaction:
