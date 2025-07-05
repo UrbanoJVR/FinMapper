@@ -1,5 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>DASHBOARD WORKS!</h1>
+    <form id="year-filter-form" method="POST" class="d-flex justify-content-center align-items-center my-4 gap-3">
+        {{ year_filter_form.csrf_token }}
+        <button type="submit" name="direction" value="previous" class="btn btn-outline-dark">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <h4 class="mb-0">{{ selected_year }}</h4>
+        <button type="submit" name="direction" value="next" class="btn btn-outline-dark">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </form>
+
+{#    <div class="container mb-4">#}
+{#        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">#}
+{#            <div class="col">#}
+{#                <div class="card text-center shadow-sm">#}
+{#                    <div class="card-body">#}
+{#                        <h6 class="card-title text-muted">Gastos sin categorizar</h6>#}
+{#                        <h3 class="card-text text-danger">{{ uncategorized_count }}</h3>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="col">#}
+{#                <div class="card text-center shadow-sm">#}
+{#                    <div class="card-body">#}
+{#                        <h6 class="card-title text-muted">Total gastos {{ selected_year }}</h6>#}
+{#                        <h3 class="card-text">{{ total_expenses | round(2) }} €</h3>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#            <!-- Más tarjetas aquí -->#}
+{#        </div>#}
+{#    </div>#}
 {% endblock %}
