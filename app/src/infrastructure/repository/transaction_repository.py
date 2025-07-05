@@ -103,7 +103,7 @@ class TransactionRepository:
             TransactionModel.category_id.__eq__(category_id))
         return self.session.execute(query).scalar()
 
-    def get_years_with_transactions(self) -> List[int]:
+    def get_years_with_transactions(self) -> list[int]:
         query = (
             select(extract('year', TransactionModel.date).label("year"))
             .distinct()
