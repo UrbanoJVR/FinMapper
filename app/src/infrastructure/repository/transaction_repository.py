@@ -49,6 +49,15 @@ class TransactionRepository:
         result = self.session.execute(stmt).scalars().all()
         return map_to_domain_list(result)
 
+    def get_by_year(self, year: int) -> List[Transaction]:
+        stmt = (
+            select(TransactionModel)
+            .where(extract('year', TransactionModel.date) == year)
+            .order_by(TransactionModel.date.desc())
+        )
+        result = self.session.execute(stmt).scalars().all()
+        return map_to_domain_list(result)
+
     def get_by_month_year_and_category_id(self, month: int, year: int, category_id: int) -> List[Transaction]:
         statement = (
             select(TransactionModel)

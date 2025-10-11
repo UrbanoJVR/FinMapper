@@ -229,3 +229,34 @@ class TestTransactionRepositoryIT:
         assert result[0] == 2023
         assert result[1] == 2024
         assert result[2] == 2025
+
+    def test_get_by_year_returns_transactions_for_specific_year(self, db_test_it):
+        transaction1 = Transaction(transaction_date=date(2024, 1, 15), amount=Decimal("100.00"),
+                                  category=None, concept="Concept 1")
+        transaction2 = Transaction(transaction_date=date(2024, 6, 20), amount=Decimal("200.00"),
+                                  category=None, concept="Concept 2")
+        transaction3 = Transaction(transaction_date=date(2023, 12, 31), amount=Decimal("300.00"),
+                                  category=None, concept="Concept 3")
+        transaction4 = Transaction(transaction_date=date(2025, 1, 1), amount=Decimal("400.00"),
+                                  category=None, concept="Concept 4")
+
+        self.sut.save(transaction1)
+        self.sut.save(transaction2)
+        self.sut.save(transaction3)
+        self.sut.save(transaction4)
+
+        result = self.sut.get_by_year(2024)
+
+        assert len(result) == 2
+        assert result[0].concept == "Concept 2"  # More recent first
+        assert result[1].concept == "Concept 1"
+        assert all(t.transaction_date.year == 2024 for t in result)
+
+    def test_get_by_year_returns_empty_list_when_no_transactions_for_year(self, db_test_it):
+        transaction = Transaction(transaction_date=date(2023, 1, 1), amount=Decimal("100.00"),
+                                 category=None, concept="Concept 1")
+        self.sut.save(transaction)
+
+        result = self.sut.get_by_year(2024)
+
+        assert len(result) == 0

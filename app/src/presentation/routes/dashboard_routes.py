@@ -3,6 +3,8 @@ from flask import Blueprint, render_template, redirect, url_for
 from app.src.application.command_bus import CommandBus
 from app.src.application.dashboard.query.get_latest_available_transaction_year_handler import \
     GetLatestAvailableTransactionYearQuery
+from app.src.application.dashboard.query.get_total_expenses_by_year_query_handler import \
+    GetTotalExpensesByYearQuery
 from app.src.application.query_bus import QueryBus
 
 dashboard_blueprint = Blueprint('dashboard_blueprint', __name__, url_prefix='')
@@ -21,7 +23,8 @@ def dashboard():
 
 @dashboard_blueprint.route('/dashboard/<int:year>', methods=['GET'])
 def dashboard_year(year: int):
-    return render_template('dashboard/dashboard.html', selected_year=year)
+    total_expenses = query_bus.ask(GetTotalExpensesByYearQuery(year))
+    return render_template('dashboard/dashboard.html', selected_year=year, total_expenses=total_expenses)
 
 @dashboard_blueprint.route('/dashboard/empty', methods=['GET'])
 def empty_dashboard():
