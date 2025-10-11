@@ -33,8 +33,17 @@ def count_transactions_in_table(client, month: int, year: int) -> int:
     html = BeautifulSoup(client.get(f'/movements/{month}/{year}').data, 'html.parser')
     table = html.find('table', {'class': 'table'})
 
-    # -1 because first row is allways header
-    return len(table.find_all('tr')) - 1
+    # Get all rows except header
+    rows = table.find_all('tr')[1:]  # Skip header row
+    
+    # Filter out the "No transactions found" row if it exists
+    transaction_rows = []
+    for row in rows:
+        # Check if this row contains the "No transactions found" message
+        if 'No transactions found' not in row.get_text():
+            transaction_rows.append(row)
+    
+    return len(transaction_rows)
 
 
 def transaction_exists(client, transaction: Transaction) -> bool:
@@ -53,18 +62,32 @@ def _transaction_in_table(response_data: bytes, transaction: Transaction) -> boo
     html_parser = BeautifulSoup(response_data, 'html.parser')
     print(html_parser.prettify())
 
-    formatted_date: str = format_datetime(transaction.transaction_date, 'EEEE, dd-MM-yyyy')
+    # Format data to match what's actually displayed in the new table design
+    formatted_date_short: str = format_datetime(transaction.transaction_date, 'dd/MM/yyyy')
+    formatted_date_day: str = format_datetime(transaction.transaction_date, 'EEEE')
     formatted_amount: str = f"{transaction.amount:.2f}"
     category_name: str = transaction.category.name if transaction.category else ""
-    transaction_data = [formatted_date, transaction.concept, transaction.comments, formatted_amount, category_name]
+    
+    # Build transaction data to search for
+    transaction_data = [transaction.concept, formatted_amount]
+    if transaction.comments:
+        transaction_data.append(transaction.comments)
+    if category_name:
+        transaction_data.append(category_name)
 
     table = html_parser.find('table', {'class': 'table'})
     assert table is not None
 
     rows = table.find_all('tr')
     for row in rows:
-        cells_text = [cell.text.strip() for cell in row.find_all('td')]
-        if all(data in cells_text for data in transaction_data):
+        # Get all text content from the row, including nested elements
+        row_text = row.get_text()
+        
+        # Check if the row contains the date (either format) and all other transaction data
+        date_found = (formatted_date_short in row_text or 
+                     formatted_date_day in row_text)
+        
+        if date_found and all(data in row_text for data in transaction_data if data):
             return True
 
     return False
