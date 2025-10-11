@@ -144,7 +144,6 @@ msgstr "Acciones"
 
 #: app/templates/transactions/movements_list.html:35
 #: app/templates/transactions/review_file.html:16
-#, fuzzy
 msgid "Comments"
 msgstr "Comentarios"
 
