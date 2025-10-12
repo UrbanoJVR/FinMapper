@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_babel import Babel, format_datetime
-from flask_migrate import Migrate
+from flask_migrate import Migrate, upgrade
 from flask_session import Session
 
 from app.common_routes import page_not_found
@@ -46,5 +46,14 @@ def create_app(config_name='default'):
 
     # Add format_datetime to Jinja2 environment globals
     app.jinja_env.globals['format_datetime'] = format_datetime
+
+    # Auto-migrate database on startup
+    with app.app_context():
+        try:
+            upgrade()
+            print("Database migrations applied successfully")
+        except Exception as e:
+            print(f"Warning: Could not apply database migrations: {e}")
+            # Continue anyway - the app should still work
 
     return app
