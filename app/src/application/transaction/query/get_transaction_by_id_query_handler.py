@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from app.src.application.query_bus_registry import query_handler
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 
@@ -7,6 +8,7 @@ from app.src.infrastructure.repository.transaction_repository import Transaction
 class GetTransactionByIdQuery:
     transaction_id: int
 
+@query_handler(GetTransactionByIdQuery)
 class GetTransactionByIdQueryHandler:
 
     def __init__(self, transaction_repository: TransactionRepository):

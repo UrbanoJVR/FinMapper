@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from decimal import Decimal
 
+from app.src.application.query_bus_registry import query_handler
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 
@@ -9,6 +10,7 @@ class GetTotalExpensesByYearQuery:
     year: int
 
 
+@query_handler(GetTotalExpensesByYearQuery)
 class GetTotalExpensesByYearQueryHandler:
 
     def __init__(self, transaction_repository: TransactionRepository):
