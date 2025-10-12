@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_babel import Babel, format_datetime
 from flask_migrate import Migrate
+from flask_session import Session
 
 from app.common_routes import page_not_found
 from config import config
@@ -29,6 +30,7 @@ def get_locale():
 
 babel = Babel()
 migrate = Migrate()
+session = Session()
 
 
 def create_app(config_name='default'):
@@ -38,6 +40,7 @@ def create_app(config_name='default'):
     app.config.from_object(config[config_name])
     db.init_app(app)
     migrate.init_app(app, db)
+    session.init_app(app)
     config[config_name].init_app(app)
     register_blueprints(app)
 
