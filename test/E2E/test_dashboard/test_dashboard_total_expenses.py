@@ -10,17 +10,18 @@ from app.src.infrastructure.repository.transaction_repository import Transaction
 class TestDashboardTotalExpenses:
 
     def test_given_no_transactions_when_access_dashboard_then_show_zero_total(self, client):
-        # Act - Access dashboard for 2024 with no transactions
-        response = client.get('/dashboard/2024')
+        # Act - Access dashboard for 2024 with no transactions (should redirect to empty dashboard)
+        response = client.get('/dashboard/2024', follow_redirects=True)
         html = BeautifulSoup(response.data, 'html.parser')
 
         # Assert - Check response and content
         assert response.status_code == 200
         
-        # Check that the total expenses card shows 0.00
-        card_value = html.find('h3', class_='card-text')
-        assert card_value is not None, "Card value should be present"
-        assert "0.00 €" in card_value.text, f"Expected '0.00 €' in value, got: {card_value.text}"
+        # Check that we're redirected to empty dashboard and it shows the appropriate message
+        assert "No hay datos para este año" in response.data.decode('utf-8'), "Should show empty dashboard message"
+        
+        # Check that quick actions are present
+        assert "Acciones Rápidas" in response.data.decode('utf-8'), "Should show quick actions"
 
     def test_given_transactions_when_access_dashboard_then_show_correct_total_sum(self, client):
         # Arrange - Create transactions directly in the test client's database

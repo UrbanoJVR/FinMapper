@@ -14,14 +14,14 @@
                     <p class="text-muted fs-5 mb-0">Resumen financiero del año</p>
                 </div>
                 <div class="d-flex gap-2">
-                    <button class="btn btn-outline-primary btn-lg">
+                    <a href="{{ url_for('dashboard_blueprint.dashboard_year', year=selected_year - 1) }}" class="btn btn-outline-primary btn-lg">
                         <i class="fas fa-chevron-left me-2"></i>
                         Año anterior
-                    </button>
-                    <button class="btn btn-outline-primary btn-lg">
+                    </a>
+                    <a href="{{ url_for('dashboard_blueprint.dashboard_year', year=selected_year + 1) }}" class="btn btn-outline-primary btn-lg">
                         Año siguiente
                         <i class="fas fa-chevron-right ms-2"></i>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
