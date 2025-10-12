@@ -15,3 +15,4 @@ INSERT INTO categories (id, name, description) VALUES (12, 'Transporte', 'Combus
 INSERT INTO categories (id, name, description) VALUES (13, 'Deportes', 'Gastos asociados a la práctica deportiva');
 INSERT INTO categories (id, name, description) VALUES (14, 'Ocio', 'Lo que haces los fines de semana cuando te aburres');
 INSERT INTO categories (id, name, description) VALUES (15, 'Seguros e impuestos', 'Lo pagas porque estás obligado o porque te protege');
+INSERT INTO categories (id, name, description) VALUES (15, 'Regalos', 'Lo gastas en algo que no es para tí');
