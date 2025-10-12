@@ -33,3 +33,7 @@ build:
 # Ejecuta la aplicación Flask
 run:
 	pipenv run flask run
+
+# Load local data for develop environment
+load-dev-data:
+	sqlite3 data.sqlite < dev-data/categories.sql
