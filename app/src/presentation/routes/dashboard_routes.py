@@ -7,6 +7,8 @@ from app.src.application.dashboard.query.get_latest_available_transaction_year_h
     GetLatestAvailableTransactionYearQuery
 from app.src.application.dashboard.query.get_total_expenses_by_year_query_handler import \
     GetTotalExpensesByYearQuery
+from app.src.application.dashboard.query.get_average_monthly_spending_by_year_query_handler import \
+    GetAverageMonthlySpendingByYearQuery
 from app.src.application.query_bus import QueryBus
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
@@ -33,7 +35,9 @@ def dashboard_year(year: int):
         return redirect(url_for('dashboard_blueprint.empty_dashboard', year=year))
     
     total_expenses = query_bus.ask(GetTotalExpensesByYearQuery(year))
-    return render_template('dashboard/dashboard.html', selected_year=year, total_expenses=total_expenses)
+    average_monthly_spending = query_bus.ask(GetAverageMonthlySpendingByYearQuery(year))
+    return render_template('dashboard/dashboard.html', selected_year=year, total_expenses=total_expenses, 
+                         average_monthly_spending=average_monthly_spending)
 
 @dashboard_blueprint.route('/dashboard/empty', methods=['GET'])
 def empty_dashboard():

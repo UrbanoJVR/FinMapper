@@ -4,6 +4,8 @@ from app.src.application.dashboard.query.get_latest_available_transaction_year_h
     GetLatestAvailableTransactionYearQuery, GetLatestAvailableTransactionYearHandler
 from app.src.application.dashboard.query.get_total_expenses_by_year_query_handler import \
     GetTotalExpensesByYearQuery, GetTotalExpensesByYearQueryHandler
+from app.src.application.dashboard.query.get_average_monthly_spending_by_year_query_handler import \
+    GetAverageMonthlySpendingByYearQuery, GetAverageMonthlySpendingByYearQueryHandler
 from app.src.application.transaction.query.get_transaction_by_id_query_handler import GetTransactionByIdQuery, \
     GetTransactionByIdQueryHandler
 from app.src.application.transaction.query.search_transactions_by_month_year_query import \
@@ -45,4 +47,8 @@ class QueryBus:
 
         if isinstance(query, GetTotalExpensesByYearQuery):
             handler = GetTotalExpensesByYearQueryHandler(self.transaction_repository)
+            return handler.execute(query)
+
+        if isinstance(query, GetAverageMonthlySpendingByYearQuery):
+            handler = GetAverageMonthlySpendingByYearQueryHandler(self.transaction_repository)
             return handler.execute(query)
