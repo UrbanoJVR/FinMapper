@@ -1,0 +1,89 @@
+{
+  "transactions": [
+    {
+      "raw_date": "01/07/2025",
+      "raw_category": "🤱🏻 Cuidado infantil",
+      "concept": "Guardería Alfonso",
+      "amount": "247",
+      "comments": ""
+    },
+    {
+      "raw_date": "01/07/2025",
+      "raw_category": "🍝 Restaurantes",
+      "concept": "Consumo tarjeta restaurante",
+      "amount": "171",
+      "comments": ""
+    },
+    {
+      "raw_date": "30/06/2025 22:50:02",
+      "raw_category": "🛒 Necesidades básicas",
+      "concept": "Compras con edenred",
+      "amount": "71",
+      "comments": ""
+    },
+    {
+      "raw_date": "30/06/2025 22:48:29",
+      "raw_category": "🪑 Hogar",
+      "concept": "Amazon",
+      "amount": "6.97",
+      "comments": "Colgador rollo papel cocina"
+    },
+    {
+      "raw_date": "01/06/2025",
+      "raw_category": "🍝 Restaurantes",
+      "concept": "Consumo tarjeta restaurante",
+      "amount": "100",
+      "comments": ""
+    },
+    {
+      "raw_date": "01/06/2025",
+      "raw_category": "🤱🏻 Cuidado infantil",
+      "concept": "Guardería Alfonso",
+      "amount": "247",
+      "comments": ""
+    },
+    {
+      "raw_date": "30/05/2025 23:28:41",
+      "raw_category": "🤱🏻 Cuidado infantil",
+      "concept": "Decathlon",
+      "amount": "21.96",
+      "comments": ""
+    },
+    {
+      "raw_date": "01/05/2025",
+      "raw_category": "🍝 Restaurantes",
+      "concept": "Consumo tarjeta restaurante",
+      "amount": "171",
+      "comments": ""
+    },
+    {
+      "raw_date": "01/05/2025",
+      "raw_category": "🤱🏻 Cuidado infantil",
+      "concept": "Guardería Alfonso",
+      "amount": "247",
+      "comments": ""
+    },
+    {
+      "raw_date": "30/04/2025 13:27:49",
+      "raw_category": "🏨 Viajes y vacaciones",
+      "concept": "Casi todo Torrejon de ardoz",
+      "amount": "25.10",
+      "comments": "Carbón puente mayo"
+    },
+    {
+      "raw_date": "21/03/2025 23:47:46",
+      "raw_category": "⛽ Transporte",
+      "concept": "Misparkings.com",
+      "amount": "12.80",
+      "comments": "Parking noche piedrahita"
+    }
+  ],
+  "categories": [
+    {"name": "Transporte", "description": "Transporte"},
+    {"name": "Hogar", "description": "Hogar"},
+    {"name": "Necesidades básicas", "description": "Necesidades básicas"},
+    {"name": "Cuidado infantil", "description": "Cuidado infantil"},
+    {"name": "Restaurantes", "description": "Comida que no cocinas en casa"},
+    {"name": "Viajes y vacaciones", "description": "Pues eso, veranito veranito"}
+  ]
+}
