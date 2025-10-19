@@ -10,15 +10,12 @@ from app.src.infrastructure.repository.transaction_repository import Transaction
 class TestDashboardAverageMonthlySpending:
 
     def test_given_no_transactions_when_access_dashboard_then_redirect_to_empty(self, client):
-        # Act - Access dashboard for 2024 with no transactions (should redirect to empty dashboard)
         response = client.get('/dashboard/2024', follow_redirects=True)
 
-        # Assert - Check response
         assert response.status_code == 200
         assert "No hay datos para este año" in response.data.decode('utf-8'), "Should show empty dashboard message"
 
     def test_given_transactions_in_two_months_then_show_correct_average(self, client):
-        # Arrange - Create transactions in 2 months (January: 100, June: 200)
         with client.application.app_context():
             transaction_repository = TransactionRepository()
             
