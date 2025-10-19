@@ -56,7 +56,7 @@ class TestDashboardAverageMonthlySpending:
         # Check the card value (should be 150.00 = (100 + 200) / 2)
         card_value = avg_card.find('h3', class_='card-text')
         assert card_value is not None, "Card value should be present"
-        assert "150.00 €" in card_value.text, f"Expected '150.00 €' in value, got: {card_value.text}"
+        assert "150,00 €" in card_value.text, f"Expected '150,00 €' in value, got: {card_value.text}"
 
     def test_given_transactions_in_three_distinct_months_then_show_correct_average(self, client):
         # Arrange - Create transactions in 3 distinct months
@@ -97,7 +97,7 @@ class TestDashboardAverageMonthlySpending:
         # Check the card value (should be 600.00 = (300 + 600 + 900) / 3)
         card_value = avg_card.find('h3', class_='card-text')
         assert card_value is not None, "Card value should be present"
-        assert "600.00 €" in card_value.text, f"Expected '600.00 €' in value, got: {card_value.text}"
+        assert "600,00 €" in card_value.text, f"Expected '600,00 €' in value, got: {card_value.text}"
 
     def test_given_all_transactions_in_same_month_then_average_equals_total(self, client):
         # Arrange - Create multiple transactions in the same month
@@ -137,12 +137,12 @@ class TestDashboardAverageMonthlySpending:
         # Check total expenses card (first card)
         total_card = cards[0]
         total_value = total_card.find('h3', class_='card-text')
-        assert "450.00 €" in total_value.text, f"Expected '450.00 €' in total, got: {total_value.text}"
+        assert "450,00 €" in total_value.text, f"Expected '450,00 €' in total, got: {total_value.text}"
         
         # Check average card (second card) - should equal total since only 1 month
         avg_card = cards[1]
         avg_value = avg_card.find('h3', class_='card-text')
-        assert "450.00 €" in avg_value.text, f"Expected '450.00 €' in average, got: {avg_value.text}"
+        assert "450,00 €" in avg_value.text, f"Expected '450,00 €' in average, got: {avg_value.text}"
 
     def test_given_mixed_positive_negative_amounts_then_show_correct_average(self, client):
         # Arrange - Create transactions with mixed amounts in 2 months
@@ -183,5 +183,5 @@ class TestDashboardAverageMonthlySpending:
         # Check the card value (should be 100.00 = (500 - 100 - 200) / 2)
         card_value = avg_card.find('h3', class_='card-text')
         assert card_value is not None, "Card value should be present"
-        assert "100.00 €" in card_value.text, f"Expected '100.00 €' in value, got: {card_value.text}"
+        assert "100,00 €" in card_value.text, f"Expected '100,00 €' in value, got: {card_value.text}"
 

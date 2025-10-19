@@ -88,3 +88,4 @@ class TestGetAverageMonthlySpendingByYearQueryHandler(TestCase):
         assert result == Decimal("400.00")
         self.mock_transaction_repository.get_by_year.assert_called_once_with(2024)
 
+

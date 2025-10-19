@@ -4,6 +4,7 @@ from flask_migrate import Migrate, upgrade
 from flask_session import Session
 
 from app.common_routes import page_not_found
+from app.src.shared.format_utils import format_currency_es
 from config import config
 from database import db
 
@@ -46,6 +47,9 @@ def create_app(config_name='default'):
 
     # Add format_datetime to Jinja2 environment globals
     app.jinja_env.globals['format_datetime'] = format_datetime
+    
+    # Add custom filter for Spanish currency formatting using Flask-Babel
+    app.jinja_env.filters['currency_es'] = format_currency_es
 
     # Auto-migrate database on startup
     with app.app_context():

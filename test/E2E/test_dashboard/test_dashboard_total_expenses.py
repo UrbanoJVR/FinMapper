@@ -68,7 +68,7 @@ class TestDashboardTotalExpenses:
         # Check the card value (should be 300.75 = 100.50 + 200.25)
         card_value = total_expenses_card.find('h3', class_='card-text')
         assert card_value is not None, "Card value should be present"
-        assert "300.75 €" in card_value.text, f"Expected '300.75 €' in value, got: {card_value.text}"
+        assert "300,75 €" in card_value.text, f"Expected '300,75 €' in value, got: {card_value.text}"
 
     def test_given_negative_transactions_when_access_dashboard_then_show_correct_total(self, client):
         # Arrange - Create transactions with negative amounts
@@ -99,7 +99,7 @@ class TestDashboardTotalExpenses:
         # Check the card value (should be -150.50)
         card_value = html.find('h3', class_='card-text')
         assert card_value is not None, "Card value should be present"
-        assert "-150.50 €" in card_value.text, f"Expected '-150.50 €' in value, got: {card_value.text}"
+        assert "-150,50 €" in card_value.text, f"Expected '-150,50 €' in value, got: {card_value.text}"
 
     def test_given_mixed_transactions_when_access_dashboard_then_show_correct_total(self, client):
         # Arrange - Create transactions with mixed positive and negative amounts
@@ -136,4 +136,4 @@ class TestDashboardTotalExpenses:
         # Check the card value (should be 99.75 = 200.00 - 75.25 - 25.00)
         card_value = html.find('h3', class_='card-text')
         assert card_value is not None, "Card value should be present"
-        assert "99.75 €" in card_value.text, f"Expected '99.75 €' in value, got: {card_value.text}"
+        assert "99,75 €" in card_value.text, f"Expected '99,75 €' in value, got: {card_value.text}"
