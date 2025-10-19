@@ -40,7 +40,7 @@
                         Total Gastos {{ selected_year }}
                     </h6>
                     <h3 class="card-text fw-bold text-dark mb-0">
-                        {{ total_expenses | currency_es }}
+                        {{ dashboard_summary.total_expense_amount | currency_es }}
                     </h3>
                 </div>
             </div>
@@ -57,7 +57,7 @@
                         Gasto Medio Mensual
                     </h6>
                     <h3 class="card-text fw-bold text-dark mb-0">
-                        {{ average_monthly_spending | currency_es }}
+                        {{ dashboard_summary.average_expense_amount | currency_es }}
                     </h3>
                 </div>
             </div>
