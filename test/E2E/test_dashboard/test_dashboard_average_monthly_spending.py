@@ -33,14 +33,11 @@ class TestDashboardAverageMonthlySpending:
             transaction_repository.save(transaction1)
             transaction_repository.save(transaction2)
 
-        # Act - Access dashboard for 2024
         response = client.get('/dashboard/2024')
         html = BeautifulSoup(response.data, 'html.parser')
 
-        # Assert - Check response and content
         assert response.status_code == 200
-        
-        # Find all cards
+
         cards = html.find_all('div', class_='card')
         assert len(cards) >= 2, "Should have at least 2 cards"
         
@@ -56,7 +53,6 @@ class TestDashboardAverageMonthlySpending:
         assert "150,00 €" in card_value.text, f"Expected '150,00 €' in value, got: {card_value.text}"
 
     def test_given_transactions_in_three_distinct_months_then_show_correct_average(self, client):
-        # Arrange - Create transactions in 3 distinct months
         with client.application.app_context():
             transaction_repository = TransactionRepository()
             
@@ -80,14 +76,11 @@ class TestDashboardAverageMonthlySpending:
             transaction_repository.save(transaction2)
             transaction_repository.save(transaction3)
 
-        # Act - Access dashboard for 2024
         response = client.get('/dashboard/2024')
         html = BeautifulSoup(response.data, 'html.parser')
 
-        # Assert - Check response and content
         assert response.status_code == 200
-        
-        # Find all cards
+
         cards = html.find_all('div', class_='card')
         avg_card = cards[1]
         
@@ -97,7 +90,6 @@ class TestDashboardAverageMonthlySpending:
         assert "600,00 €" in card_value.text, f"Expected '600,00 €' in value, got: {card_value.text}"
 
     def test_given_all_transactions_in_same_month_then_average_equals_total(self, client):
-        # Arrange - Create multiple transactions in the same month
         with client.application.app_context():
             transaction_repository = TransactionRepository()
             
@@ -121,14 +113,11 @@ class TestDashboardAverageMonthlySpending:
             transaction_repository.save(transaction2)
             transaction_repository.save(transaction3)
 
-        # Act - Access dashboard for 2024
         response = client.get('/dashboard/2024')
         html = BeautifulSoup(response.data, 'html.parser')
 
-        # Assert - Check response and content
         assert response.status_code == 200
-        
-        # Find all cards
+
         cards = html.find_all('div', class_='card')
         
         # Check total expenses card (first card)
@@ -142,7 +131,6 @@ class TestDashboardAverageMonthlySpending:
         assert "450,00 €" in avg_value.text, f"Expected '450,00 €' in average, got: {avg_value.text}"
 
     def test_given_mixed_positive_negative_amounts_then_show_correct_average(self, client):
-        # Arrange - Create transactions with mixed amounts in 2 months
         with client.application.app_context():
             transaction_repository = TransactionRepository()
             
@@ -166,14 +154,11 @@ class TestDashboardAverageMonthlySpending:
             transaction_repository.save(transaction2)
             transaction_repository.save(transaction3)
 
-        # Act - Access dashboard for 2024
         response = client.get('/dashboard/2024')
         html = BeautifulSoup(response.data, 'html.parser')
 
-        # Assert - Check response and content
         assert response.status_code == 200
-        
-        # Find all cards
+
         cards = html.find_all('div', class_='card')
         avg_card = cards[1]
         
