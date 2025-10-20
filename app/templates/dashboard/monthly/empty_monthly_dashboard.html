@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="display-4 fw-bold text-dark mb-1">
+                        <i class="fas fa-calendar-alt text-primary me-3"></i>
+                        Hola {{ month_name }}
+                    </h1>
+                    <p class="text-muted fs-5 mb-0">Resumen financiero del mes</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('monthly_dashboard_blueprint.monthly_dashboard', year=previous_year, month=previous_month) }}" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-chevron-left me-2"></i>
+                        Mes anterior
+                    </a>
+                    <a href="{{ url_for('monthly_dashboard_blueprint.monthly_dashboard', year=next_year, month=next_month) }}" class="btn btn-outline-primary btn-lg">
+                        Mes siguiente
+                        <i class="fas fa-chevron-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty State Message -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="alert alert-info border-0 shadow-sm" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-info-circle fa-2x me-3"></i>
+                    <div>
+                        <h5 class="alert-heading mb-1">No hay datos para este mes</h5>
+                        <p class="mb-0">Comienza añadiendo transacciones y categorías para ver tu resumen financiero mensual.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions Section -->
+    <div class="row">
+        <div class="col-12">
+            <h3 class="fw-bold text-dark mb-4">
+                <i class="fas fa-bolt text-warning me-2"></i>
+                Acciones Rápidas
+            </h3>
+            <div class="row g-3">
+                <div class="col-12 col-sm-6 col-md-3">
+                    <a href="{{ url_for('transactions_crud_blueprint.create_transaction') }}" 
+                       class="btn btn-outline-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center py-4">
+                        <i class="fas fa-plus-circle fa-2x mb-2"></i>
+                        <span>Añadir Transacción</span>
+                    </a>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3">
+                    <a href="{{ url_for('transactions_crud_blueprint.movements') }}" 
+                       class="btn btn-outline-success btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center py-4">
+                        <i class="fas fa-table fa-2x mb-2"></i>
+                        <span>Ver Movimientos</span>
+                    </a>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3">
+                    <a href="{{ url_for('transactions_crud_blueprint.categorize_transaction') }}" 
+                       class="btn btn-outline-warning btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center py-4">
+                        <i class="fas fa-tag fa-2x mb-2"></i>
+                        <span>Categorizar</span>
+                    </a>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3">
+                    <a href="{{ url_for('transactions_file_blueprint.load_transactions_file') }}" 
+                       class="btn btn-outline-info btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center py-4">
+                        <i class="fas fa-upload fa-2x mb-2"></i>
+                        <span>Cargar Archivo</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -35,7 +35,7 @@ def dashboard_year(year: int):
         return redirect(url_for('dashboard_blueprint.empty_dashboard', year=year))
 
     dashboard_summary: DashboardSummaryResult = query_bus.ask(GetDashboardSummaryQuery(year))
-    return render_template('dashboard/dashboard.html', selected_year=year, dashboard_summary=dashboard_summary)
+    return render_template('dashboard/yearly/dashboard.html', selected_year=year, dashboard_summary=dashboard_summary)
 
 
 @dashboard_blueprint.route('/dashboard/empty', methods=['GET'])
@@ -43,4 +43,4 @@ def empty_dashboard():
     year = request.args.get('year', type=int)
     if year is None:
         year = datetime.now().year
-    return render_template('dashboard/empty_dashboard.html', selected_year=year)
+    return render_template('dashboard/yearly/empty_dashboard.html', selected_year=year)

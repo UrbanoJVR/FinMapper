@@ -22,6 +22,9 @@ def register_blueprints(app):
     from app.src.presentation.routes.dashboard.yearly_summary_routes import dashboard_blueprint
     app.register_blueprint(dashboard_blueprint)
 
+    from app.src.presentation.routes.dashboard.monthly_summary_routes import monthly_dashboard_blueprint
+    app.register_blueprint(monthly_dashboard_blueprint)
+
     app.errorhandler(404)(page_not_found)
 
 
