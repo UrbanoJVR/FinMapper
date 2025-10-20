@@ -20,20 +20,20 @@ class TestMonthlyDashboard:
     def test_given_transactions_in_month_then_show_monthly_dashboard(self, client):
         with client.application.app_context():
             transaction_repository = TransactionRepository()
-            
+
             transaction = Transaction(
-                transaction_date=date(2024, 1, 15), 
-                amount=Decimal("100.00"), 
+                transaction_date=date(2024, 1, 15),
+                amount=Decimal("100.00"),
                 concept="January transaction"
             )
-            
+
             transaction_repository.save(transaction)
 
         response = client.get('/dashboard/2024/1')
 
         assert response.status_code == 200
         assert "Hola Enero" in response.data.decode('utf-8'), "Should show month name in Spanish"
-        assert "Dashboard mensual en desarrollo" in response.data.decode('utf-8'), "Should show development message"
+        assert "Gastos por Categoría" in response.data.decode('utf-8'), "Should show category expenses section"
 
     def test_monthly_dashboard_navigation_previous_month(self, client):
         response = client.get('/dashboard/2024/2', follow_redirects=True)

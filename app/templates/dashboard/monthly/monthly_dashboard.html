@@ -27,15 +27,97 @@
         </div>
     </div>
 
-    <!-- Content Section - Preparado para futuras iteraciones -->
-    <div class="row">
+    <div class="row mt-4">
         <div class="col-12">
-            <div class="alert alert-info border-0 shadow-sm" role="alert">
-                <div class="d-flex align-items-center">
-                    <i class="fas fa-info-circle fa-2x me-3"></i>
-                    <div>
-                        <h5 class="alert-heading mb-1">Dashboard mensual en desarrollo</h5>
-                        <p class="mb-0">Este dashboard se irá completando en futuras iteraciones con datos específicos del mes.</p>
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold mb-0">
+                            <i class="fas fa-chart-pie text-primary me-2"></i>
+                            Gastos por Categoría
+                        </h5>
+                        <span class="badge bg-primary fs-6">
+                            {{ monthly_summary.total_expense_amount | currency_es }}
+                        </span>
+                    </div>
+
+                    <!-- Category list -->
+                    <div class="list-group list-group-flush">
+                        {% for category_expense in monthly_summary.category_expenses %}
+                        <div class="list-group-item px-0 border-0 mb-3">
+                            <!-- Category header -->
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="d-flex align-items-center flex-grow-1">
+                                    <span class="fw-semibold me-3">{{ category_expense.category_name }}</span>
+                                    <!-- Visual progress bar -->
+                                    <div class="progress flex-grow-1 me-3" style="height: 10px;">
+                                        {% set percentage = (category_expense.total_amount / monthly_summary.total_expense_amount * 100) | round(0, 'floor') %}
+                                        <div class="progress-bar bg-primary" role="progressbar" 
+                                             style="width: {{ percentage }}%">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="badge bg-light text-dark">
+                                        {{ category_expense.total_amount | currency_es }}
+                                    </span>
+                                    <button class="btn btn-sm btn-link text-primary" 
+                                            type="button" 
+                                            data-bs-toggle="collapse" 
+                                            data-bs-target="#category{{ loop.index }}" 
+                                            aria-expanded="false">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Collapsible with transactions and notes -->
+                            <div class="collapse" id="category{{ loop.index }}">
+                                <div class="row mt-3">
+                                    <!-- Left column: Transactions -->
+                                    <div class="col-12 col-lg-7">
+                                        <h6 class="text-muted mb-3">Transacciones</h6>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-hover">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Fecha</th>
+                                                        <th>Concepto</th>
+                                                        <th>Comentarios</th>
+                                                        <th class="text-end">Importe</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for transaction in category_expense.transactions %}
+                                                    <tr>
+                                                        <td class="text-muted">{{ transaction.transaction_date.strftime('%d/%m') }}</td>
+                                                        <td>{{ transaction.concept[:30] }}{% if transaction.concept|length > 30 %}...{% endif %}</td>
+                                                        <td class="text-muted">{{ transaction.comments[:20] if transaction.comments else '-' }}{% if transaction.comments and transaction.comments|length > 20 %}...{% endif %}</td>
+                                                        <td class="text-end">{{ transaction.amount | currency_es }}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- Right column: Month notes -->
+                                    <div class="col-12 col-lg-5 mt-4 mt-lg-0">
+                                        <h6 class="text-muted mb-3">Notas del Mes</h6>
+                                        <div class="card bg-light border-0">
+                                            <div class="card-body">
+                                                <textarea class="form-control" rows="8" 
+                                                          placeholder="Añade notas sobre los gastos de este mes..."></textarea>
+                                                <button class="btn btn-sm btn-primary mt-2" disabled>
+                                                    <i class="fas fa-save me-1"></i> Guardar (próximamente)
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

@@ -4,6 +4,8 @@ from app.src.application.dashboard.query.get_latest_available_transaction_year_h
     GetLatestAvailableTransactionYearQuery, GetLatestAvailableTransactionYearHandler
 from app.src.application.dashboard.query.get_dashboard_summary_query_handler import \
     GetDashboardSummaryQuery, GetDashboardSummaryQueryHandler
+from app.src.application.dashboard.query.get_monthly_summary_query_handler import \
+    GetMonthlySummaryQuery, GetMonthlySummaryQueryHandler
 from app.src.application.transaction.query.get_transaction_by_id_query_handler import GetTransactionByIdQuery, \
     GetTransactionByIdQueryHandler
 from app.src.application.transaction.query.search_transactions_by_month_year_query import \
@@ -45,4 +47,8 @@ class QueryBus:
 
         if isinstance(query, GetDashboardSummaryQuery):
             handler = GetDashboardSummaryQueryHandler(self.transaction_repository)
+            return handler.execute(query)
+
+        if isinstance(query, GetMonthlySummaryQuery):
+            handler = GetMonthlySummaryQueryHandler(self.transaction_repository)
             return handler.execute(query)
