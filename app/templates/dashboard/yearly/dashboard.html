@@ -81,6 +81,31 @@
         </div>
     </div>
 
+    <div class="row g-3 mt-4">
+        {% set month_names = [
+            ('Ene', 1), ('Feb', 2), ('Mar', 3), ('Abr', 4), 
+            ('May', 5), ('Jun', 6), ('Jul', 7), ('Ago', 8), 
+            ('Sep', 9), ('Oct', 10), ('Nov', 11), ('Dic', 12)
+        ] %}
+        
+        {% for month_name, month_num in month_names %}
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+            {% if month_num in dashboard_summary.months_with_data %}
+            <a href="{{ url_for('monthly_dashboard_blueprint.monthly_dashboard', year=dashboard_summary.year, month=month_num) }}" 
+               class="btn btn-outline-primary w-100 py-3">
+                <i class="fas fa-calendar-day me-2"></i>
+                <span class="fw-bold">{{ month_name }}</span>
+            </a>
+            {% else %}
+            <button class="btn btn-outline-secondary w-100 py-3" disabled>
+                <i class="fas fa-calendar-day me-2"></i>
+                <span>{{ month_name }}</span>
+            </button>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
     <!-- Quick Actions Section -->
     <div class="row mt-5">
         <div class="col-12">

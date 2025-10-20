@@ -15,6 +15,7 @@ class DashboardSummaryResult:
     total_expense_amount: Decimal
     average_expense_amount: Decimal
     total_transactions_count: int
+    months_with_data: set[int]
 
 
 class GetDashboardSummaryQueryHandler:
@@ -30,7 +31,8 @@ class GetDashboardSummaryQueryHandler:
                 year=query.year,
                 total_expense_amount=Decimal("0.00"),
                 average_expense_amount=Decimal("0.00"),
-                total_transactions_count=0
+                total_transactions_count=0,
+                months_with_data=set()
             )
 
         total_expense_amount = sum(
@@ -50,5 +52,6 @@ class GetDashboardSummaryQueryHandler:
             year=query.year,
             total_expense_amount=total_expense_amount,
             average_expense_amount=average_expense_amount,
-            total_transactions_count=total_transactions_count
+            total_transactions_count=total_transactions_count,
+            months_with_data=distinct_months
         )
