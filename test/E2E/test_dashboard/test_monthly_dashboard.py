@@ -97,10 +97,8 @@ class TestMonthlyDashboard:
         assert response.status_code == 200
         assert f"Hola {expected_spanish_name}" in response.data.decode('utf-8'), f"Should show 'Hola {expected_spanish_name}'"
 
-    def test_empty_monthly_dashboard_shows_quick_actions(self, client):
+    def test_empty_monthly_dashboard_has_no_quick_actions_section(self, client):
         response = client.get('/dashboard/2024/1', follow_redirects=True)
 
         assert response.status_code == 200
-        assert "Acciones Rápidas" in response.data.decode('utf-8'), "Should show quick actions section"
-        assert "Añadir Transacción" in response.data.decode('utf-8'), "Should show add transaction button"
-        assert "Ver Movimientos" in response.data.decode('utf-8'), "Should show view movements button"
+        assert "Acciones Rápidas" not in response.data.decode('utf-8'), "Should not show quick actions section"

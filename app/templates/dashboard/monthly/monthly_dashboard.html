@@ -71,11 +71,10 @@
                                 </div>
                             </div>
 
-                            <!-- Collapsible with transactions and notes -->
+                            <!-- Collapsible with transactions -->
                             <div class="collapse" id="category{{ loop.index }}">
                                 <div class="row mt-3">
-                                    <!-- Left column: Transactions -->
-                                    <div class="col-12 col-lg-7">
+                                    <div class="col-12">
                                         <h6 class="text-muted mb-3">Transacciones</h6>
                                         <div class="table-responsive">
                                             <table class="table table-sm table-hover">
@@ -100,20 +99,6 @@
                                             </table>
                                         </div>
                                     </div>
-
-                                    <!-- Right column: Month notes -->
-                                    <div class="col-12 col-lg-5 mt-4 mt-lg-0">
-                                        <h6 class="text-muted mb-3">Notas del Mes</h6>
-                                        <div class="card bg-light border-0">
-                                            <div class="card-body">
-                                                <textarea class="form-control" rows="8" 
-                                                          placeholder="Añade notas sobre los gastos de este mes..."></textarea>
-                                                <button class="btn btn-sm btn-primary mt-2" disabled>
-                                                    <i class="fas fa-save me-1"></i> Guardar (próximamente)
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -124,41 +109,21 @@
         </div>
     </div>
 
-    <!-- Quick Actions Section -->
-    <div class="row mt-5">
+    <!-- Monthly Notes Section -->
+    <div class="row mt-4">
         <div class="col-12">
-            <h3 class="fw-bold text-dark mb-4">
-                <i class="fas fa-bolt text-warning me-2"></i>
-                Acciones Rápidas
-            </h3>
-            <div class="row g-3">
-                <div class="col-12 col-sm-6 col-md-3">
-                    <a href="{{ url_for('transactions_crud_blueprint.create_transaction') }}" 
-                       class="btn btn-outline-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center py-4">
-                        <i class="fas fa-plus-circle fa-2x mb-2"></i>
-                        <span>Añadir Transacción</span>
-                    </a>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <a href="{{ url_for('transactions_crud_blueprint.movements') }}" 
-                       class="btn btn-outline-success btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center py-4">
-                        <i class="fas fa-table fa-2x mb-2"></i>
-                        <span>Ver Movimientos</span>
-                    </a>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <a href="{{ url_for('transactions_crud_blueprint.categorize_transaction') }}" 
-                       class="btn btn-outline-warning btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center py-4">
-                        <i class="fas fa-tag fa-2x mb-2"></i>
-                        <span>Categorizar</span>
-                    </a>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <a href="{{ url_for('transactions_file_blueprint.load_transactions_file') }}" 
-                       class="btn btn-outline-info btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center py-4">
-                        <i class="fas fa-upload fa-2x mb-2"></i>
-                        <span>Cargar Archivo</span>
-                    </a>
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">
+                        <i class="fas fa-sticky-note text-warning me-2"></i>
+                        Notas del Mes
+                    </h5>
+                    <textarea class="form-control" rows="6" 
+                              placeholder="Añade notas sobre los gastos de este mes..."></textarea>
+                    <button class="btn btn-primary mt-3" disabled>
+                        <i class="fas fa-save me-2"></i>
+                        Guardar (próximamente)
+                    </button>
                 </div>
             </div>
         </div>

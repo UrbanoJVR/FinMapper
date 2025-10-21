@@ -2,6 +2,7 @@ from datetime import date
 from decimal import Decimal
 
 from bs4 import BeautifulSoup
+from flask import url_for
 
 from app.src.domain.category import Category
 from app.src.domain.transaction import Transaction
@@ -104,9 +105,16 @@ class TestMonthlyDashboardWithData:
 
         assert response.status_code == 200
         
-        collapse_div = html.find('div', class_='collapse')
-        assert collapse_div is not None
+        collapse_divs = html.find_all('div', class_='collapse')
+        assert len(collapse_divs) > 0
         
+        transactions_found = False
+        for collapse in collapse_divs:
+            if collapse.find('table', class_='table'):
+                transactions_found = True
+                break
+        
+        assert transactions_found, "Should find transactions table in collapse"
         assert "Transacciones" in response.data.decode('utf-8')
         assert "Mercadona Compra Grande" in response.data.decode('utf-8')
         assert "Compra mensual" in response.data.decode('utf-8')
@@ -188,13 +196,63 @@ class TestMonthlyDashboardWithData:
         assert response.status_code == 200
         assert "Notas del Mes" in response.data.decode('utf-8')
         
+        notes_section = html.find('h5', class_='fw-bold mb-3')
+        assert notes_section is not None
+        assert 'Notas del Mes' in notes_section.get_text()
+        
+        collapse_divs = html.find_all('div', class_='collapse')
+        notes_in_collapse = False
+        for collapse in collapse_divs:
+            if 'Notas del Mes' in collapse.get_text():
+                notes_in_collapse = True
+                break
+        assert not notes_in_collapse, "Notes should not be inside a collapse"
+        
         textarea = html.find('textarea', class_='form-control')
         assert textarea is not None
         assert "Añade notas sobre los gastos de este mes..." in textarea.get('placeholder', '')
         
-        save_button = html.find('button', class_='btn btn-sm btn-primary mt-2')
+        save_button = html.find('button', class_='btn btn-primary mt-3')
         assert save_button is not None
         assert save_button.has_attr('disabled')
         button_text = save_button.get_text()
         assert 'Guardar' in button_text
         assert 'próximamente' in button_text
+
+    def test_monthly_dashboard_has_no_quick_actions(self, client):
+        with client.application.app_context():
+            category_repository = CategoryRepository()
+            transaction_repository = TransactionRepository()
+            
+            category = Category(name="Alimentación", description="Gastos de alimentación")
+            category_repository.save(category)
+            
+            category = category_repository.get_by_name("Alimentación")
+            
+            transaction = Transaction(
+                transaction_date=date(2024, 1, 15), 
+                amount=Decimal("100.00"), 
+                concept="Test",
+                category=category
+            )
+            
+            transaction_repository.save(transaction)
+
+        response = client.get('/dashboard/2024/1')
+        html = BeautifulSoup(response.data, 'html.parser')
+
+        assert response.status_code == 200
+        
+        quick_actions_section = html.find('h3', string=lambda text: text and 'Acciones Rápidas' in text)
+        assert quick_actions_section is None, "Should not have Quick Actions section"
+        
+        quick_action_buttons = html.find_all('a', class_='btn-outline-primary btn-lg')
+        quick_action_button_texts = ['Añadir Transacción', 'Ver Movimientos', 'Categorizar', 'Cargar Archivo']
+        
+        for button_text in quick_action_button_texts:
+            found_quick_action_button = False
+            for button in quick_action_buttons:
+                if button_text in button.get_text() and 'py-4' in button.get('class', []):
+                    found_quick_action_button = True
+                    break
+            assert not found_quick_action_button, f"Should not have {button_text} quick action button"
