@@ -42,7 +42,7 @@ flask db revision
 ## Config pycharm
 
 ![Pycharm run configuration](doc_img/flask_run_config_pycharm.png?raw=true "Pycharm run config")
-´`´++
+
 
 ## Language and translations
 

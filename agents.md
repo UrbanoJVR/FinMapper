@@ -144,3 +144,4 @@ make clean                 # Limpiar archivos generados
 - **Usar las traducciones existentes** en lugar de hardcodear texto
 - **Seguir la estructura de paquetes** establecida
 - **Documentar cambios** en comentarios cuando sea necesario
+
