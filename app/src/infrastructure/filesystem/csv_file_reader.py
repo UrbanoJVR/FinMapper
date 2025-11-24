@@ -1,7 +1,7 @@
 from decimal import Decimal
 from io import BytesIO
 
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 from app.src.infrastructure.filesystem.transactions_file_reader import TransactionsFileReader
 from app.src.shared.date_utils import str_to_date
 

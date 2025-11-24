@@ -4,7 +4,7 @@ from decimal import Decimal
 import pytest
 
 from app.src.domain.category import Category
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 

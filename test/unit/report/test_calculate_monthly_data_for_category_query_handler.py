@@ -6,7 +6,7 @@ from decimal import Decimal
 from app.src.application.report.calculate_monthly_data_for_category_query_handler import \
     CalculateMonthlyDataForCategoryQueryHandler
 from app.src.domain.report.month import Month
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 from app.src.domain.category import Category
 

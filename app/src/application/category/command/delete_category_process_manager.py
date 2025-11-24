@@ -1,6 +1,5 @@
 from app.src.application.category.query.is_category_used_query_handler import IsCategoryUsedQueryHandler
 from app.src.infrastructure.repository.category_repository import CategoryRepository
-from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 
 class DeleteCategoryProcessManager:

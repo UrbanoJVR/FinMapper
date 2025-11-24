@@ -12,7 +12,7 @@ from app.src.application.transaction.command.read_transactions_from_file_command
 from app.src.application.transaction.query.get_transactions_in_memory_query_handler import \
     GetTransactionsInMemoryQueryHandler
 from app.src.domain.file_type import FileType
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 from app.src.infrastructure.filesystem.file_reader_factory import FileReaderFactory
 from app.src.infrastructure.in_memory.transaction_memory_repository import TransactionMemoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository

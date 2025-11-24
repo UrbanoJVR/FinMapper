@@ -6,7 +6,7 @@ from unittest.mock import Mock
 
 from app.src.application.transaction.query.search_last_uncategorized_transactions_query_handler import \
     SearchLastUncategorizedTransactionsQueryHandler
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 

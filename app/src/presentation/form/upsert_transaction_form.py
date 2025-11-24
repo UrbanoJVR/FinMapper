@@ -12,7 +12,7 @@ from wtforms.validators import DataRequired
 from app.src.application.transaction.command.update_transaction_command import UpdateTransactionCommand
 from app.src.application.transaction.command.create_transaction_command import CreateTransactionCommand
 from app.src.domain.category import Category
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 
 
 class UpsertTransactionForm(FlaskForm):

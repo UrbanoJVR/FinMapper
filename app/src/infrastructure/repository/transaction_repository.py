@@ -3,7 +3,7 @@ from typing import List
 from sqlalchemy import extract, select, delete, func, Integer
 from sqlalchemy.orm import Session
 
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 from app.src.infrastructure.mapper.transaction_model_mapper import (
     map_to_model_list,
     map_to_domain,

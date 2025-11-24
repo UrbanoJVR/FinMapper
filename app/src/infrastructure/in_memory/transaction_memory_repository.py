@@ -5,7 +5,7 @@ from decimal import Decimal
 from flask import session
 
 from app.src.domain.category import Category
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 
 
 class TransactionMemoryRepository:

@@ -6,7 +6,7 @@ from unittest.mock import Mock
 from app.src.application.dashboard.query.get_dashboard_summary_query_handler import (
     GetDashboardSummaryQuery, GetDashboardSummaryQueryHandler, DashboardSummaryResult
 )
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 

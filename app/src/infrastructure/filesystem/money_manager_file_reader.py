@@ -7,7 +7,7 @@ from io import BytesIO
 import pyexcel as pe
 
 from app.src.domain.category import Category
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 from app.src.infrastructure.filesystem.transactions_file_reader import TransactionsFileReader
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 

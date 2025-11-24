@@ -8,7 +8,7 @@ from app.src.application.transaction.query.search_transactions_by_month_year_que
     SearchTransactionsByMonthYearQuery
 from app.src.application.transaction.query.search_transactions_by_month_year_query_handler import \
     SearchTransactionsByMonthYearQueryHandler
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 

@@ -1,6 +1,6 @@
 from typing import List, Sequence
 
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 from app.src.infrastructure.mapper.category_model_mapper import CategoryModelMapper
 from app.src.infrastructure.repository.model.transaction_model import TransactionModel
 

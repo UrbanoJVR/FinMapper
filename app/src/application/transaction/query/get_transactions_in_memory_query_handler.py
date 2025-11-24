@@ -1,4 +1,4 @@
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 from app.src.infrastructure.in_memory.transaction_memory_repository import TransactionMemoryRepository
 
 

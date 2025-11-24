@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 
 
 class TransactionsFileReader(ABC):

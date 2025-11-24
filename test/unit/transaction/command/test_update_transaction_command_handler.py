@@ -6,7 +6,7 @@ from unittest.mock import Mock
 from app.src.application.transaction.command.update_transaction_command import UpdateTransactionCommand
 from app.src.application.transaction.command.update_transaction_command_handler import UpdateTransactionCommandHandler
 from app.src.domain.category import Category
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 

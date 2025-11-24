@@ -1,7 +1,7 @@
 from decimal import Decimal
 from typing import List
 
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 from app.src.shared.date_utils import str_to_date
 
 

@@ -1,5 +1,5 @@
 from app.src.application.transaction.command.read_transactions_from_file_command import ReadTransactionsFromFileCommand
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 from app.src.infrastructure.filesystem.file_reader_factory import FileReaderFactory
 from app.src.infrastructure.in_memory.transaction_memory_repository import TransactionMemoryRepository
 

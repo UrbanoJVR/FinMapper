@@ -7,7 +7,7 @@ from app.src.application.dashboard.query.get_monthly_summary_query_handler impor
     GetMonthlySummaryQuery, GetMonthlySummaryQueryHandler, MonthlySummaryResult
 )
 from app.src.domain.category import Category
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 

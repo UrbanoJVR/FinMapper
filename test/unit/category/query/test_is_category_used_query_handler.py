@@ -2,7 +2,7 @@ from unittest import TestCase
 from unittest.mock import Mock
 
 from app.src.application.category.query.is_category_used_query_handler import IsCategoryUsedQueryHandler
-from app.src.domain.transaction import Transaction
+from app.src.domain.transaction.transaction import Transaction
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 
