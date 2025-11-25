@@ -20,14 +20,14 @@ class UpdateTransactionCommandHandler:
         self.transaction_repository.update(transaction)
 
     def _update_transaction_from_command(self, transaction: Transaction, command: UpdateTransactionCommand) -> Transaction:
-        transaction.concept = command.concept
-        transaction.comments = command.comments
-        transaction.transaction_date = command.date
-        transaction.amount = command.amount
-
-        if command.category_id is None:
-            transaction.category = None
-        else:
-            transaction.category = self.category_repository.get_by_id(command.category_id)
-
-        return transaction
+        category = None
+        if command.category_id is not None:
+            category = self.category_repository.get_by_id(command.category_id)
+        
+        return transaction.update(
+            transaction_date=command.date,
+            amount=command.amount,
+            concept=command.concept,
+            comments=command.comments,
+            category=category
+        )

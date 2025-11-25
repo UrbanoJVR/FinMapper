@@ -2,7 +2,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import List
 from unittest import TestCase
-from unittest.mock import Mock, MagicMock, call
+from unittest.mock import Mock, call
 
 from app.src.application.transaction.command.categorization.categorize_transactions_command import \
     CategorizedTransaction, CategorizeTransactionsCommand
@@ -12,6 +12,7 @@ from app.src.domain.category import Category
 from app.src.domain.transaction.transaction import Transaction
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
+from test.unit.transaction.domain.mother.transaction_mother import TransactionMother
 
 
 class TestCategorizeTransactionCommandHandler(TestCase):
@@ -54,17 +55,22 @@ class TestCategorizeTransactionCommandHandler(TestCase):
         ]
         command = CategorizeTransactionsCommand(categorized_transactions)
 
-        transaction_mock_1 = MagicMock()
-        transaction_mock_2 = MagicMock()
-        category_mock_1 = MagicMock()
-        category_mock_2 = MagicMock()
+        category_1 = Category(name="Category 1", description="Desc 1", id=10)
+        category_2 = Category(name="Category 2", description="Desc 2", id=20)
 
-        self.mock_transaction_repository.get_by_id.side_effect = [transaction_mock_1, transaction_mock_2]
-        self.mock_category_repository.get_by_id.side_effect = [category_mock_1, category_mock_2]
+        transaction_1 = TransactionMother.random().change_id(1)
+        transaction_2 = TransactionMother.random().change_id(2)
+
+        self.mock_transaction_repository.get_by_id.side_effect = [transaction_1, transaction_2]
+        self.mock_category_repository.get_by_id.side_effect = [category_1, category_2]
 
         self.sut.execute(command)
 
         self.mock_transaction_repository.get_by_id.assert_has_calls([call(categorized_transactions[0].transaction_id), call(categorized_transactions[1].transaction_id)])
         self.mock_category_repository.get_by_id.assert_has_calls([call(categorized_transactions[0].category_id), call(categorized_transactions[1].category_id)])
-        self.mock_transaction_repository.update.assert_has_calls([call(transaction_mock_1), call(transaction_mock_2)])
+        self.assertEqual(self.mock_transaction_repository.update.call_count, 2)
+        updated_transaction_1 = self.mock_transaction_repository.update.call_args_list[0][0][0]
+        updated_transaction_2 = self.mock_transaction_repository.update.call_args_list[1][0][0]
+        self.assertEqual(updated_transaction_1.category, category_1)
+        self.assertEqual(updated_transaction_2.category, category_2)
 
