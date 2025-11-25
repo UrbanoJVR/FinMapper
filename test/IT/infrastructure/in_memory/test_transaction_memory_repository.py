@@ -26,17 +26,31 @@ class TestTransactionMemoryRepository:
     def setup_method(self):
         self.sut = TransactionMemoryRepository()
 
-    # TODO ¿cuándo dejamos esto sin acabar?
     def test_save_and_get_transactions(self, flask_request_context):
-        transactions = [
-            Transaction(id=None, category=None, amount=Decimal(100.25), concept="Concept 1",
-                        comments = "Comments 1", transaction_date=datetime.now()),
-            Transaction(id=None, category=None, amount=Decimal(200.99), concept="Concept 2",
-                        comments = "Comments 2", transaction_date=datetime.now())
-        ]
+        TransactionMemoryRepository.clear()
+        
+        transaction1 = Transaction(id=None, category=None, amount=Decimal("100.25"), concept="Concept 1",
+                                   comments="Comments 1", transaction_date=datetime.now().date())
+        transaction2 = Transaction(id=None, category=None, amount=Decimal("200.99"), concept="Concept 2",
+                                   comments="Comments 2", transaction_date=datetime.now().date())
+        transactions = [transaction1, transaction2]
 
         TransactionMemoryRepository.save_transactions(transactions)
 
         result = TransactionMemoryRepository.get_transactions()
 
-        # asserts ...
+        assert len(result) == 2
+        
+        result_concepts = {t.concept for t in result}
+        assert result_concepts == {"Concept 1", "Concept 2"}
+        
+        result_amounts = {t.amount for t in result}
+        assert result_amounts == {Decimal("100.25"), Decimal("200.99")}
+        
+        for transaction in result:
+            if transaction.concept == "Concept 1":
+                assert transaction.amount == Decimal("100.25")
+                assert transaction.comments == "Comments 1"
+            elif transaction.concept == "Concept 2":
+                assert transaction.amount == Decimal("200.99")
+                assert transaction.comments == "Comments 2"

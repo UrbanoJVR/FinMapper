@@ -172,8 +172,12 @@ class TestTransactionRepositoryIT:
         assert result == transaction
 
     def test_find_first_by_category_id_return_none(self, db_test_it):
-        # TODO
-        assert True
+        category = Category(id=999, name="Non-existent category", description="Category description")
+        self.category_repository.save(category)
+        
+        result = self.sut.find_first_by_category_id(category.id)
+        
+        assert result is None
 
     def test_count_by_category_id_should_return_zero(self, db_test_it):
         result = self.sut.count_by_category_id(1)
