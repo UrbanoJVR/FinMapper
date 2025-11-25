@@ -1,5 +1,6 @@
 from app.src.application.transaction.command.create_transaction_command import CreateTransactionCommand
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
@@ -16,13 +17,12 @@ class CreateTransactionCommandHandler:
         if command.category_id is not None:
             category = self.category_repository.get_by_id(command.category_id)
 
-        transaction = Transaction(
-            concept=command.concept,
-            comments=command.comments,
-            amount=command.amount,
-            transaction_date=command.date,
-            category=category,
-            id=None
+        transaction = Transaction.create(
+            TransactionDate(command.date),
+            command.amount,
+            command.concept,
+            command.comments,
+            category
         )
 
         self.transaction_repository.save(transaction)
