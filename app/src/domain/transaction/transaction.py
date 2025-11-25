@@ -59,53 +59,53 @@ class Transaction:
         )
 
     class Builder:
-        transaction_date: TransactionDate | None
-        amount: Decimal | None
-        concept: str | None
-        comments: str | None
-        category: Category | None
-        id: int | None
+        _transaction_date: TransactionDate | None
+        _amount: Decimal | None
+        _concept: str | None
+        _comments: str | None
+        _category: Category | None
+        _id: int | None
 
         def __init__(self) -> None:
-            self.transaction_date = None
-            self.amount = None
-            self.concept = None
-            self.comments = None
-            self.category = None
-            self.id = None
+            self._transaction_date = None
+            self._amount = None
+            self._concept = None
+            self._comments = None
+            self._category = None
+            self._id = None
 
         def transaction_date(self, value: TransactionDate) -> Transaction.Builder:
-            self.transaction_date = value
+            self._transaction_date = value
             return self
 
         def amount(self, value: Decimal) -> Transaction.Builder:
-            self.amount = value
+            self._amount = value
             return self
 
         def concept(self, value: str) -> Transaction.Builder:
-            self.concept = value
+            self._concept = value
             return self
 
         def comments(self, value: str | None) -> Transaction.Builder:
-            self.comments = value
+            self._comments = value
             return self
 
         def category(self, value: Category | None) -> Transaction.Builder:
-            self.category = value
+            self._category = value
             return self
 
         def id(self, value: int | None) -> Transaction.Builder:
-            self.id = value
+            self._id = value
             return self
 
         def build(self) -> Transaction:
             return Transaction(
-                self.transaction_date,   # type: ignore
-                self.amount,             # type: ignore
-                self.concept,            # type: ignore
-                self.comments,
-                self.category,
-                self.id
+                self._transaction_date,   # type: ignore
+                self._amount,             # type: ignore
+                self._concept,            # type: ignore
+                self._comments,
+                self._category,
+                self._id
             )
 
     def change_transaction_date(self, value: TransactionDate) -> Transaction:
