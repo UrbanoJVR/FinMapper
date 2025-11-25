@@ -35,7 +35,7 @@ class TestCreateTransactionCommandHandler(TestCase):
         )
         transaction = Transaction(
             amount=command.amount,
-            transaction_date=TransactionDate(command.date.date() if isinstance(command.date, datetime) else command.date),
+            transaction_date=TransactionDate(command.date),
             concept=command.concept,
             comments=command.comments,
             category=category_from_db,
@@ -58,7 +58,7 @@ class TestCreateTransactionCommandHandler(TestCase):
         )
         transaction = Transaction(
             amount=command.amount,
-            transaction_date=command.date,
+            transaction_date=TransactionDate(command.date),
             concept=command.concept,
             comments=command.comments,
             category=None,
@@ -80,7 +80,7 @@ class TestCreateTransactionCommandHandler(TestCase):
         )
         transaction = Transaction(
             amount=command.amount,
-            transaction_date=command.date,
+            transaction_date=TransactionDate(command.date),
             concept=command.concept,
             comments=command.comments,
             category=None,
