@@ -4,6 +4,7 @@ from decimal import Decimal
 from bs4 import BeautifulSoup
 
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 
@@ -14,12 +15,12 @@ class TestDashboardMonthlyNavigationGrid:
             transaction_repository = TransactionRepository()
             
             transaction1 = Transaction(
-                transaction_date=date(2024, 1, 15), 
+                transaction_date=TransactionDate(date(2024, 1, 15)), 
                 amount=Decimal("100.00"), 
                 concept="January transaction"
             )
             transaction2 = Transaction(
-                transaction_date=date(2024, 6, 20), 
+                transaction_date=TransactionDate(date(2024, 6, 20)), 
                 amount=Decimal("200.00"), 
                 concept="June transaction"
             )
@@ -51,7 +52,7 @@ class TestDashboardMonthlyNavigationGrid:
             transaction_repository = TransactionRepository()
             
             transaction = Transaction(
-                transaction_date=date(2023, 3, 15), 
+                transaction_date=TransactionDate(date(2023, 3, 15)), 
                 amount=Decimal("100.00"), 
                 concept="March 2023 transaction"
             )

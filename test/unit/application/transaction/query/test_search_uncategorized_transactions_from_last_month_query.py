@@ -7,6 +7,7 @@ from unittest.mock import Mock
 from app.src.application.transaction.query.search_last_uncategorized_transactions_query_handler import \
     SearchLastUncategorizedTransactionsQueryHandler
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 
@@ -21,7 +22,7 @@ class TestSearchUncategorizedTransactionsFromLastMonthQuery(TestCase):
         transaction_1: Transaction = Transaction(
             concept="Concept",
             amount=Decimal(100),
-            transaction_date=datetime.now(),
+            transaction_date=TransactionDate(datetime.now().date()),
             id=1,
             category=None
         )

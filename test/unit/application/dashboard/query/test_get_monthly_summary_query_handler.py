@@ -8,6 +8,7 @@ from app.src.application.dashboard.query.get_monthly_summary_query_handler impor
 )
 from app.src.domain.category import Category
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 
@@ -30,8 +31,8 @@ class TestGetMonthlySummaryQueryHandler(TestCase):
 
     def test_given_transactions_in_single_category_then_return_correct_summary(self):
         category = Category(id=1, name="Alimentación")
-        transaction1 = Transaction(transaction_date=date(2024, 1, 15), amount=Decimal("100.00"), concept="Mercadona", category=category)
-        transaction2 = Transaction(transaction_date=date(2024, 1, 20), amount=Decimal("50.00"), concept="Carrefour", category=category)
+        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=Decimal("100.00"), concept="Mercadona", category=category)
+        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 1, 20)), amount=Decimal("50.00"), concept="Carrefour", category=category)
 
         self.mock_transaction_repository.get_by_month_year.return_value = [transaction1, transaction2]
 
@@ -51,9 +52,9 @@ class TestGetMonthlySummaryQueryHandler(TestCase):
         category2 = Category(id=2, name="Transporte")
         category3 = Category(id=3, name="Vivienda")
 
-        transaction1 = Transaction(transaction_date=date(2024, 1, 15), amount=Decimal("100.00"), concept="Mercadona", category=category1)
-        transaction2 = Transaction(transaction_date=date(2024, 1, 16), amount=Decimal("300.00"), concept="Alquiler", category=category3)
-        transaction3 = Transaction(transaction_date=date(2024, 1, 17), amount=Decimal("50.00"), concept="Gasolina", category=category2)
+        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=Decimal("100.00"), concept="Mercadona", category=category1)
+        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 1, 16)), amount=Decimal("300.00"), concept="Alquiler", category=category3)
+        transaction3 = Transaction(transaction_date=TransactionDate(date(2024, 1, 17)), amount=Decimal("50.00"), concept="Gasolina", category=category2)
 
         self.mock_transaction_repository.get_by_month_year.return_value = [transaction1, transaction2, transaction3]
 
@@ -68,8 +69,8 @@ class TestGetMonthlySummaryQueryHandler(TestCase):
         assert result.category_expenses[2].total_amount == Decimal("50.00")
 
     def test_given_uncategorized_transactions_then_group_as_sin_categoria(self):
-        transaction1 = Transaction(transaction_date=date(2024, 1, 15), amount=Decimal("100.00"), concept="Sin categoría 1", category=None)
-        transaction2 = Transaction(transaction_date=date(2024, 1, 16), amount=Decimal("50.00"), concept="Sin categoría 2", category=None)
+        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=Decimal("100.00"), concept="Sin categoría 1", category=None)
+        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 1, 16)), amount=Decimal("50.00"), concept="Sin categoría 2", category=None)
 
         self.mock_transaction_repository.get_by_month_year.return_value = [transaction1, transaction2]
 
@@ -83,9 +84,9 @@ class TestGetMonthlySummaryQueryHandler(TestCase):
 
     def test_given_multiple_transactions_per_category_then_sum_correctly(self):
         category = Category(id=1, name="Alimentación")
-        transaction1 = Transaction(transaction_date=date(2024, 1, 5), amount=Decimal("25.50"), concept="Test 1", category=category)
-        transaction2 = Transaction(transaction_date=date(2024, 1, 10), amount=Decimal("30.25"), concept="Test 2", category=category)
-        transaction3 = Transaction(transaction_date=date(2024, 1, 15), amount=Decimal("44.25"), concept="Test 3", category=category)
+        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 5)), amount=Decimal("25.50"), concept="Test 1", category=category)
+        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 1, 10)), amount=Decimal("30.25"), concept="Test 2", category=category)
+        transaction3 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=Decimal("44.25"), concept="Test 3", category=category)
 
         self.mock_transaction_repository.get_by_month_year.return_value = [transaction1, transaction2, transaction3]
 

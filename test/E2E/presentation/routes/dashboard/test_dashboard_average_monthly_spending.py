@@ -4,6 +4,7 @@ from decimal import Decimal
 from bs4 import BeautifulSoup
 
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 
@@ -20,12 +21,12 @@ class TestDashboardAverageMonthlySpending:
             transaction_repository = TransactionRepository()
             
             transaction1 = Transaction(
-                transaction_date=date(2024, 1, 15), 
+                transaction_date=TransactionDate(date(2024, 1, 15)), 
                 amount=Decimal("100.00"), 
                 concept="January transaction"
             )
             transaction2 = Transaction(
-                transaction_date=date(2024, 6, 20), 
+                transaction_date=TransactionDate(date(2024, 6, 20)), 
                 amount=Decimal("200.00"), 
                 concept="June transaction"
             )
@@ -57,17 +58,17 @@ class TestDashboardAverageMonthlySpending:
             transaction_repository = TransactionRepository()
             
             transaction1 = Transaction(
-                transaction_date=date(2024, 1, 15), 
+                transaction_date=TransactionDate(date(2024, 1, 15)), 
                 amount=Decimal("300.00"), 
                 concept="January transaction"
             )
             transaction2 = Transaction(
-                transaction_date=date(2024, 5, 20), 
+                transaction_date=TransactionDate(date(2024, 5, 20)), 
                 amount=Decimal("600.00"), 
                 concept="May transaction"
             )
             transaction3 = Transaction(
-                transaction_date=date(2024, 12, 10), 
+                transaction_date=TransactionDate(date(2024, 12, 10)), 
                 amount=Decimal("900.00"), 
                 concept="December transaction"
             )
@@ -94,17 +95,17 @@ class TestDashboardAverageMonthlySpending:
             transaction_repository = TransactionRepository()
             
             transaction1 = Transaction(
-                transaction_date=date(2024, 3, 1), 
+                transaction_date=TransactionDate(date(2024, 3, 1)), 
                 amount=Decimal("100.00"), 
                 concept="Transaction 1"
             )
             transaction2 = Transaction(
-                transaction_date=date(2024, 3, 15), 
+                transaction_date=TransactionDate(date(2024, 3, 15)), 
                 amount=Decimal("200.00"), 
                 concept="Transaction 2"
             )
             transaction3 = Transaction(
-                transaction_date=date(2024, 3, 30), 
+                transaction_date=TransactionDate(date(2024, 3, 30)), 
                 amount=Decimal("150.00"), 
                 concept="Transaction 3"
             )
@@ -135,17 +136,17 @@ class TestDashboardAverageMonthlySpending:
             transaction_repository = TransactionRepository()
             
             transaction1 = Transaction(
-                transaction_date=date(2024, 1, 15), 
+                transaction_date=TransactionDate(date(2024, 1, 15)), 
                 amount=Decimal("500.00"), 
                 concept="Income"
             )
             transaction2 = Transaction(
-                transaction_date=date(2024, 1, 20), 
+                transaction_date=TransactionDate(date(2024, 1, 20)), 
                 amount=Decimal("-100.00"), 
                 concept="Expense"
             )
             transaction3 = Transaction(
-                transaction_date=date(2024, 6, 10), 
+                transaction_date=TransactionDate(date(2024, 6, 10)), 
                 amount=Decimal("-200.00"), 
                 concept="Expense"
             )

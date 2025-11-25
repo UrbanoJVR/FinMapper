@@ -17,8 +17,8 @@ class SearchLastUncategorizedTransactionsQueryHandler:
             return []
 
         return self.transaction_repository.get_uncategorized_by_month_year(
-            last_uncategorized_transaction.transaction_date.month,
-            last_uncategorized_transaction.transaction_date.year)
+            last_uncategorized_transaction.transaction_date.value.month,
+            last_uncategorized_transaction.transaction_date.value.year)
 
 @dataclass
 class SearchLastUncategorizedTransactionsQuery:

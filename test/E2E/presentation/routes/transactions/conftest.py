@@ -7,6 +7,7 @@ from flask_babel import format_datetime
 
 from app.src.domain.category import Category
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
@@ -25,7 +26,7 @@ def given_a_transaction_with_specific_date(client, date: datetime.date) -> Trans
     CategoryRepository().save(Category(name="Category for transaction", description="Category description"))
     category = CategoryRepository().get_by_name("Category for transaction")
     TransactionRepository().save(
-        Transaction(transaction_date=date, amount=Decimal(100), concept="Concept", category=category))
+        Transaction(transaction_date=TransactionDate(date), amount=Decimal(100), concept="Concept", category=category))
     return TransactionRepository().get_by_id(1)
 
 
@@ -47,13 +48,13 @@ def count_transactions_in_table(client, month: int, year: int) -> int:
 
 
 def transaction_exists(client, transaction: Transaction) -> bool:
-    response = client.get(f'/movements/{transaction.transaction_date.month}/{transaction.transaction_date.year}')
+    response = client.get(f'/movements/{transaction.transaction_date.value.month}/{transaction.transaction_date.value.year}')
     assert response.status_code == 200
     return _transaction_in_table(response.data, transaction)
 
 
 def transaction_not_exists(client, transaction: Transaction) -> bool:
-    response = client.get(f'/movements/{transaction.transaction_date.month}/{transaction.transaction_date.year}')
+    response = client.get(f'/movements/{transaction.transaction_date.value.month}/{transaction.transaction_date.value.year}')
     assert response.status_code == 200
     return not _transaction_in_table(response.data, transaction)
 
@@ -63,8 +64,8 @@ def _transaction_in_table(response_data: bytes, transaction: Transaction) -> boo
     print(html_parser.prettify())
 
     # Format data to match what's actually displayed in the new table design
-    formatted_date_short: str = format_datetime(transaction.transaction_date, 'dd/MM/yyyy')
-    formatted_date_day: str = format_datetime(transaction.transaction_date, 'EEEE')
+    formatted_date_short: str = format_datetime(transaction.transaction_date.value, 'dd/MM/yyyy')
+    formatted_date_day: str = format_datetime(transaction.transaction_date.value, 'EEEE')
     formatted_amount: str = f"{transaction.amount:.2f}"
     category_name: str = transaction.category.name if transaction.category else ""
     

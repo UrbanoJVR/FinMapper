@@ -10,6 +10,7 @@ from app.src.application.transaction.command.categorization.categorize_transacti
     CategorizeTransactionsCommandHandler
 from app.src.domain.category import Category
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 from test.unit.domain.transaction.mother.transaction_mother import TransactionMother
@@ -35,7 +36,7 @@ class TestCategorizeTransactionCommandHandler(TestCase):
             id=1
         )
         transaction_from_db = Transaction(
-            transaction_date=datetime.now(),
+            transaction_date=TransactionDate(datetime.now().date()),
             amount=Decimal.from_float(30.10),
             concept="Concept",
             category=category_from_db,

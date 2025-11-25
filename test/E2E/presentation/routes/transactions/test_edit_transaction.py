@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from flask import url_for
 
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from test.conftest import assert_flash_message_success_is_present
 
@@ -16,7 +17,7 @@ class TestEditTransaction:
             amount=Decimal(999.00),
             concept="New concept",
             comments="New comments",
-            transaction_date=date.min,
+            transaction_date=TransactionDate(date.min),
             category=None,
             id=existing_transaction.id,
         )
@@ -29,13 +30,13 @@ class TestEditTransaction:
                                         data=dict(amount=new_transaction.amount,
                                                   concept=new_transaction.concept,
                                                   comments=new_transaction.comments,
-                                                  date=new_transaction.transaction_date.strftime('%Y-%m-%d'))
+                                                  date=new_transaction.transaction_date.value.strftime('%Y-%m-%d'))
                                         , follow_redirects=True)
         assert result_after_edit.status_code == 200
         # assert reload works
         assert result_after_edit.request.path == url_for('transactions_crud_blueprint.movements_list',
-                                                         month=new_transaction.transaction_date.month,
-                                                         year=new_transaction.transaction_date.year)
+                                                         month=new_transaction.transaction_date.value.month,
+                                                         year=new_transaction.transaction_date.value.year)
         # assert transaction exists with new data
         self._assert_edit_form_contains_transaction_data(client, new_transaction)
         # assert success message is visible
@@ -51,7 +52,7 @@ class TestEditTransaction:
 
         # Check the date field
         date_field = form.find('input', {'name': 'date'})
-        date = transaction.transaction_date.strftime('%Y-%m-%d')
+        date = transaction.transaction_date.value.strftime('%Y-%m-%d')
         assert date_field is not None, "Date field not found"
         assert date_field['value'] == date, f"Date field should be {date} (same as expected transaction)"
 

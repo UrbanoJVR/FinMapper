@@ -30,7 +30,7 @@ def given_a_category_used_by_transaction(client):
     CategoryRepository().save(Category(name='TestCategory', description='Test description'))
     category = CategoryRepository().get_by_name('TestCategory')
     TransactionRepository().save(Transaction(
-        transaction_date=TransactionDate(datetime.now()),
+        transaction_date=TransactionDate(datetime.now().date()),
         amount=Decimal('100'),
         concept='TestConcept',
         category=category

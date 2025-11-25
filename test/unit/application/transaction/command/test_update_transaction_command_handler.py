@@ -7,6 +7,7 @@ from app.src.application.transaction.command.update_transaction_command import U
 from app.src.application.transaction.command.update_transaction_command_handler import UpdateTransactionCommandHandler
 from app.src.domain.category import Category
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
@@ -34,7 +35,7 @@ class TestUpdateTransactionCommandHandler(TestCase):
             concept=command.concept,
             comments=command.comments,
             category=category,
-            transaction_date=command.date,
+            transaction_date=TransactionDate(command.date),
             id=command.transaction_id
         )
         self.mock_transaction_repository.get_by_id.return_value = transaction_from_db
@@ -54,7 +55,7 @@ class TestUpdateTransactionCommandHandler(TestCase):
             concept=command.concept,
             comments=command.comments,
             category=None,
-            transaction_date=command.date,
+            transaction_date=TransactionDate(command.date),
             id=command.transaction_id
         )
         self.mock_transaction_repository.get_by_id.return_value = transaction_from_db_with_category
@@ -88,7 +89,7 @@ class TestUpdateTransactionCommandHandler(TestCase):
             concept="Concept",
             comments="Comments",
             category=None,
-            transaction_date=date.today(),
+            transaction_date=TransactionDate(date.today()),
             id=1
         )
 
@@ -98,7 +99,7 @@ class TestUpdateTransactionCommandHandler(TestCase):
             concept="Concept",
             comments="Comments",
             category=self._random_category(),
-            transaction_date=date.today(),
+            transaction_date=TransactionDate(date.today()),
             id=1)
 
     @staticmethod

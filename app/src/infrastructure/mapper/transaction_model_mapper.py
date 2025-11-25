@@ -1,6 +1,7 @@
 from typing import List, Sequence
 
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.mapper.category_model_mapper import CategoryModelMapper
 from app.src.infrastructure.repository.model.transaction_model import TransactionModel
 
@@ -8,7 +9,7 @@ from app.src.infrastructure.repository.model.transaction_model import Transactio
 def map_to_model(transaction: Transaction) -> TransactionModel:
     return TransactionModel(
         id=transaction.id,
-        date=transaction.transaction_date,
+        date=transaction.transaction_date.value,
         amount=transaction.amount,
         concept=transaction.concept,
         comments=transaction.comments,
@@ -19,7 +20,7 @@ def map_to_model(transaction: Transaction) -> TransactionModel:
 def map_to_domain(transaction_model: TransactionModel) -> Transaction:
     return Transaction(
         id=transaction_model.id,
-        transaction_date=transaction_model.date,
+        transaction_date=TransactionDate(transaction_model.date),
         amount=transaction_model.amount,
         concept=transaction_model.concept,
         comments=transaction_model.comments,

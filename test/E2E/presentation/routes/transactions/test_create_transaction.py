@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from flask import url_for
 
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from .conftest import transaction_exists
 
 
@@ -14,14 +15,14 @@ class TestCreateTransaction:
         transaction_to_create = Transaction(
             amount=Decimal(20.50),
             concept='Transaction concept',
-            transaction_date=date(2024, 12, 1),
+            transaction_date=TransactionDate(date(2024, 12, 1)),
             comments='Transaction comments'
         )
 
         response = client.post('/transactions/add',
                                data=dict(amount=transaction_to_create.amount, concept=transaction_to_create.concept,
                                          comments=transaction_to_create.comments,
-                                         date=transaction_to_create.transaction_date.strftime('%Y-%m-%d')),
+                                         date=transaction_to_create.transaction_date.value.strftime('%Y-%m-%d')),
                                follow_redirects=True)
 
         assert response.status_code == 200

@@ -5,6 +5,7 @@ from decimal import Decimal
 from bs4 import BeautifulSoup
 
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 
@@ -22,7 +23,7 @@ class TestMonthlyDashboard:
             transaction_repository = TransactionRepository()
 
             transaction = Transaction(
-                transaction_date=date(2024, 1, 15),
+                transaction_date=TransactionDate(date(2024, 1, 15)),
                 amount=Decimal("100.00"),
                 concept="January transaction"
             )

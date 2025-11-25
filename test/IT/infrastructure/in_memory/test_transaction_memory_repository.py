@@ -5,6 +5,7 @@ import pytest
 from flask import Flask
 
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.in_memory.transaction_memory_repository import TransactionMemoryRepository
 
 
@@ -30,9 +31,9 @@ class TestTransactionMemoryRepository:
         TransactionMemoryRepository.clear()
         
         transaction1 = Transaction(id=None, category=None, amount=Decimal("100.25"), concept="Concept 1",
-                                   comments="Comments 1", transaction_date=datetime.now().date())
+                                   comments="Comments 1", transaction_date=TransactionDate(datetime.now().date()))
         transaction2 = Transaction(id=None, category=None, amount=Decimal("200.99"), concept="Concept 2",
-                                   comments="Comments 2", transaction_date=datetime.now().date())
+                                   comments="Comments 2", transaction_date=TransactionDate(datetime.now().date()))
         transactions = [transaction1, transaction2]
 
         TransactionMemoryRepository.save_transactions(transactions)
