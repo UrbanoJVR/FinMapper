@@ -12,7 +12,7 @@ from app.src.domain.category import Category
 from app.src.domain.transaction.transaction import Transaction
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
-from test.unit.transaction.domain.mother.transaction_mother import TransactionMother
+from test.unit.domain.transaction.mother.transaction_mother import TransactionMother
 
 
 class TestCategorizeTransactionCommandHandler(TestCase):
