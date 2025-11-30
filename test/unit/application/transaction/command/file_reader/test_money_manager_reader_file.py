@@ -1,3 +1,4 @@
+from datetime import date
 from decimal import Decimal, InvalidOperation
 from io import BytesIO
 from unittest import TestCase
@@ -6,6 +7,8 @@ from unittest.mock import Mock
 import pyexcel as pe
 
 from app.src.domain.category import Category
+from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.filesystem.money_manager_file_reader import MoneyManagerFileReader
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 
@@ -41,8 +44,9 @@ class TestMoneyManagerFileReader(TestCase):
         tx = transactions[0]
         self.assertEqual(tx.concept, "Compra Amazon")
         self.assertEqual(tx.comments, "Pedido #123")
-        self.assertEqual(tx.amount, Decimal("-50.00"))
+        self.assertEqual(tx.amount, TransactionAmount(Decimal("-50.00")))
         self.assertEqual(tx.category.name, "Necesidades básicas")
+        self.assertEqual(tx.transaction_date, TransactionDate(date(2025, 1, 1)))
 
     def test_transaction_without_category(self):
         data = [{
@@ -75,7 +79,7 @@ class TestMoneyManagerFileReader(TestCase):
         file = self._create_xls_file(data)
         transactions = self.reader.read_all_transactions(file)
 
-        self.assertEqual(transactions[0].amount, Decimal("2000.00"))
+        self.assertEqual(transactions[0].amount, TransactionAmount(Decimal("2000.00")))
 
     def test_given_invalid_date_then_skip_transaction(self):
         data = [{

@@ -1,5 +1,3 @@
-from datetime import datetime
-from decimal import Decimal
 from typing import List
 from unittest import TestCase
 from unittest.mock import Mock
@@ -7,8 +5,8 @@ from unittest.mock import Mock
 from app.src.application.transaction.query.search_last_uncategorized_transactions_query_handler import \
     SearchLastUncategorizedTransactionsQueryHandler
 from app.src.domain.transaction.transaction import Transaction
-from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
+from test.unit.domain.transaction.mother.transaction_mother import TransactionMother
 
 
 class TestSearchUncategorizedTransactionsFromLastMonthQuery(TestCase):
@@ -16,16 +14,11 @@ class TestSearchUncategorizedTransactionsFromLastMonthQuery(TestCase):
     def setUp(self):
         self.mock_transaction_repository = Mock(spec=TransactionRepository)
         self.sut = SearchLastUncategorizedTransactionsQueryHandler(self.mock_transaction_repository)
+        self.transaction_mother = TransactionMother()
 
 
     def test_execute_success(self):
-        transaction_1: Transaction = Transaction(
-            concept="Concept",
-            amount=Decimal(100),
-            transaction_date=TransactionDate(datetime.now().date()),
-            id=1,
-            category=None
-        )
+        transaction_1 = self.transaction_mother.random_with_empty_category_and_id(transaction_id=1)
         transactions_from_db: List[Transaction] = [transaction_1]
         self.mock_transaction_repository.get_last_uncategorized.return_value = transaction_1
         self.mock_transaction_repository.get_uncategorized_by_month_year.return_value = transactions_from_db

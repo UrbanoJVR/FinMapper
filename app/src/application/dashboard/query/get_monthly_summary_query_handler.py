@@ -53,7 +53,7 @@ class GetMonthlySummaryQueryHandler:
         category_expenses = []
         for category_id, trans_list in category_groups.items():
             category_name = trans_list[0].category.name if trans_list[0].category else "Sin categoría"
-            total_amount = sum((t.amount for t in trans_list), Decimal("0.00"))
+            total_amount = sum((t.amount.value for t in trans_list), Decimal("0.00"))
             
             category_expenses.append(CategoryExpense(
                 category_id=category_id,

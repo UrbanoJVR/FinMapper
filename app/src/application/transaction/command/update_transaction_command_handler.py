@@ -1,5 +1,6 @@
 from app.src.application.transaction.command.update_transaction_command import UpdateTransactionCommand
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
@@ -27,7 +28,7 @@ class UpdateTransactionCommandHandler:
         
         return transaction.update(
             TransactionDate(command.date),
-            command.amount,
+            TransactionAmount(command.amount),
             command.concept,
             command.comments,
             category

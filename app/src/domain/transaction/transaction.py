@@ -1,8 +1,9 @@
 from __future__ import annotations
+
 from dataclasses import dataclass
-from decimal import Decimal
 
 from app.src.domain.category import Category
+from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
 
 
@@ -10,7 +11,7 @@ from app.src.domain.transaction.vo.transaction_date import TransactionDate
 class Transaction:
 
     transaction_date: TransactionDate
-    amount: Decimal
+    amount: TransactionAmount
     concept: str
     comments: str | None = None
     category: Category | None = None
@@ -18,10 +19,16 @@ class Transaction:
 
     def __post_init__(self) -> None:
         if not isinstance(self.transaction_date, TransactionDate):
-            raise TypeError("transaction_date must be a TransactionDate")
+            raise TypeError("transaction_date must be a TransactionDate type")
 
-        if not isinstance(self.amount, Decimal):
-            raise TypeError("amount must be a Decimal")
+        if self.transaction_date is None:
+            raise TypeError("transaction_date cannot be empty")
+
+        if not isinstance(self.amount, TransactionAmount):
+            raise TypeError("amount must be TransactionAmount type")
+
+        if self.amount is None:
+            raise TypeError("amount cannot be empty")
 
         if not self.concept or self.concept.strip() == "":
             raise ValueError("concept cannot be empty")
@@ -29,7 +36,7 @@ class Transaction:
     @staticmethod
     def create(
         transaction_date: TransactionDate,
-        amount: Decimal,
+        amount: TransactionAmount,
         concept: str,
         comments: str | None = None,
         category: Category | None = None
@@ -60,7 +67,7 @@ class Transaction:
 
     class Builder:
         _transaction_date: TransactionDate | None
-        _amount: Decimal | None
+        _amount: TransactionAmount | None
         _concept: str | None
         _comments: str | None
         _category: Category | None
@@ -78,7 +85,7 @@ class Transaction:
             self._transaction_date = value
             return self
 
-        def amount(self, value: Decimal) -> Transaction.Builder:
+        def amount(self, value: TransactionAmount) -> Transaction.Builder:
             self._amount = value
             return self
 
@@ -108,28 +115,13 @@ class Transaction:
                 self._id
             )
 
-    def change_transaction_date(self, value: TransactionDate) -> Transaction:
-        return self.to_builder().transaction_date(value).build()
-
-    def change_amount(self, value: Decimal) -> Transaction:
-        return self.to_builder().amount(value).build()
-
-    def change_concept(self, value: str) -> Transaction:
-        return self.to_builder().concept(value).build()
-
-    def change_comments(self, value: str | None) -> Transaction:
-        return self.to_builder().comments(value).build()
-
     def change_category(self, value: Category | None) -> Transaction:
         return self.to_builder().category(value).build()
-
-    def change_id(self, value: int | None) -> Transaction:
-        return self.to_builder().id(value).build()
 
     def update(
         self,
         transaction_date: TransactionDate,
-        amount: Decimal,
+        amount: TransactionAmount,
         concept: str,
         comments: str | None,
         category: Category | None

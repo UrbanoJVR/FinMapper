@@ -7,6 +7,7 @@ from app.src.application.transaction.command.create_transaction_command import C
 from app.src.application.transaction.command.create_transaction_command_handler import CreateTransactionCommandHandler
 from app.src.domain.category import Category
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
@@ -34,7 +35,7 @@ class TestCreateTransactionCommandHandler(TestCase):
             id=command.category_id
         )
         transaction = Transaction(
-            amount=command.amount,
+            amount=TransactionAmount(command.amount),
             transaction_date=TransactionDate(command.date),
             concept=command.concept,
             comments=command.comments,
@@ -57,7 +58,7 @@ class TestCreateTransactionCommandHandler(TestCase):
             date=datetime.now()
         )
         transaction = Transaction(
-            amount=command.amount,
+            amount=TransactionAmount(command.amount),
             transaction_date=TransactionDate(command.date),
             concept=command.concept,
             comments=command.comments,
@@ -79,7 +80,7 @@ class TestCreateTransactionCommandHandler(TestCase):
             date=datetime.now()
         )
         transaction = Transaction(
-            amount=command.amount,
+            amount=TransactionAmount(command.amount),
             transaction_date=TransactionDate(command.date),
             concept=command.concept,
             comments=command.comments,

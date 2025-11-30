@@ -36,7 +36,7 @@ class GetDashboardSummaryQueryHandler:
             )
 
         total_expense_amount = sum(
-            (transaction.amount for transaction in transactions), 
+            (transaction.amount.value for transaction in transactions),
             Decimal("0.00")
         )
 
