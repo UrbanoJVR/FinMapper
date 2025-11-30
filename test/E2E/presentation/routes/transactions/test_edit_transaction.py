@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from flask import url_for
 
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from test.conftest import assert_flash_message_success_is_present
@@ -14,7 +15,7 @@ class TestEditTransaction:
     def test_edit_transaction(self, client, given_a_transaction):
         existing_transaction = given_a_transaction
         new_transaction = Transaction(
-            amount=Decimal(999.00),
+            amount=TransactionAmount(Decimal(999.00)),
             concept="New concept",
             comments="New comments",
             transaction_date=TransactionDate(date.min),
@@ -27,7 +28,7 @@ class TestEditTransaction:
 
         # send new data to edit existing transaction
         result_after_edit = client.post(edit_transaction_url,
-                                        data=dict(amount=new_transaction.amount,
+                                        data=dict(amount=new_transaction.amount.value,
                                                   concept=new_transaction.concept,
                                                   comments=new_transaction.comments,
                                                   date=new_transaction.transaction_date.value.strftime('%Y-%m-%d'))
@@ -60,7 +61,7 @@ class TestEditTransaction:
         amount_field = form.find('input', {'name': 'amount'})
         assert amount_field is not None, "Amount field not found"
         actual_value: Decimal = Decimal(amount_field['value'])
-        assert actual_value == transaction.amount, "Amount field is not the same than transaction"
+        assert actual_value == transaction.amount.value, "Amount field is not the same than transaction"
 
         # Check concept field
         concept_field = form.find('input', {'name': 'concept'})

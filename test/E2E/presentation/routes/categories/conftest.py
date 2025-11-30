@@ -5,6 +5,7 @@ import pytest
 
 from app.src.domain.category import Category
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
@@ -31,7 +32,7 @@ def given_a_category_used_by_transaction(client):
     category = CategoryRepository().get_by_name('TestCategory')
     TransactionRepository().save(Transaction(
         transaction_date=TransactionDate(datetime.now().date()),
-        amount=Decimal('100'),
+        amount=TransactionAmount(Decimal('100')),
         concept='TestConcept',
         category=category
     ))

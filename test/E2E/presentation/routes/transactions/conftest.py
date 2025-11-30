@@ -66,7 +66,7 @@ def _transaction_in_table(response_data: bytes, transaction: Transaction) -> boo
     # Format data to match what's actually displayed in the new table design
     formatted_date_short: str = format_datetime(transaction.transaction_date.value, 'dd/MM/yyyy')
     formatted_date_day: str = format_datetime(transaction.transaction_date.value, 'EEEE')
-    formatted_amount: str = f"{transaction.amount:.2f}"
+    formatted_amount: str = f"{transaction.amount.value:.2f}"
     category_name: str = transaction.category.name if transaction.category else ""
     
     # Build transaction data to search for
