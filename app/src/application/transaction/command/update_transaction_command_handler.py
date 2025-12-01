@@ -1,5 +1,7 @@
 from app.src.application.transaction.command.update_transaction_command import UpdateTransactionCommand
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
@@ -20,14 +22,14 @@ class UpdateTransactionCommandHandler:
         self.transaction_repository.update(transaction)
 
     def _update_transaction_from_command(self, transaction: Transaction, command: UpdateTransactionCommand) -> Transaction:
-        transaction.concept = command.concept
-        transaction.comments = command.comments
-        transaction.transaction_date = command.date
-        transaction.amount = command.amount
-
-        if command.category_id is None:
-            transaction.category = None
-        else:
-            transaction.category = self.category_repository.get_by_id(command.category_id)
-
-        return transaction
+        category = None
+        if command.category_id is not None:
+            category = self.category_repository.get_by_id(command.category_id)
+        
+        return transaction.update(
+            TransactionDate(command.date),
+            TransactionAmount(command.amount),
+            command.concept,
+            command.comments,
+            category
+        )

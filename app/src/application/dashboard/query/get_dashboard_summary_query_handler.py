@@ -36,11 +36,11 @@ class GetDashboardSummaryQueryHandler:
             )
 
         total_expense_amount = sum(
-            (transaction.amount for transaction in transactions), 
+            (transaction.amount.value for transaction in transactions),
             Decimal("0.00")
         )
 
-        distinct_months = set(transaction.transaction_date.month for transaction in transactions)
+        distinct_months = set(transaction.transaction_date.value.month for transaction in transactions)
         months_count = len(distinct_months)
         average_expense_amount = (
             total_expense_amount / months_count if months_count > 0 else Decimal("0.00")

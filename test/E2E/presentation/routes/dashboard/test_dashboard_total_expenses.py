@@ -1,0 +1,133 @@
+from datetime import date
+from decimal import Decimal
+
+from bs4 import BeautifulSoup
+
+from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
+from app.src.infrastructure.repository.transaction_repository import TransactionRepository
+
+
+class TestDashboardTotalExpenses:
+
+    def test_given_no_transactions_when_access_dashboard_then_redirect_to_empty(self, client):
+        response = client.get('/dashboard/2024', follow_redirects=True)
+        html = BeautifulSoup(response.data, 'html.parser')
+
+        assert response.status_code == 200
+
+        assert "No hay datos para este año" in html.get_text(), "Should show empty dashboard message"
+
+        assert "Acciones Rápidas" in html.get_text(), "Should show quick actions"
+
+    def test_given_transactions_when_access_dashboard_then_show_correct_total_sum(self, client):
+        with client.application.app_context():
+            transaction_repository = TransactionRepository()
+
+            transaction1 = Transaction(
+                transaction_date=TransactionDate(date(2024, 1, 15)), 
+                amount=TransactionAmount(Decimal("100.50")),
+                concept="Test transaction 1"
+            )
+            transaction2 = Transaction(
+                transaction_date=TransactionDate(date(2024, 6, 20)), 
+                amount=TransactionAmount(Decimal("200.25")),
+                concept="Test transaction 2"
+            )
+            transaction3 = Transaction(
+                transaction_date=TransactionDate(date(2023, 12, 31)),  # Different year - should not be included
+                amount=TransactionAmount(Decimal("300.00")),
+                concept="Test transaction 3"
+            )
+            
+            transaction_repository.save(transaction1)
+            transaction_repository.save(transaction2)
+            transaction_repository.save(transaction3)
+
+        response = client.get('/dashboard/2024')
+        html = BeautifulSoup(response.data, 'html.parser')
+
+        assert response.status_code == 200
+
+        cards = html.find_all('div', class_='card')
+        assert len(cards) >= 3, "Should have at least 3 cards"
+
+        total_expenses_card = cards[0]
+        card_title = total_expenses_card.find('h6', class_='card-title')
+        assert card_title is not None, "Card title should be present"
+        assert "Total Gastos 2024" in card_title.text, f"Expected 'Total Gastos 2024' in title, got: {card_title.text}"
+
+        card_value = total_expenses_card.find('h3', class_='card-text')
+        assert card_value is not None, "Card value should be present"
+        assert "300,75 €" in card_value.text, f"Expected '300,75 €' in value, got: {card_value.text}"
+
+        transactions_card = cards[2]
+        transactions_title = transactions_card.find('h6', class_='card-title')
+        assert transactions_title is not None, "Transactions card title should be present"
+        assert "Total Movimientos" in transactions_title.text, f"Expected 'Total Movimientos' in title, got: {transactions_title.text}"
+
+        transactions_value = transactions_card.find('h3', class_='card-text')
+        assert transactions_value is not None, "Transactions card value should be present"
+        assert "2" in transactions_value.text, f"Expected '2' in transactions count, got: {transactions_value.text}"
+
+    def test_given_negative_transactions_when_access_dashboard_then_show_correct_total(self, client):
+        with client.application.app_context():
+            transaction_repository = TransactionRepository()
+            
+            transaction1 = Transaction(
+                transaction_date=TransactionDate(date(2024, 1, 15)), 
+                amount=TransactionAmount(Decimal("-100.00")),
+                concept="Expense 1"
+            )
+            transaction2 = Transaction(
+                transaction_date=TransactionDate(date(2024, 6, 20)), 
+                amount=TransactionAmount(Decimal("-50.50")),
+                concept="Expense 2"
+            )
+            
+            transaction_repository.save(transaction1)
+            transaction_repository.save(transaction2)
+
+        response = client.get('/dashboard/2024')
+        html = BeautifulSoup(response.data, 'html.parser')
+
+        assert response.status_code == 200
+
+        card_value = html.find('h3', class_='card-text')
+        assert card_value is not None, "Card value should be present"
+        assert "-150,50 €" in card_value.text, f"Expected '-150,50 €' in value, got: {card_value.text}"
+
+    def test_given_mixed_transactions_when_access_dashboard_then_show_correct_total(self, client):
+        with client.application.app_context():
+            transaction_repository = TransactionRepository()
+            
+            transaction1 = Transaction(
+                transaction_date=TransactionDate(date(2024, 1, 15)), 
+                amount=TransactionAmount(Decimal("200.00")),
+                concept="Income"
+            )
+            transaction2 = Transaction(
+                transaction_date=TransactionDate(date(2024, 6, 20)), 
+                amount=TransactionAmount(Decimal("-75.25")),
+                concept="Expense"
+            )
+            transaction3 = Transaction(
+                transaction_date=TransactionDate(date(2024, 12, 1)), 
+                amount=TransactionAmount(Decimal("-25.00")),
+                concept="Expense"
+            )
+            
+            transaction_repository.save(transaction1)
+            transaction_repository.save(transaction2)
+            transaction_repository.save(transaction3)
+
+        response = client.get('/dashboard/2024')
+        html = BeautifulSoup(response.data, 'html.parser')
+
+        assert response.status_code == 200
+        
+        # Check the card value (should be 99.75 = 200.00 - 75.25 - 25.00)
+        card_value = html.find('h3', class_='card-text')
+        assert card_value is not None, "Card value should be present"
+        assert "99,75 €" in card_value.text, f"Expected '99,75 €' in value, got: {card_value.text}"

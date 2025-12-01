@@ -16,6 +16,6 @@ class CategorizeTransactionsCommandHandler:
     def execute(self, command: CategorizeTransactionsCommand):
         for categorized_transaction in command.categorized_transactions:
             transaction_from_db = self.transactionRepository.get_by_id(categorized_transaction.transaction_id)
-            transaction_from_db.category = self.categoryRepository.get_by_id(categorized_transaction.category_id)
-            self.transactionRepository.update(transaction_from_db)
+            updated_transaction = transaction_from_db.change_category(self.categoryRepository.get_by_id(categorized_transaction.category_id))
+            self.transactionRepository.update(updated_transaction)
 

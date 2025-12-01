@@ -8,6 +8,8 @@ import pyexcel as pe
 
 from app.src.domain.category import Category
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.infrastructure.filesystem.transactions_file_reader import TransactionsFileReader
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 
@@ -37,10 +39,10 @@ class MoneyManagerFileReader(TransactionsFileReader):
 
             try:
                 transaction = Transaction(
-                    transaction_date=self._parse_date(row.get(self.DATE_HEADER)),
+                    transaction_date=TransactionDate(self._parse_date(row.get(self.DATE_HEADER))),
                     concept=self._parse_concept(row.get(self.CONCEPT_HEADER)),
                     comments=str(row.get(self.COMMENTS_HEADER, "")),
-                    amount=self._parse_amount(row.get(self.AMOUNT_HEADER), row.get(self.TRANSACTION_TYPE_HEADER)),
+                    amount=TransactionAmount(self._parse_amount(row.get(self.AMOUNT_HEADER), row.get(self.TRANSACTION_TYPE_HEADER))),
                     category=self._find_category_by_name(row.get(self.CATEGORY_HEADER))
                 )
                 transactions.append(transaction)

@@ -17,7 +17,7 @@ class CalculateMonthlyDataForCategoryQueryHandler:
         total_cumulative_amount = Decimal("0.00")
         for month in Month:
             transactions = self.transaction_repository.get_by_month_year_and_category_id(month.value, year, category.id)
-            total_amount = sum((transaction.amount for transaction in transactions), Decimal("0.00"))
+            total_amount = sum((transaction.amount.value for transaction in transactions), Decimal("0.00"))
             total_cumulative_amount += total_amount
             cumulative_average = Decimal(total_cumulative_amount / month.value).quantize(Decimal("0.01"))
 

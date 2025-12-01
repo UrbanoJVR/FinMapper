@@ -48,8 +48,8 @@ class UpsertTransactionFormMapper:
 
     def map_from_domain(self, transaction: Transaction, selectable_categories: List[Category]) -> UpsertTransactionForm:
         form = UpsertTransactionForm()
-        form.date.data = transaction.transaction_date
-        form.amount.data = transaction.amount
+        form.date.data = transaction.transaction_date.value
+        form.amount.data = transaction.amount.value
         form.concept.data = transaction.concept
         form.comments.data = transaction.comments
         form.category_id.choices = [('None', '')] + [(str(category.id), category.name) for category in

@@ -20,9 +20,9 @@
             <tbody>
             {% for transaction in transactions %}
                 <tr>
-                    <td>{{ format_datetime(transaction.transaction_date, 'EEEE, dd-MM-yyyy') }}</td>
+                    <td>{{ format_datetime(transaction.transaction_date.value, 'EEEE, dd-MM-yyyy') }}</td>
                     <td>{{ transaction.concept }}</td>
-                    <td>{{ transaction.amount }}</td>
+                    <td>{{ transaction.amount.value }}</td>
                     <td>{{ transaction.comments if transaction.comments }}</td>
                     <td>{{ transaction.category.name if transaction.category }}</td>
                 </tr>

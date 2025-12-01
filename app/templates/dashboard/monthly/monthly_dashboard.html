@@ -91,10 +91,10 @@
                                                 <tbody>
                                                     {% for transaction in category_expense.transactions %}
                                                     <tr>
-                                                        <td class="text-muted">{{ transaction.transaction_date.strftime('%d/%m') }}</td>
+                                                        <td class="text-muted">{{ transaction.transaction_date.value.strftime('%d/%m') }}</td>
                                                         <td>{{ transaction.concept[:30] }}{% if transaction.concept|length > 30 %}...{% endif %}</td>
                                                         <td class="text-muted">{{ transaction.comments[:20] if transaction.comments else '-' }}{% if transaction.comments and transaction.comments|length > 20 %}...{% endif %}</td>
-                                                        <td class="text-end">{{ transaction.amount | currency_es }}</td>
+                                                        <td class="text-end">{{ transaction.amount.value | currency_es }}</td>
                                                     </tr>
                                                     {% endfor %}
                                                 </tbody>

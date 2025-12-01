@@ -33,6 +33,7 @@ pandas = "2.2.3"
 openpyxl = "3.1.3"
 pyexcel = "*"
 pyexcel-xls = "*"
+faker = "*"
 
 [dev-packages]
 beautifulsoup4 = "4.12.3"
@@ -42,6 +43,7 @@ mkdocs-material = "*"
 mkdocs-mermaid2-plugin = "*"
 pyexcel-xls = "*"
 freezegun = "*"
+faker = "*"
 
 [requires]
 python_version = "3.12"

@@ -6,6 +6,8 @@ from flask import session
 
 from app.src.domain.category import Category
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
+from app.src.domain.transaction.vo.transaction_date import TransactionDate
 
 
 class TransactionMemoryRepository:
@@ -24,7 +26,7 @@ class TransactionMemoryRepository:
         tmp_transactions: list[dict] = session.get('transactions', [])
         transactions: list[Transaction] = [TmpTransaction.from_dict_to_domain(tmp) for tmp in tmp_transactions]
 
-        return sorted(transactions, key=lambda t: t.transaction_date, reverse=True)
+        return sorted(transactions, key=lambda t: t.transaction_date.value, reverse=True)
 
     @staticmethod
     def clear():
@@ -42,22 +44,22 @@ class TmpTransaction:
 
     @staticmethod
     def from_domain(transaction: Transaction):
-        return TmpTransaction(str(transaction.amount),
-                              str(transaction.transaction_date),
+        return TmpTransaction(str(transaction.amount.value),
+                              str(transaction.transaction_date.value),
                               str(transaction.concept),
                               str(transaction.comments),
                               str(transaction.category.name if transaction.category else None),
                               transaction.category.id if transaction.category else None)
 
     def to_domain(self) -> Transaction:
-        return Transaction(
-            amount=Decimal(self.amount.replace(',', '.')),
-            transaction_date=datetime.fromisoformat(self.date).date(),
-            concept=self.concept,
-            comments=self.comments if self.comments not in [None, "", "None", "nan"] else None,
-            category=Category(name=self.category_name, id=self.category_id)
-            if self.category_name not in [None, "", "None", "null", "nan"] else None
-        )
+        return (Transaction.builder()
+                .amount(TransactionAmount(Decimal(self.amount.replace(',', '.'))))
+                .transaction_date(TransactionDate(datetime.fromisoformat(self.date).date()))
+                .concept(self.concept)
+                .comments(self.comments)
+                .category(Category(name=self.category_name, id=self.category_id)
+                          if self.category_name not in [None, "", "None", "null", "nan"] else None)
+                .build())
 
     def to_dict(self) -> dict:
         # noinspection PyTypeChecker

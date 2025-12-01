@@ -84,8 +84,8 @@
                                 </td>
                                 <td>
                                     <div class="d-flex flex-column">
-                                        <span class="fw-medium">{{ format_datetime(transaction.transaction_date, 'dd/MM/yyyy') }}</span>
-                                        <small class="text-muted">{{ format_datetime(transaction.transaction_date, 'EEEE') }}</small>
+                                        <span class="fw-medium">{{ format_datetime(transaction.transaction_date.value, 'dd/MM/yyyy') }}</span>
+                                        <small class="text-muted">{{ format_datetime(transaction.transaction_date.value, 'EEEE') }}</small>
                                     </div>
                                 </td>
                                 <td>
@@ -104,7 +104,7 @@
                                     {% endif %}
                                 </td>
                                 <td class="text-end">
-                                    {% set amount_float = transaction.amount|float %}
+                                    {% set amount_float = transaction.amount.value|float %}
                                     <span class="fw-bold {% if amount_float >= 0 %}text-success{% else %}text-danger{% endif %}">
                                         {% if amount_float >= 0 %}+{% endif %}{{ "%.2f"|format(amount_float) }} €
                                     </span>

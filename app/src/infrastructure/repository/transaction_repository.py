@@ -103,9 +103,10 @@ class TransactionRepository:
         result = self.session.execute(stmt).scalars().all()
         return map_to_domain_list(result)
 
-    def find_first_by_category_id(self, category_id: int) -> Transaction:
+    def find_first_by_category_id(self, category_id: int) -> Transaction | None:
         query = select(TransactionModel).where(TransactionModel.category_id.__eq__(category_id))
-        return map_to_domain(self.session.execute(query).scalar())
+        result = self.session.execute(query).scalar()
+        return None if result is None else map_to_domain(result)
 
     def count_by_category_id(self, category_id: int) -> int:
         query = select(func.count()).select_from(TransactionModel).where(
