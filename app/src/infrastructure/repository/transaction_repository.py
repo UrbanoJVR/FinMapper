@@ -1,6 +1,6 @@
 from typing import List
 
-from sqlalchemy import extract, select, delete, func, Integer
+from sqlalchemy import extract, select, delete, func
 from sqlalchemy.orm import Session
 
 from app.src.domain.transaction.transaction import Transaction
@@ -76,14 +76,14 @@ class TransactionRepository:
         result = self.session.execute(stmt).scalars().first()
         return map_to_domain(result)
 
-    def get_last_uncategorized(self) -> Transaction:
+    def get_last_uncategorized(self) -> Transaction | None:
         stmt = (
             select(TransactionModel)
             .where(TransactionModel.category_id.__eq__(None))
             .order_by(TransactionModel.date.desc())
         )
         result = self.session.execute(stmt).scalars().first()
-        return map_to_domain(result)
+        return None if result is None else map_to_domain(result)
 
     def get_uncategorized_by_month_year(self, month: int, year: int) -> List[Transaction]:
         stmt = (

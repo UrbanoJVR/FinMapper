@@ -1,11 +1,13 @@
+from datetime import date
 from decimal import Decimal
 
 from faker import Faker
 
+from app.src.domain.category import Category
 from app.src.domain.transaction.transaction import Transaction
 from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
-from test.unit.domain.category.category_mother import CategoryMother
+from test.unit.domain.category.mother.category_mother import CategoryMother
 
 
 class TransactionMother:
@@ -38,4 +40,17 @@ class TransactionMother:
             comments=self._faker.sentence(),
             category=None,
             id=self._faker.random_number(),
+        )
+
+    def random_with_date_and_category_and_id(self, transaction_date: date, category: Category,
+                                             transaction_id: int) -> Transaction:
+        return (
+            Transaction.builder()
+            .transaction_date(TransactionDate(transaction_date))
+            .amount(TransactionAmount(Decimal("100.00")))
+            .concept("Concept 1")
+            .comments(None)
+            .category(category)
+            .id(transaction_id)
+            .build()
         )

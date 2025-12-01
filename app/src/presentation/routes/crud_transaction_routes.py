@@ -8,8 +8,7 @@ from app.src.application.command_bus import CommandBus
 from app.src.application.query_bus import QueryBus
 from app.src.application.transaction.command.categorization.categorize_transactions_command import \
     CategorizeTransactionsCommand, CategorizedTransaction
-from app.src.application.transaction.command.delete_transaction_command_handler import DeleteTransactionCommandHandler, \
-    DeleteTransactionCommand
+from app.src.application.transaction.command.delete_transaction_command_handler import DeleteTransactionCommand
 from app.src.application.transaction.query.get_transaction_by_id_query_handler import GetTransactionByIdQuery
 from app.src.application.transaction.query.search_last_uncategorized_transactions_query_handler import \
     SearchLastUncategorizedTransactionsQuery
@@ -17,6 +16,7 @@ from app.src.application.transaction.query.search_transactions_by_month_year_que
     SearchTransactionsByMonthYearQuery
 from app.src.presentation.form.transactions_forms import MonthYearFilterForm
 from app.src.presentation.form.upsert_transaction_form import UpsertTransactionForm, UpsertTransactionFormMapper
+from app.src.shared.date_utils import get_translated_month_names
 
 transactions_crud_blueprint = Blueprint('transactions_crud_blueprint', __name__, url_prefix='')
 command_bus = CommandBus()
@@ -50,9 +50,23 @@ def categorize_transaction():
     if request.method == 'GET':
         transactions = query_bus.ask(SearchLastUncategorizedTransactionsQuery())
         categories = query_bus.ask(GetAllCategoriesQuery())
+
+        # Calcular mes y año actual para mostrar en el título
+        month_names = get_translated_month_names()
+
+        if transactions:
+            current_month = month_names[transactions[0].transaction_date.value.month]
+            current_year = transactions[0].transaction_date.value.year
+        else:
+            now = datetime.now()
+            current_month = month_names[now.month]
+            current_year = now.year
+
         return render_template('transactions/categorize_transactions.html',
                                transactions=transactions,
-                               categories=categories)
+                               categories=categories,
+                               current_month=current_month,
+                               current_year=current_year)
 
     if request.method == 'POST':
         categorized_transactions = []

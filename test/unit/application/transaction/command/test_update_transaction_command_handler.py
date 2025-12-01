@@ -9,7 +9,7 @@ from app.src.infrastructure.repository.category_repository import CategoryReposi
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 from test.unit.application.transaction.command.mother.update_transaction_command_mother import \
     UpdateTransactionCommandMother
-from test.unit.domain.category.category_mother import CategoryMother
+from test.unit.domain.category.mother.category_mother import CategoryMother
 from test.unit.domain.transaction.mother.transaction_mother import TransactionMother
 
 
