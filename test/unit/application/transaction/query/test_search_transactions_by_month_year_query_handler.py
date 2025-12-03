@@ -20,7 +20,7 @@ class TestSearchTransactionsByMonthYearQueryHandler(TestCase):
 
     def test_execute(self):
         expected_list: List[Transaction] = [
-            self.transaction_mother.random_with_empty_category()]
+            self.transaction_mother.random_expense_with_empty_category()]
         self.mock_transaction_repository.get_by_month_year.return_value = expected_list
         query = SearchTransactionsByMonthYearQuery(month=10, year=2024)
 

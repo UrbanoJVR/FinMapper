@@ -8,6 +8,7 @@ from flask_babel import format_datetime
 from app.src.domain.category import Category
 from app.src.domain.transaction.transaction import Transaction
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
+from app.src.domain.transaction.vo.transaction_type import TransactionType
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
@@ -23,10 +24,22 @@ def given_a_transaction(client) -> Transaction:
 
 @pytest.fixture(scope='function')
 def given_a_transaction_with_specific_date(client, date: datetime.date) -> Transaction:
+    """Fixture que crea una transacción con fecha específica. Por defecto usa EXPENSE."""
+    return _create_transaction_with_date_and_type(client, date, TransactionType.EXPENSE)
+
+
+@pytest.fixture(scope='function')
+def given_a_transaction_with_specific_date_and_type(client, date: datetime.date, transaction_type: TransactionType) -> Transaction:
+    """Fixture que crea una transacción con fecha y tipo específicos."""
+    return _create_transaction_with_date_and_type(client, date, transaction_type)
+
+
+def _create_transaction_with_date_and_type(client, date: datetime.date, transaction_type: TransactionType) -> Transaction:
+    """Función helper para crear transacciones con fecha y tipo específicos."""
     CategoryRepository().save(Category(name="Category for transaction", description="Category description"))
     category = CategoryRepository().get_by_name("Category for transaction")
     TransactionRepository().save(
-        Transaction(transaction_date=TransactionDate(date), amount=Decimal(100), concept="Concept", category=category))
+        Transaction(transaction_date=TransactionDate(date), amount=Decimal(100), concept="Concept", type=transaction_type, category=category))
     return TransactionRepository().get_by_id(1)
 
 

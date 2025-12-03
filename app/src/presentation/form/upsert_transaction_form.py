@@ -13,6 +13,7 @@ from app.src.application.transaction.command.update_transaction_command import U
 from app.src.application.transaction.command.create_transaction_command import CreateTransactionCommand
 from app.src.domain.category import Category
 from app.src.domain.transaction.transaction import Transaction
+from app.src.domain.transaction.vo.transaction_type import TransactionType
 
 
 class UpsertTransactionForm(FlaskForm):
@@ -66,6 +67,7 @@ class UpsertTransactionFormMapper:
             concept=form.concept.data,
             comments=form.comments.data,
             category_id=self._get_field_data_if_not_empty(form.category_id),
+            type=TransactionType.EXPENSE,
         )
 
     def map_to_update_command(self, form: UpsertTransactionForm, transaction_id: int) -> UpdateTransactionCommand:
@@ -76,6 +78,7 @@ class UpsertTransactionFormMapper:
             concept=form.concept.data,
             comments=form.comments.data,
             category_id=self._get_field_data_if_not_empty(form.category_id),
+            type=TransactionType.EXPENSE,
         )
 
     @staticmethod

@@ -22,6 +22,7 @@ class CreateTransactionCommandHandler:
             TransactionDate(command.date),
             TransactionAmount(command.amount),
             command.concept,
+            command.type,
             command.comments,
             category
         )

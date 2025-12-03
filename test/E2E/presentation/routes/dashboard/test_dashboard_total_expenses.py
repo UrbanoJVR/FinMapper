@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from app.src.domain.transaction.transaction import Transaction
 from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
+from app.src.domain.transaction.vo.transaction_type import TransactionType
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 
@@ -28,17 +29,20 @@ class TestDashboardTotalExpenses:
             transaction1 = Transaction(
                 transaction_date=TransactionDate(date(2024, 1, 15)), 
                 amount=TransactionAmount(Decimal("100.50")),
-                concept="Test transaction 1"
+                concept="Test transaction 1",
+                type=TransactionType.EXPENSE
             )
             transaction2 = Transaction(
                 transaction_date=TransactionDate(date(2024, 6, 20)), 
                 amount=TransactionAmount(Decimal("200.25")),
-                concept="Test transaction 2"
+                concept="Test transaction 2",
+                type=TransactionType.EXPENSE
             )
             transaction3 = Transaction(
                 transaction_date=TransactionDate(date(2023, 12, 31)),  # Different year - should not be included
                 amount=TransactionAmount(Decimal("300.00")),
-                concept="Test transaction 3"
+                concept="Test transaction 3",
+                type=TransactionType.EXPENSE
             )
             
             transaction_repository.save(transaction1)
@@ -78,12 +82,14 @@ class TestDashboardTotalExpenses:
             transaction1 = Transaction(
                 transaction_date=TransactionDate(date(2024, 1, 15)), 
                 amount=TransactionAmount(Decimal("-100.00")),
-                concept="Expense 1"
+                concept="Expense 1",
+                type=TransactionType.EXPENSE
             )
             transaction2 = Transaction(
                 transaction_date=TransactionDate(date(2024, 6, 20)), 
                 amount=TransactionAmount(Decimal("-50.50")),
-                concept="Expense 2"
+                concept="Expense 2",
+                type=TransactionType.EXPENSE
             )
             
             transaction_repository.save(transaction1)
@@ -105,17 +111,20 @@ class TestDashboardTotalExpenses:
             transaction1 = Transaction(
                 transaction_date=TransactionDate(date(2024, 1, 15)), 
                 amount=TransactionAmount(Decimal("200.00")),
-                concept="Income"
+                concept="Income",
+                type=TransactionType.INCOME
             )
             transaction2 = Transaction(
                 transaction_date=TransactionDate(date(2024, 6, 20)), 
                 amount=TransactionAmount(Decimal("-75.25")),
-                concept="Expense"
+                concept="Expense",
+                type=TransactionType.EXPENSE
             )
             transaction3 = Transaction(
                 transaction_date=TransactionDate(date(2024, 12, 1)), 
                 amount=TransactionAmount(Decimal("-25.00")),
-                concept="Expense"
+                concept="Expense",
+                type=TransactionType.EXPENSE
             )
             
             transaction_repository.save(transaction1)

@@ -9,6 +9,7 @@ from app.src.application.dashboard.query.get_dashboard_summary_query_handler imp
 from app.src.domain.transaction.transaction import Transaction
 from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
+from app.src.domain.transaction.vo.transaction_type import TransactionType
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 
@@ -34,9 +35,9 @@ class TestGetDashboardSummaryQueryHandler(TestCase):
         self.mock_transaction_repository.get_by_year.assert_called_once_with(2024)
 
     def test_given_transactions_then_calculate_correct_total_expense_amount(self):
-        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=TransactionAmount(Decimal("100.50")), concept="Test 1")
-        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 6, 20)), amount=TransactionAmount(Decimal("200.25")), concept="Test 2")
-        transaction3 = Transaction(transaction_date=TransactionDate(date(2024, 12, 10)), amount=TransactionAmount(Decimal("50.00")), concept="Test 3")
+        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=TransactionAmount(Decimal("100.50")), type=TransactionType.EXPENSE, concept="Test 1")
+        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 6, 20)), amount=TransactionAmount(Decimal("200.25")), type=TransactionType.EXPENSE, concept="Test 2")
+        transaction3 = Transaction(transaction_date=TransactionDate(date(2024, 12, 10)), amount=TransactionAmount(Decimal("50.00")), type=TransactionType.EXPENSE, concept="Test 3")
 
         self.mock_transaction_repository.get_by_year.return_value = [transaction1, transaction2, transaction3]
 
@@ -48,9 +49,9 @@ class TestGetDashboardSummaryQueryHandler(TestCase):
         self.mock_transaction_repository.get_by_year.assert_called_once_with(2024)
 
     def test_given_transactions_in_multiple_months_then_calculate_correct_average(self):
-        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=TransactionAmount(Decimal("300.00")), concept="Test 1")
-        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 2, 10)), amount=TransactionAmount(Decimal("300.00")), concept="Test 2")
-        transaction3 = Transaction(transaction_date=TransactionDate(date(2024, 3, 20)), amount=TransactionAmount(Decimal("300.00")), concept="Test 3")
+        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=TransactionAmount(Decimal("300.00")), type=TransactionType.EXPENSE, concept="Test 1")
+        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 2, 10)), amount=TransactionAmount(Decimal("300.00")), type=TransactionType.EXPENSE, concept="Test 2")
+        transaction3 = Transaction(transaction_date=TransactionDate(date(2024, 3, 20)), amount=TransactionAmount(Decimal("300.00")), type=TransactionType.EXPENSE, concept="Test 3")
 
         self.mock_transaction_repository.get_by_year.return_value = [transaction1, transaction2, transaction3]
 
@@ -61,9 +62,9 @@ class TestGetDashboardSummaryQueryHandler(TestCase):
         assert result.months_with_data == {1, 2, 3}
 
     def test_given_transactions_in_single_month_then_average_equals_total(self):
-        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=TransactionAmount(Decimal("100.00")), concept="Test 1")
-        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 1, 20)), amount=TransactionAmount(Decimal("200.00")), concept="Test 2")
-        transaction3 = Transaction(transaction_date=TransactionDate(date(2024, 1, 25)), amount=TransactionAmount(Decimal("150.00")), concept="Test 3")
+        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=TransactionAmount(Decimal("100.00")), type=TransactionType.EXPENSE, concept="Test 1")
+        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 1, 20)), amount=TransactionAmount(Decimal("200.00")), type=TransactionType.EXPENSE, concept="Test 2")
+        transaction3 = Transaction(transaction_date=TransactionDate(date(2024, 1, 25)), amount=TransactionAmount(Decimal("150.00")), type=TransactionType.EXPENSE, concept="Test 3")
 
         self.mock_transaction_repository.get_by_year.return_value = [transaction1, transaction2, transaction3]
 
@@ -74,10 +75,10 @@ class TestGetDashboardSummaryQueryHandler(TestCase):
         assert result.months_with_data == {1}
 
     def test_given_mixed_positive_negative_amounts_then_calculate_correct_total(self):
-        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=TransactionAmount(Decimal("200.00")), concept="Income")
-        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 1, 20)), amount=TransactionAmount(Decimal("-50.00")), concept="Expense")
-        transaction3 = Transaction(transaction_date=TransactionDate(date(2024, 6, 10)), amount=TransactionAmount(Decimal("-100.00")), concept="Expense")
-        transaction4 = Transaction(transaction_date=TransactionDate(date(2024, 6, 15)), amount=TransactionAmount(Decimal("150.00")), concept="Income")
+        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=TransactionAmount(Decimal("200.00")), type=TransactionType.EXPENSE, concept="Income")
+        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 1, 20)), amount=TransactionAmount(Decimal("-50.00")), type=TransactionType.EXPENSE, concept="Expense")
+        transaction3 = Transaction(transaction_date=TransactionDate(date(2024, 6, 10)), amount=TransactionAmount(Decimal("-100.00")), type=TransactionType.EXPENSE, concept="Expense")
+        transaction4 = Transaction(transaction_date=TransactionDate(date(2024, 6, 15)), amount=TransactionAmount(Decimal("150.00")), type=TransactionType.EXPENSE, concept="Income")
 
         self.mock_transaction_repository.get_by_year.return_value = [transaction1, transaction2, transaction3,
                                                                      transaction4]
@@ -88,10 +89,10 @@ class TestGetDashboardSummaryQueryHandler(TestCase):
         assert result.months_with_data == {1, 6}
 
     def test_given_mixed_amounts_in_two_months_then_calculate_correct_average(self):
-        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=TransactionAmount(Decimal("200.00")), concept="Income")
-        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 1, 20)), amount=TransactionAmount(Decimal("-50.00")), concept="Expense")
-        transaction3 = Transaction(transaction_date=TransactionDate(date(2024, 6, 10)), amount=TransactionAmount(Decimal("-100.00")), concept="Expense")
-        transaction4 = Transaction(transaction_date=TransactionDate(date(2024, 6, 15)), amount=TransactionAmount(Decimal("150.00")), concept="Income")
+        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=TransactionAmount(Decimal("200.00")), type=TransactionType.EXPENSE, concept="Income")
+        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 1, 20)), amount=TransactionAmount(Decimal("-50.00")), type=TransactionType.EXPENSE, concept="Expense")
+        transaction3 = Transaction(transaction_date=TransactionDate(date(2024, 6, 10)), amount=TransactionAmount(Decimal("-100.00")), type=TransactionType.EXPENSE, concept="Expense")
+        transaction4 = Transaction(transaction_date=TransactionDate(date(2024, 6, 15)), amount=TransactionAmount(Decimal("150.00")), type=TransactionType.EXPENSE, concept="Income")
 
         self.mock_transaction_repository.get_by_year.return_value = [transaction1, transaction2, transaction3,
                                                                      transaction4]
@@ -111,10 +112,10 @@ class TestGetDashboardSummaryQueryHandler(TestCase):
         assert result.months_with_data == set()
 
     def test_given_transactions_then_return_correct_transactions_count(self):
-        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=TransactionAmount(Decimal("100.00")), concept="Test 1")
-        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 2, 10)), amount=TransactionAmount(Decimal("200.00")), concept="Test 2")
-        transaction3 = Transaction(transaction_date=TransactionDate(date(2024, 6, 20)), amount=TransactionAmount(Decimal("300.00")), concept="Test 3")
-        transaction4 = Transaction(transaction_date=TransactionDate(date(2024, 12, 5)), amount=TransactionAmount(Decimal("400.00")), concept="Test 4")
+        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=TransactionAmount(Decimal("100.00")), type=TransactionType.EXPENSE, concept="Test 1")
+        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 2, 10)), amount=TransactionAmount(Decimal("200.00")), type=TransactionType.EXPENSE, concept="Test 2")
+        transaction3 = Transaction(transaction_date=TransactionDate(date(2024, 6, 20)), amount=TransactionAmount(Decimal("300.00")), type=TransactionType.EXPENSE, concept="Test 3")
+        transaction4 = Transaction(transaction_date=TransactionDate(date(2024, 12, 5)), amount=TransactionAmount(Decimal("400.00")), type=TransactionType.EXPENSE, concept="Test 4")
 
         self.mock_transaction_repository.get_by_year.return_value = [transaction1, transaction2, transaction3,
                                                                      transaction4]
@@ -125,11 +126,11 @@ class TestGetDashboardSummaryQueryHandler(TestCase):
         assert result.months_with_data == {1, 2, 6, 12}
 
     def test_given_transactions_across_different_months_then_return_all_months_with_data(self):
-        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=TransactionAmount(Decimal("100.00")), concept="Jan")
-        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 1, 20)), amount=TransactionAmount(Decimal("50.00")), concept="Jan2")
-        transaction3 = Transaction(transaction_date=TransactionDate(date(2024, 3, 10)), amount=TransactionAmount(Decimal("200.00")), concept="Mar")
-        transaction4 = Transaction(transaction_date=TransactionDate(date(2024, 6, 5)), amount=TransactionAmount(Decimal("150.00")), concept="Jun")
-        transaction5 = Transaction(transaction_date=TransactionDate(date(2024, 12, 25)), amount=TransactionAmount(Decimal("300.00")), concept="Dec")
+        transaction1 = Transaction(transaction_date=TransactionDate(date(2024, 1, 15)), amount=TransactionAmount(Decimal("100.00")), type=TransactionType.EXPENSE, concept="Jan")
+        transaction2 = Transaction(transaction_date=TransactionDate(date(2024, 1, 20)), amount=TransactionAmount(Decimal("50.00")), type=TransactionType.EXPENSE, concept="Jan2")
+        transaction3 = Transaction(transaction_date=TransactionDate(date(2024, 3, 10)), amount=TransactionAmount(Decimal("200.00")), type=TransactionType.EXPENSE, concept="Mar")
+        transaction4 = Transaction(transaction_date=TransactionDate(date(2024, 6, 5)), amount=TransactionAmount(Decimal("150.00")), type=TransactionType.EXPENSE, concept="Jun")
+        transaction5 = Transaction(transaction_date=TransactionDate(date(2024, 12, 25)), amount=TransactionAmount(Decimal("300.00")), type=TransactionType.EXPENSE, concept="Dec")
 
         self.mock_transaction_repository.get_by_year.return_value = [transaction1, transaction2, transaction3,
                                                                      transaction4, transaction5]

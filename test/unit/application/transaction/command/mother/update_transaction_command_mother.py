@@ -3,6 +3,7 @@ from decimal import Decimal
 from faker import Faker
 
 from app.src.application.transaction.command.update_transaction_command import UpdateTransactionCommand
+from app.src.domain.transaction.vo.transaction_type import TransactionType
 
 
 class UpdateTransactionCommandMother:
@@ -24,6 +25,7 @@ class UpdateTransactionCommandMother:
             comments=self._faker.sentence(),
             amount=Decimal(str(self._faker.pydecimal(left_digits=3, right_digits=2, positive=True))),
             date=self._faker.date_object(),
+            type=self._faker.random_element(list(TransactionType)),
             transaction_id=self._faker.random_number(),
             category_id=None
         )
@@ -34,6 +36,7 @@ class UpdateTransactionCommandMother:
             comments=self._faker.sentence(),
             amount=Decimal(str(self._faker.pydecimal(left_digits=3, right_digits=2, positive=True))),
             date=self._faker.date_object(),
+            type=self._faker.random_element(list(TransactionType)),
             transaction_id=transaction_id,
             category_id=category_id
         )

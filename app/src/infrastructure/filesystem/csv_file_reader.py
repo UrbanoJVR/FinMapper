@@ -4,6 +4,7 @@ from io import BytesIO
 from app.src.domain.transaction.transaction import Transaction
 from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
+from app.src.domain.transaction.vo.transaction_type import TransactionType
 from app.src.infrastructure.filesystem.transactions_file_reader import TransactionsFileReader
 from app.src.shared.date_utils import str_to_date
 
@@ -27,7 +28,8 @@ class CsvFileReader(TransactionsFileReader):
             transaction = Transaction(
                 transaction_date=TransactionDate(str_to_date(fields[0])),
                 concept=fields[1],
-                amount=TransactionAmount(Decimal(fields[2].replace(',', '.')))
+                amount=TransactionAmount(Decimal(fields[2].replace(',', '.'))),
+                type=TransactionType.EXPENSE,
             )
             transactions.append(transaction)
 

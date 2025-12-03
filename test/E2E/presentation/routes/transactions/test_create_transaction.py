@@ -7,6 +7,7 @@ from flask import url_for
 from app.src.domain.transaction.transaction import Transaction
 from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
+from app.src.domain.transaction.vo.transaction_type import TransactionType
 from .conftest import transaction_exists
 
 
@@ -17,7 +18,8 @@ class TestCreateTransaction:
             amount=TransactionAmount(Decimal(20.50)),
             concept='Transaction concept',
             transaction_date=TransactionDate(date(2024, 12, 1)),
-            comments='Transaction comments'
+            comments='Transaction comments',
+            type=TransactionType.EXPENSE,
         )
 
         response = client.post('/transactions/add',

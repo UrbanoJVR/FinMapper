@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from app.src.domain.transaction.transaction import Transaction
 from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
+from app.src.domain.transaction.vo.transaction_type import TransactionType
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 
@@ -18,12 +19,14 @@ class TestDashboardMonthlyNavigationGrid:
             transaction1 = Transaction(
                 transaction_date=TransactionDate(date(2024, 1, 15)), 
                 amount=TransactionAmount(Decimal("100.00")),
-                concept="January transaction"
+                concept="January transaction",
+                type=TransactionType.EXPENSE
             )
             transaction2 = Transaction(
                 transaction_date=TransactionDate(date(2024, 6, 20)), 
                 amount=TransactionAmount(Decimal("200.00")),
-                concept="June transaction"
+                concept="June transaction",
+                type=TransactionType.EXPENSE
             )
             
             transaction_repository.save(transaction1)
@@ -55,7 +58,8 @@ class TestDashboardMonthlyNavigationGrid:
             transaction = Transaction(
                 transaction_date=TransactionDate(date(2023, 3, 15)), 
                 amount=TransactionAmount(Decimal("100.00")),
-                concept="March 2023 transaction"
+                concept="March 2023 transaction",
+                type=TransactionType.EXPENSE
             )
             
             transaction_repository.save(transaction)

@@ -8,6 +8,7 @@ from app.src.domain.category import Category
 from app.src.domain.transaction.transaction import Transaction
 from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
+from app.src.domain.transaction.vo.transaction_type import TransactionType
 
 
 class TransactionMemoryRepository:
@@ -41,6 +42,7 @@ class TmpTransaction:
     comments: str
     category_name: str
     category_id: int
+    type: str
 
     @staticmethod
     def from_domain(transaction: Transaction):
@@ -49,14 +51,17 @@ class TmpTransaction:
                               str(transaction.concept),
                               str(transaction.comments),
                               str(transaction.category.name if transaction.category else None),
-                              transaction.category.id if transaction.category else None)
+                              transaction.category.id if transaction.category else None,
+                              transaction.type.value if transaction.type else None)
 
     def to_domain(self) -> Transaction:
+        transaction_type = TransactionType(self.type) if self.type else TransactionType.EXPENSE
         return (Transaction.builder()
                 .amount(TransactionAmount(Decimal(self.amount.replace(',', '.'))))
                 .transaction_date(TransactionDate(datetime.fromisoformat(self.date).date()))
                 .concept(self.concept)
                 .comments(self.comments)
+                .type(transaction_type)
                 .category(Category(name=self.category_name, id=self.category_id)
                           if self.category_name not in [None, "", "None", "null", "nan"] else None)
                 .build())

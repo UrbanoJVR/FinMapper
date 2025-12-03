@@ -19,6 +19,7 @@ class TestEditTransaction:
             concept="New concept",
             comments="New comments",
             transaction_date=TransactionDate(date.min),
+            type=existing_transaction.type,
             category=None,
             id=existing_transaction.id,
         )

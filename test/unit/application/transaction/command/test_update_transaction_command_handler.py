@@ -5,6 +5,7 @@ from app.src.application.transaction.command.update_transaction_command_handler 
 from app.src.domain.transaction.transaction import Transaction
 from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
+from app.src.domain.transaction.vo.transaction_type import TransactionType
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 from test.unit.application.transaction.command.mother.update_transaction_command_mother import \
@@ -25,7 +26,7 @@ class TestUpdateTransactionCommandHandler(TestCase):
 
     def test_execute_success(self):
         category = self.category_mother.random()
-        transaction_from_db = self.transaction_mother.random_with_empty_category()
+        transaction_from_db = self.transaction_mother.random_expense_with_empty_category()
         command = self.update_transaction_command_mother.random_with_transaction_id_and_category_id(
             transaction_from_db.id, category.id)
         expected_transaction_to_update = Transaction(
@@ -34,6 +35,7 @@ class TestUpdateTransactionCommandHandler(TestCase):
             comments=command.comments,
             category=category,
             transaction_date=TransactionDate(command.date),
+            type=command.type,
             id=command.transaction_id
         )
         self.mock_transaction_repository.get_by_id.return_value = transaction_from_db
@@ -51,6 +53,7 @@ class TestUpdateTransactionCommandHandler(TestCase):
         expected_transaction_to_update = Transaction(
             amount=TransactionAmount(command.amount),
             concept=command.concept,
+            type=command.type,
             comments=command.comments,
             category=None,
             transaction_date=TransactionDate(command.date),

@@ -14,7 +14,7 @@ class TestGetTransactionByIdQueryHandler(TestCase):
         self.transaction_mother = TransactionMother()
 
     def test_execute(self):
-        expected_transaction = self.transaction_mother.random_with_empty_category()
+        expected_transaction = self.transaction_mother.random_expense_with_empty_category()
         result = self.mock_transaction_repository.get_by_id.return_value = expected_transaction
 
         assert expected_transaction == result

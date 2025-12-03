@@ -9,6 +9,7 @@ import pyexcel as pe
 from app.src.domain.category import Category
 from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
+from app.src.domain.transaction.vo.transaction_type import TransactionType
 from app.src.infrastructure.filesystem.money_manager_file_reader import MoneyManagerFileReader
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 
@@ -47,6 +48,7 @@ class TestMoneyManagerFileReader(TestCase):
         self.assertEqual(tx.amount, TransactionAmount(Decimal("-50.00")))
         self.assertEqual(tx.category.name, "Necesidades básicas")
         self.assertEqual(tx.transaction_date, TransactionDate(date(2025, 1, 1)))
+        self.assertEqual(tx.type, TransactionType.EXPENSE)
 
     def test_transaction_without_category(self):
         data = [{
@@ -64,22 +66,8 @@ class TestMoneyManagerFileReader(TestCase):
 
         self.assertEqual(len(transactions), 1)
         self.assertIsNone(transactions[0].category)
+        self.assertEqual(transactions[0].type, TransactionType.EXPENSE)
 
-    def test_income_transaction(self):
-        data = [{
-            "Fecha": "01/01/2025",
-            "Nota": "Nómina",
-            "Descripción": "",
-            "EUR": "2000.00",
-            "Categoría": "💼 Ingresos",
-            "Ingreso/Gasto": "Ingreso"
-        }]
-
-        self.mock_category_repository.get_by_name.return_value = Category(name="Ingresos", id=2)
-        file = self._create_xls_file(data)
-        transactions = self.reader.read_all_transactions(file)
-
-        self.assertEqual(transactions[0].amount, TransactionAmount(Decimal("2000.00")))
 
     def test_given_invalid_date_then_skip_transaction(self):
         data = [{

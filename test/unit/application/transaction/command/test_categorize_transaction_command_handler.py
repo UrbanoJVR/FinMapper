@@ -12,6 +12,7 @@ from app.src.domain.category import Category
 from app.src.domain.transaction.transaction import Transaction
 from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
+from app.src.domain.transaction.vo.transaction_type import TransactionType
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 from test.unit.domain.transaction.mother.transaction_mother import TransactionMother
@@ -40,6 +41,7 @@ class TestCategorizeTransactionCommandHandler(TestCase):
         transaction_from_db = Transaction(
             transaction_date=TransactionDate(datetime.now().date()),
             amount=TransactionAmount(Decimal.from_float(30.10)),
+            type=TransactionType.EXPENSE,
             concept="Concept",
             category=category_from_db,
             id=1)
@@ -61,8 +63,8 @@ class TestCategorizeTransactionCommandHandler(TestCase):
         category_1 = Category(name="Category 1", description="Desc 1", id=10)
         category_2 = Category(name="Category 2", description="Desc 2", id=20)
 
-        transaction_1 = self.transaction_mother.random_with_empty_category()
-        transaction_2 = self.transaction_mother.random_with_empty_category()
+        transaction_1 = self.transaction_mother.random_expense_with_empty_category()
+        transaction_2 = self.transaction_mother.random_expense_with_empty_category()
 
         self.mock_transaction_repository.get_by_id.side_effect = [transaction_1, transaction_2]
         self.mock_category_repository.get_by_id.side_effect = [category_1, category_2]

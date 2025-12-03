@@ -8,6 +8,7 @@ from app.src.domain.category import Category
 from app.src.domain.transaction.transaction import Transaction
 from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
+from app.src.domain.transaction.vo.transaction_type import TransactionType
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
@@ -31,12 +32,14 @@ class TestMonthlyDashboardWithData:
                 transaction_date=TransactionDate(date(2024, 1, 15)), 
                 amount=TransactionAmount(Decimal("100.00")),
                 concept="Mercadona",
+                type=TransactionType.EXPENSE,
                 category=category1
             )
             transaction2 = Transaction(
                 transaction_date=TransactionDate(date(2024, 1, 20)), 
                 amount=TransactionAmount(Decimal("50.00")),
                 concept="Gasolina",
+                type=TransactionType.EXPENSE,
                 category=category2
             )
             
@@ -65,12 +68,14 @@ class TestMonthlyDashboardWithData:
                 transaction_date=TransactionDate(date(2024, 1, 15)), 
                 amount=TransactionAmount(Decimal("100.00")),
                 concept="Test 1",
+                type=TransactionType.EXPENSE,
                 category=category
             )
             transaction2 = Transaction(
                 transaction_date=TransactionDate(date(2024, 1, 20)), 
                 amount=TransactionAmount(Decimal("50.00")),
                 concept="Test 2",
+                type=TransactionType.EXPENSE,
                 category=category
             )
             
@@ -97,6 +102,7 @@ class TestMonthlyDashboardWithData:
                 amount=TransactionAmount(Decimal("100.00")),
                 concept="Mercadona Compra Grande",
                 comments="Compra mensual",
+                type=TransactionType.EXPENSE,
                 category=category
             )
             
@@ -141,18 +147,21 @@ class TestMonthlyDashboardWithData:
                 transaction_date=TransactionDate(date(2024, 1, 15)), 
                 amount=TransactionAmount(Decimal("100.00")),
                 concept="Alimentación",
+                type=TransactionType.EXPENSE,
                 category=category1
             )
             transaction2 = Transaction(
                 transaction_date=TransactionDate(date(2024, 1, 16)), 
                 amount=TransactionAmount(Decimal("500.00")),
                 concept="Alquiler",
+                type=TransactionType.EXPENSE,
                 category=category2
             )
             transaction3 = Transaction(
                 transaction_date=TransactionDate(date(2024, 1, 17)), 
                 amount=TransactionAmount(Decimal("50.00")),
                 concept="Gasolina",
+                type=TransactionType.EXPENSE,
                 category=category3
             )
             
@@ -187,6 +196,7 @@ class TestMonthlyDashboardWithData:
                 transaction_date=TransactionDate(date(2024, 1, 15)), 
                 amount=TransactionAmount(Decimal("100.00")),
                 concept="Test",
+                type=TransactionType.EXPENSE,
                 category=category
             )
             
@@ -235,6 +245,7 @@ class TestMonthlyDashboardWithData:
                 transaction_date=TransactionDate(date(2024, 1, 15)), 
                 amount=TransactionAmount(Decimal("100.00")),
                 concept="Test",
+                type=TransactionType.EXPENSE,
                 category=category
             )
             

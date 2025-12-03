@@ -5,14 +5,15 @@ from dataclasses import dataclass
 from app.src.domain.category import Category
 from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
+from app.src.domain.transaction.vo.transaction_type import TransactionType
 
 
 @dataclass(frozen=True)
 class Transaction:
-
     transaction_date: TransactionDate
     amount: TransactionAmount
     concept: str
+    type: TransactionType
     comments: str | None = None
     category: Category | None = None
     id: int | None = None
@@ -33,18 +34,23 @@ class Transaction:
         if not self.concept or self.concept.strip() == "":
             raise ValueError("concept cannot be empty")
 
+        if not type:
+            raise TypeError("type cannot be empty")
+
     @staticmethod
     def create(
-        transaction_date: TransactionDate,
-        amount: TransactionAmount,
-        concept: str,
-        comments: str | None = None,
-        category: Category | None = None
+            transaction_date: TransactionDate,
+            amount: TransactionAmount,
+            concept: str,
+            type: TransactionType,
+            comments: str | None = None,
+            category: Category | None = None
     ) -> Transaction:
         return Transaction(
             transaction_date,
             amount,
             concept,
+            type,
             comments,
             category,
             None
@@ -60,6 +66,7 @@ class Transaction:
             .transaction_date(self.transaction_date)
             .amount(self.amount)
             .concept(self.concept)
+            .type(self.type)
             .comments(self.comments)
             .category(self.category)
             .id(self.id)
@@ -69,6 +76,7 @@ class Transaction:
         _transaction_date: TransactionDate | None
         _amount: TransactionAmount | None
         _concept: str | None
+        _type: TransactionType | None
         _comments: str | None
         _category: Category | None
         _id: int | None
@@ -77,6 +85,7 @@ class Transaction:
             self._transaction_date = None
             self._amount = None
             self._concept = None
+            self._type = None
             self._comments = None
             self._category = None
             self._id = None
@@ -93,6 +102,10 @@ class Transaction:
             self._concept = value
             return self
 
+        def type(self, value: TransactionType) -> Transaction.Builder:
+            self._type = value
+            return self
+
         def comments(self, value: str | None) -> Transaction.Builder:
             self._comments = value
             return self
@@ -107,9 +120,10 @@ class Transaction:
 
         def build(self) -> Transaction:
             return Transaction(
-                self._transaction_date,   # type: ignore
-                self._amount,             # type: ignore
-                self._concept,            # type: ignore
+                self._transaction_date,
+                self._amount,
+                self._concept,
+                self._type,
                 self._comments,
                 self._category,
                 self._id
@@ -119,18 +133,20 @@ class Transaction:
         return self.to_builder().category(value).build()
 
     def update(
-        self,
-        transaction_date: TransactionDate,
-        amount: TransactionAmount,
-        concept: str,
-        comments: str | None,
-        category: Category | None
+            self,
+            transaction_date: TransactionDate,
+            amount: TransactionAmount,
+            concept: str,
+            type: TransactionType,
+            comments: str | None,
+            category: Category | None
     ) -> Transaction:
         return (
             self.to_builder()
             .transaction_date(transaction_date)
             .amount(amount)
             .concept(concept)
+            .type(type)
             .comments(comments)
             .category(category)
             .build()

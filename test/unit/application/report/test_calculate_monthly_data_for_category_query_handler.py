@@ -9,6 +9,7 @@ from app.src.domain.report.month import Month
 from app.src.domain.transaction.transaction import Transaction
 from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
+from app.src.domain.transaction.vo.transaction_type import TransactionType
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 from app.src.domain.category import Category
 
@@ -23,11 +24,11 @@ class TestCalculateMonthlyDataForCategoryQueryHandler(TestCase):
         category = Category(id=1, name="Groceries", description="Groceries")
         year = 2024
         transactions_per_month = [
-            [Transaction(amount=TransactionAmount(Decimal("-100.00")), concept="Transaction 1", transaction_date=TransactionDate(date(year, 1, 1))),
-             Transaction(amount=TransactionAmount(Decimal("-900.50")), concept="Transaction 1", transaction_date=TransactionDate(date(year, 1, 2)))],
-            [Transaction(amount=TransactionAmount(Decimal("-200.00")), concept="Transaction 2", transaction_date=TransactionDate(date(year, 2, 1)))],
+            [Transaction(amount=TransactionAmount(Decimal("-100.00")), concept="Transaction 1", type=TransactionType.EXPENSE, transaction_date=TransactionDate(date(year, 1, 1))),
+             Transaction(amount=TransactionAmount(Decimal("-900.50")), concept="Transaction 1", type=TransactionType.EXPENSE, transaction_date=TransactionDate(date(year, 1, 2)))],
+            [Transaction(amount=TransactionAmount(Decimal("-200.00")), concept="Transaction 2", type=TransactionType.EXPENSE, transaction_date=TransactionDate(date(year, 2, 1)))],
             [],
-            [Transaction(amount=TransactionAmount(Decimal("-300.00")), concept="Transaction 3", transaction_date=TransactionDate(date(year, 4, 1)))],
+            [Transaction(amount=TransactionAmount(Decimal("-300.00")), concept="Transaction 3", type=TransactionType.EXPENSE, transaction_date=TransactionDate(date(year, 4, 1)))],
             [],
             [],
             [],

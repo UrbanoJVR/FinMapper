@@ -9,11 +9,14 @@ from app.src.domain.category import Category
 from app.src.domain.transaction.transaction import Transaction
 from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
+from app.src.domain.transaction.vo.transaction_type import TransactionType
 from app.src.infrastructure.repository.category_repository import CategoryRepository
 from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 
 
 class TestCreateTransactionCommandHandler(TestCase):
+
+    # TODO use mothers
 
     def setUp(self):
         self.mock_transaction_repository = Mock(spec=TransactionRepository)
@@ -26,6 +29,7 @@ class TestCreateTransactionCommandHandler(TestCase):
             amount=Decimal(10),
             concept="concept",
             comments="comments",
+            type=TransactionType.EXPENSE,
             category_id=1,
             date=datetime.now()
         )
@@ -38,6 +42,7 @@ class TestCreateTransactionCommandHandler(TestCase):
             amount=TransactionAmount(command.amount),
             transaction_date=TransactionDate(command.date),
             concept=command.concept,
+            type=command.type,
             comments=command.comments,
             category=category_from_db,
             id=None
@@ -54,6 +59,7 @@ class TestCreateTransactionCommandHandler(TestCase):
             amount=Decimal(10),
             concept="concept",
             comments="comments",
+            type=TransactionType.EXPENSE,
             category_id=1,
             date=datetime.now()
         )
@@ -61,6 +67,7 @@ class TestCreateTransactionCommandHandler(TestCase):
             amount=TransactionAmount(command.amount),
             transaction_date=TransactionDate(command.date),
             concept=command.concept,
+            type=command.type,
             comments=command.comments,
             category=None,
             id=None
@@ -77,12 +84,14 @@ class TestCreateTransactionCommandHandler(TestCase):
             amount=Decimal(10),
             concept="concept",
             comments="comments",
+            type=TransactionType.EXPENSE,
             date=datetime.now()
         )
         transaction = Transaction(
             amount=TransactionAmount(command.amount),
             transaction_date=TransactionDate(command.date),
             concept=command.concept,
+            type=command.type,
             comments=command.comments,
             category=None,
             id=None

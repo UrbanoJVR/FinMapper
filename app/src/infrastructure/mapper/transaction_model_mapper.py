@@ -3,6 +3,7 @@ from typing import List, Sequence
 from app.src.domain.transaction.transaction import Transaction
 from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
+from app.src.domain.transaction.vo.transaction_type import TransactionType
 from app.src.infrastructure.mapper.category_model_mapper import CategoryModelMapper
 from app.src.infrastructure.repository.model.transaction_model import TransactionModel
 
@@ -13,6 +14,7 @@ def map_to_model(transaction: Transaction) -> TransactionModel:
         date=transaction.transaction_date.value,
         amount=transaction.amount.value,
         concept=transaction.concept,
+        type=transaction.type.value,
         comments=transaction.comments,
         category_id=transaction.category.id if transaction.category is not None else None
     )
@@ -24,6 +26,7 @@ def map_to_domain(transaction_model: TransactionModel) -> Transaction:
         transaction_date=TransactionDate(transaction_model.date),
         amount=TransactionAmount(transaction_model.amount),
         concept=transaction_model.concept,
+        type=TransactionType(transaction_model.type),
         comments=transaction_model.comments,
         category=CategoryModelMapper.map_to_domain(
             transaction_model.category) if transaction_model.category is not None else None
