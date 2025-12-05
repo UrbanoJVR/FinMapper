@@ -44,7 +44,16 @@ class TestTransactionRepositoryIT:
         assert transactions[0].id == transaction.id
         assert transactions[0].amount == transaction.amount
 
-    def test_when_save_and_array_then_should_find(self, db_test_it):
+    def test_given_transaction_income_when_save_then_success(self, db_test_it):
+        transaction = self.transaction_mother.random_income_with_empty_category()
+
+        self.sut.save(transaction)
+        transactions = self.sut.find_all()
+
+        assert len(transactions) == 1
+        assert transactions[0].type == TransactionType.INCOME
+
+    def test_when_save_an_array_then_should_find(self, db_test_it):
         transaction1 = Transaction(id=1, transaction_date=TransactionDate(date(2024, 12, 1)),
                                    amount=TransactionAmount(Decimal(100)),
                                    type=TransactionType.EXPENSE, category=None, concept="Concept")
@@ -62,7 +71,7 @@ class TestTransactionRepositoryIT:
         assert transactions[1].id == 2
         assert transactions[1].amount == transactions[1].amount
 
-    def test_whe_delete_by_id_then_not_find(self, db_test_it):
+    def test_when_delete_by_id_then_not_find(self, db_test_it):
         transaction1 = Transaction(id=1, transaction_date=TransactionDate(date(2024, 12, 1)),
                                    amount=TransactionAmount(Decimal(100)),
                                    type=TransactionType.EXPENSE, category=None, concept="Concept")

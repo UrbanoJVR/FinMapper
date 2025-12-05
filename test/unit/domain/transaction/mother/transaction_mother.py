@@ -42,3 +42,9 @@ class TransactionMother:
             category=None,
             id=self._faker.random_number(),
         )
+
+    def random_income_with_empty_category(self):
+        return (self.random().to_builder()
+                .category(None)
+                .type(TransactionType.INCOME)
+                .build())
