@@ -8,6 +8,7 @@ from app.src.domain.transaction.transaction import Transaction
 from app.src.domain.transaction.vo.transaction_amount import TransactionAmount
 from app.src.domain.transaction.vo.transaction_date import TransactionDate
 from app.src.domain.transaction.vo.transaction_type import TransactionType
+from app.src.infrastructure.repository.transaction_repository import TransactionRepository
 from .conftest import transaction_exists
 
 
@@ -23,9 +24,13 @@ class TestCreateTransaction:
         )
 
         response = client.post('/transactions/add',
-                               data=dict(amount=transaction_to_create.amount.value, concept=transaction_to_create.concept,
-                                         comments=transaction_to_create.comments,
-                                         date=transaction_to_create.transaction_date.value.strftime('%Y-%m-%d')),
+                               data=dict(
+                                   amount=transaction_to_create.amount.value,
+                                   concept=transaction_to_create.concept,
+                                   comments=transaction_to_create.comments,
+                                   date=transaction_to_create.transaction_date.value.strftime('%Y-%m-%d'),
+                                   type=TransactionType.EXPENSE.value
+                               ),
                                follow_redirects=True)
 
         assert response.status_code == 200
@@ -65,3 +70,78 @@ class TestCreateTransaction:
         comments_field = form.find('input', {'name': 'comments'})
         assert comments_field is not None, "Comments field not found"
         assert comments_field['value'] == '', "Comments field is not empty"
+
+        # Check that the type field defaults to EXPENSE
+        type_field_expense = form.find('input', {'name': 'type', 'value': 'EXPENSE'})
+        assert type_field_expense is not None, "Type field EXPENSE not found"
+        assert 'checked' in type_field_expense.attrs, "Type should default to EXPENSE"
+
+    def test_create_expense_transaction_and_verify_type(self, client):
+        transaction_to_create = Transaction(
+            amount=TransactionAmount(Decimal(50.75)),
+            concept='Expense transaction',
+            transaction_date=TransactionDate(date(2024, 12, 15)),
+            comments='Expense comments',
+            type=TransactionType.EXPENSE,
+        )
+
+        response = client.post('/transactions/add',
+                               data=dict(
+                                   amount=transaction_to_create.amount.value,
+                                   concept=transaction_to_create.concept,
+                                   comments=transaction_to_create.comments,
+                                   date=transaction_to_create.transaction_date.value.strftime('%Y-%m-%d'),
+                                   type=TransactionType.EXPENSE.value
+                               ),
+                               follow_redirects=True)
+
+        assert response.status_code == 200
+        assert transaction_exists(client, transaction_to_create)
+        
+        # Verificar que el tipo se guardó correctamente en la BD
+        transactions = TransactionRepository().get_by_month_year(
+            transaction_to_create.transaction_date.value.month,
+            transaction_to_create.transaction_date.value.year
+        )
+        saved_transaction = next(
+            (t for t in transactions if t.concept == transaction_to_create.concept and 
+             t.amount.value == transaction_to_create.amount.value),
+            None
+        )
+        assert saved_transaction is not None, "Transaction should be saved"
+        assert saved_transaction.type == TransactionType.EXPENSE, "Transaction type should be EXPENSE"
+
+    def test_create_income_transaction_and_verify_type(self, client):
+        transaction_to_create = Transaction(
+            amount=TransactionAmount(Decimal(100.00)),
+            concept='Income transaction',
+            transaction_date=TransactionDate(date(2024, 12, 20)),
+            comments='Income comments',
+            type=TransactionType.INCOME,
+        )
+
+        response = client.post('/transactions/add',
+                               data=dict(
+                                   amount=transaction_to_create.amount.value,
+                                   concept=transaction_to_create.concept,
+                                   comments=transaction_to_create.comments,
+                                   date=transaction_to_create.transaction_date.value.strftime('%Y-%m-%d'),
+                                   type=TransactionType.INCOME.value
+                               ),
+                               follow_redirects=True)
+
+        assert response.status_code == 200
+        assert transaction_exists(client, transaction_to_create)
+        
+        # Verificar que el tipo se guardó correctamente en la BD
+        transactions = TransactionRepository().get_by_month_year(
+            transaction_to_create.transaction_date.value.month,
+            transaction_to_create.transaction_date.value.year
+        )
+        saved_transaction = next(
+            (t for t in transactions if t.concept == transaction_to_create.concept and 
+             t.amount.value == transaction_to_create.amount.value),
+            None
+        )
+        assert saved_transaction is not None, "Transaction should be saved"
+        assert saved_transaction.type == TransactionType.INCOME, "Transaction type should be INCOME"

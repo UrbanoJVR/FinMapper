@@ -3,7 +3,7 @@ from typing import List
 
 from flask_babel import lazy_gettext
 from flask_wtf import FlaskForm
-from wtforms.fields.choices import SelectField
+from wtforms.fields.choices import SelectField, RadioField
 from wtforms.fields.datetime import DateField
 from wtforms.fields.numeric import DecimalField
 from wtforms.fields.simple import StringField
@@ -35,6 +35,14 @@ class UpsertTransactionForm(FlaskForm):
     category_id = SelectField(
         str(lazy_gettext('Category'))
     )
+    type = RadioField(
+        str(lazy_gettext('Transaction Type')),
+        choices=[
+            (TransactionType.EXPENSE.value, str(lazy_gettext('Expense'))),
+            (TransactionType.INCOME.value, str(lazy_gettext('Income')))
+        ],
+        default=TransactionType.EXPENSE.value
+    )
 
 
 class UpsertTransactionFormMapper:
@@ -44,6 +52,7 @@ class UpsertTransactionFormMapper:
         form.date.data = date.today()
         form.category_id.choices = [('None', '')] + [(str(category.id), category.name) for category in
                                                      selectable_categories]
+        form.type.data = TransactionType.EXPENSE.value
 
         return form
 
@@ -57,20 +66,23 @@ class UpsertTransactionFormMapper:
                                                      selectable_categories]
         form.category_id.data = str(transaction.category.id) if transaction.category else 'None'
         form.category_id.selected = form.category_id.data
+        form.type.data = transaction.type.value
 
         return form
 
     def map_to_create_command(self, form: UpsertTransactionForm) -> CreateTransactionCommand:
+        transaction_type = TransactionType(form.type.data) if form.type.data else TransactionType.EXPENSE
         return CreateTransactionCommand(
             date=form.date.data,
             amount=form.amount.data,
             concept=form.concept.data,
             comments=form.comments.data,
             category_id=self._get_field_data_if_not_empty(form.category_id),
-            type=TransactionType.EXPENSE,
+            type=transaction_type,
         )
 
     def map_to_update_command(self, form: UpsertTransactionForm, transaction_id: int) -> UpdateTransactionCommand:
+        transaction_type = TransactionType(form.type.data) if form.type.data else TransactionType.EXPENSE
         return UpdateTransactionCommand(
             transaction_id=transaction_id,
             date=form.date.data,
@@ -78,7 +90,7 @@ class UpsertTransactionFormMapper:
             concept=form.concept.data,
             comments=form.comments.data,
             category_id=self._get_field_data_if_not_empty(form.category_id),
-            type=TransactionType.EXPENSE,
+            type=transaction_type,
         )
 
     @staticmethod

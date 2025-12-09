@@ -160,6 +160,15 @@ msgstr "Cancel"
 msgid "Return"
 msgstr "Return"
 
+msgid "Transaction Type"
+msgstr "Transaction Type"
+
+msgid "Expense"
+msgstr "Expense"
+
+msgid "Income"
+msgstr "Income"
+
 # MANUAL TRANSLATIONS
 msgid "January"
 msgstr "January"

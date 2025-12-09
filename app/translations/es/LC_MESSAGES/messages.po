@@ -160,6 +160,15 @@ msgstr "Concepto"
 msgid "Return"
 msgstr "Volver"
 
+msgid "Transaction Type"
+msgstr "Tipo de Transacción"
+
+msgid "Expense"
+msgstr "Gasto"
+
+msgid "Income"
+msgstr "Ingreso"
+
 # MANUAL TRANSLATIONS
 msgid "January"
 msgstr "Enero"

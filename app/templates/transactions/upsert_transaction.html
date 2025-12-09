@@ -7,6 +7,29 @@
     <form class="form" method="post">
         {{ form.hidden_tag() }}
         <div class="mb-3 mt-3">
+            <label class="form-label">{{ form.type.label.text }}</label>
+            <div class="btn-group w-100" role="group" id="transaction-type-toggle">
+                <input type="radio" class="btn-check" name="type" id="type-expense" value="EXPENSE" 
+                       {% if form.type.data == 'EXPENSE' or not form.type.data %}checked{% endif %}>
+                <label class="btn btn-outline-danger" for="type-expense">
+                    <i class="fas fa-arrow-down"></i> {{ _('Expense') }}
+                </label>
+
+                <input type="radio" class="btn-check" name="type" id="type-income" value="INCOME"
+                       {% if form.type.data == 'INCOME' %}checked{% endif %}>
+                <label class="btn btn-outline-success" for="type-income">
+                    <i class="fas fa-arrow-up"></i> {{ _('Income') }}
+                </label>
+            </div>
+            {% if form.type.errors %}
+                <div class="invalid-feedback d-block">
+                    {% for error in form.type.errors %}
+                        <span>{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
             {{ form.date.label(class="form-label") }}
             {{ form.date(class="form-control") }}
             {% if form.date.errors %}
@@ -66,4 +89,37 @@
             <button type="button" onclick="window.history.back();" class="btn btn-outline-primary">{{ _('Return') }}</button>
         </div>
     </form>
+
+    <style>
+        #transaction-type-toggle .btn {
+            border-radius: 0;
+            flex: 1;
+        }
+        
+        #transaction-type-toggle .btn:first-of-type {
+            border-top-left-radius: 0.375rem;
+            border-bottom-left-radius: 0.375rem;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        
+        #transaction-type-toggle .btn:last-of-type {
+            border-top-right-radius: 0.375rem;
+            border-bottom-right-radius: 0.375rem;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        
+        #transaction-type-toggle .btn-check:checked + .btn-outline-danger {
+            background-color: var(--bs-danger);
+            border-color: var(--bs-danger);
+            color: white;
+        }
+        
+        #transaction-type-toggle .btn-check:checked + .btn-outline-success {
+            background-color: var(--bs-success);
+            border-color: var(--bs-success);
+            color: white;
+        }
+    </style>
 {% endblock %}
