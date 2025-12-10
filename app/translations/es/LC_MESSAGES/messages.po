@@ -161,7 +161,7 @@ msgid "Return"
 msgstr "Volver"
 
 msgid "Transaction Type"
-msgstr "Tipo de Transacción"
+msgstr "Tipo de transacción"
 
 msgid "Expense"
 msgstr "Gasto"

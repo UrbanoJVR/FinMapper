@@ -37,3 +37,7 @@ run:
 # Load local data for develop environment
 load-dev-data:
 	sqlite3 data.sqlite < dev-data/categories.sql
+
+# Compile translations (.po to .mo)
+compile-translations:
+	pipenv run pybabel compile -d app/translations

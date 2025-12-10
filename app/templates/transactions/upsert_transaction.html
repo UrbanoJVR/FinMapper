@@ -7,7 +7,7 @@
     <form class="form" method="post">
         {{ form.hidden_tag() }}
         <div class="mb-3 mt-3">
-            <label class="form-label">{{ form.type.label.text }}</label>
+            <label class="form-label">{{ _('Transaction Type') }}</label>
             <div class="btn-group w-100" role="group" id="transaction-type-toggle">
                 <input type="radio" class="btn-check" name="type" id="type-expense" value="EXPENSE" 
                        {% if form.type.data == 'EXPENSE' or not form.type.data %}checked{% endif %}>
