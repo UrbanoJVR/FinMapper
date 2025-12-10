@@ -105,8 +105,8 @@
                                 </td>
                                 <td class="text-end">
                                     {% set amount_float = transaction.amount.value|float %}
-                                    <span class="fw-bold {% if amount_float >= 0 %}text-success{% else %}text-danger{% endif %}">
-                                        {% if amount_float >= 0 %}+{% endif %}{{ "%.2f"|format(amount_float) }} €
+                                    <span class="fw-bold {% if transaction.type.value == 'INCOME' %}text-success{% else %}text-danger{% endif %}">
+                                        {{ "%.2f"|format(amount_float) }} €
                                     </span>
                                 </td>
                                 <td>
