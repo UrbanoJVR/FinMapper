@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: finmapper-app
+
+server:
+  address: 127.0.0.1
